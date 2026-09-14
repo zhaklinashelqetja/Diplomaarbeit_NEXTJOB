@@ -1,3 +1,7 @@
+<script>
+	import { resolve } from '$app/paths';
+</script>
+
 <svelte:head>
 	<title>NextJob | Lokale Dienstleistungen in Shkodër</title>
 	<meta
@@ -15,20 +19,20 @@
 		</h1>
 
 		<p class="mt-6 max-w-2xl text-lg text-gray-600">
-			NextJob verbindet Menschen, die Hilfe benötigen, mit lokalen Dienstleistern
-			und Handwerkern in Shkodër.
+			NextJob verbindet Menschen, die Hilfe benötigen, mit lokalen Dienstleistern und Handwerkern in
+			Shkodër.
 		</p>
 
 		<div class="mt-8 flex flex-col gap-3 sm:flex-row">
 			<a
-				href="/auth/register"
+				href={resolve('/auth/register')}
 				class="rounded-lg bg-gray-900 px-6 py-3 font-medium text-white hover:bg-gray-700"
 			>
 				Jetzt starten
 			</a>
 
 			<a
-				href="/wer-wir-sind"
+				href={resolve('/wer-wir-sind')}
 				class="rounded-lg border border-gray-300 bg-white px-6 py-3 font-medium text-gray-900 hover:bg-gray-100"
 			>
 				Mehr erfahren
@@ -40,6 +44,7 @@
 <section class="mx-auto max-w-6xl px-4 py-16">
 	<div class="text-center">
 		<h2 class="text-3xl font-bold text-gray-900">Wie funktioniert NextJob?</h2>
+
 		<p class="mt-3 text-gray-600">Einfach, schnell und übersichtlich.</p>
 	</div>
 
@@ -47,25 +52,19 @@
 		<div class="rounded-xl border border-gray-200 p-6">
 			<p class="text-sm font-semibold text-gray-500">01</p>
 			<h3 class="mt-2 text-xl font-semibold text-gray-900">Auftrag erstellen</h3>
-			<p class="mt-3 text-gray-600">
-				Beschreibe, welche Arbeit erledigt werden soll.
-			</p>
+			<p class="mt-3 text-gray-600">Beschreibe, welche Arbeit erledigt werden soll.</p>
 		</div>
 
 		<div class="rounded-xl border border-gray-200 p-6">
 			<p class="text-sm font-semibold text-gray-500">02</p>
 			<h3 class="mt-2 text-xl font-semibold text-gray-900">Angebote erhalten</h3>
-			<p class="mt-3 text-gray-600">
-				Passende Dienstleister können ein Angebot senden.
-			</p>
+			<p class="mt-3 text-gray-600">Passende Dienstleister können ein Angebot senden.</p>
 		</div>
 
 		<div class="rounded-xl border border-gray-200 p-6">
 			<p class="text-sm font-semibold text-gray-500">03</p>
 			<h3 class="mt-2 text-xl font-semibold text-gray-900">Zusammenarbeiten</h3>
-			<p class="mt-3 text-gray-600">
-				Wähle ein Angebot und kommuniziere direkt über NextJob.
-			</p>
+			<p class="mt-3 text-gray-600">Wähle ein Angebot und kommuniziere direkt über NextJob.</p>
 		</div>
 	</div>
 </section>
