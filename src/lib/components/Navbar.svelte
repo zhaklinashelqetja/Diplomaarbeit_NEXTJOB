@@ -1,39 +1,88 @@
 <script>
-  let menuOpen = $state(false);
-  import { locale, t } from '$lib/i18n.js';
+	import { locale } from '$lib/i18n.js';
+
+	let menuOpen = $state(false);
+
+	function toggleLanguage() {
+		locale.update((current) => (current === 'de' ? 'al' : 'de'));
+	}
+
+	function closeMenu() {
+		menuOpen = false;
+	}
 </script>
 
-<nav class="border-b border-gray-200 bg-white">
-  <div class="mx-auto flex max-w-6xl items-center justify-between px-4 py-3">
-    <a href="/" class="text-xl font-bold text-gray-900">NextJob</a>
+<nav class="sticky top-0 z-50 border-b border-gray-200 bg-white">
+	<div class="mx-auto flex max-w-6xl items-center justify-between px-4 py-3">
+		<a href="/" class="text-xl font-bold text-gray-900">
+			NextJob
+		</a>
 
-    <!-- Desktop-Links -->
-    <div class="hidden items-center gap-6 md:flex">
-      <a href="/" class="text-gray-700 hover:text-gray-900">Start</a>
-      <a href="/wer-wir-sind" class="text-gray-700 hover:text-gray-900">Wer wir sind</a>
-      <a href="/auth/login" class="rounded-lg bg-gray-900 px-4 py-2 text-white hover:bg-gray-700">Login</a>
-    </div>
+		<div class="hidden items-center gap-6 md:flex">
+			<a href="/" class="text-gray-700 transition hover:text-gray-900">
+				Start
+			</a>
 
-    <!-- Mobile Burger-Button -->
-    <button
-      class="md:hidden"
-      aria-label="Menü öffnen"
-      onclick={() => (menuOpen = !menuOpen)}
-    >
-      ☰
-    </button>
+			<a href="/wer-wir-sind" class="text-gray-700 transition hover:text-gray-900">
+				Wer wir sind
+			</a>
 
-    <button onclick={() => locale.update((l) => (l === 'de' ? 'al' : 'de'))}>
-  {$locale === 'de' ? 'AL' : 'DE'}
-</button>
-  </div>
+			<button
+				type="button"
+				onclick={toggleLanguage}
+				class="rounded-md border border-gray-300 px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100"
+			>
+				{$locale === 'de' ? 'AL' : 'DE'}
+			</button>
 
-  <!-- Mobile-Menü -->
-  {#if menuOpen}
-    <div class="flex flex-col gap-2 border-t border-gray-200 px-4 py-3 md:hidden">
-      <a href="/" class="text-gray-700">Start</a>
-      <a href="/wer-wir-sind" class="text-gray-700">Wer wir sind</a>
-      <a href="/auth/login" class="text-gray-700">Login</a>
-    </div>
-  {/if}
+			<a
+				href="/auth/login"
+				class="rounded-lg bg-gray-900 px-4 py-2 text-white transition hover:bg-gray-700"
+			>
+				Login
+			</a>
+		</div>
+
+		<div class="flex items-center gap-3 md:hidden">
+			<button
+				type="button"
+				onclick={toggleLanguage}
+				class="rounded-md border border-gray-300 px-2 py-1 text-sm"
+			>
+				{$locale === 'de' ? 'AL' : 'DE'}
+			</button>
+
+			<button
+				type="button"
+				aria-label="Menü öffnen"
+				aria-expanded={menuOpen}
+				onclick={() => (menuOpen = !menuOpen)}
+				class="text-2xl text-gray-900"
+			>
+				{menuOpen ? '✕' : '☰'}
+			</button>
+		</div>
+	</div>
+
+	{#if menuOpen}
+		<div class="border-t border-gray-200 bg-white px-4 py-4 md:hidden">
+			<div class="mx-auto flex max-w-6xl flex-col gap-4">
+				<a href="/" onclick={closeMenu} class="text-gray-700">
+					Start
+				</a>
+
+				<a href="/wer-wir-sind" onclick={closeMenu} class="text-gray-700">
+					Wer wir sind
+				</a>
+
+				<a
+					href="/auth/login"
+					onclick={closeMenu}
+					class="rounded-lg bg-gray-900 px-4 py-2 text-center text-white"
+				>
+					Login
+				</a>
+			</div>
+		</div>
+	{/if}
 </nav>
