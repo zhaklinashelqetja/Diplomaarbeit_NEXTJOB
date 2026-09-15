@@ -50,6 +50,15 @@
 			class="rounded-lg border px-3 py-2"
 		/>
 
+		<div class="text-right">
+			<a
+				href={resolve('/auth/passwort-vergessen')}
+				class="text-sm font-medium text-gray-600 hover:text-gray-900"
+			>
+				Passwort vergessen?
+			</a>
+		</div>
+
 		{#if error}
 			<p class="text-sm text-red-600">
 				{error}

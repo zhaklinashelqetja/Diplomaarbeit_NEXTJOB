@@ -28,7 +28,7 @@
 
 		localStorage.setItem('token', data.token);
 
-		goto(resolve('/'));
+		goto(resolve('/auth/verifizierung'));
 	}
 </script>
 
