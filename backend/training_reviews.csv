@@ -1,0 +1,801 @@
+text,sentiment,labels
+Excellent worker. did a quality job and always punctual.,positive,high_quality|punctual
+Too expensive. Also response time could be faster.,negative,overpriced|slow_response
+Would not recommend. quite rude when I asked questions.,negative,rude
+Avoid this worker. took days to answer my messages.,negative,slow_response
+"Great experience. didn't overcharge me at all, honest guy, plus came even a few minutes early.",positive,price_fair|punctual
+Way too expensive for what he did.,negative,overpriced
+Very disappointed. his prices are absurdly high.,negative,overpriced
+"Would not recommend. took days to answer my messages, plus way too expensive for what he did.",negative,overpriced|slow_response
+"Not happy at all. bad quality, plus came very late and such a rude person.",negative,late|poor_quality|rude
+"Very disappointed. had to chase him constantly for updates, plus the installation was done wrong. Also arrived late without any excuse.",negative,late|poor_quality|slow_response
+Avoid this worker. added hidden costs at the end. Also missed the appointment completely.,negative,late|overpriced
+Really happy with this. courteous and professional in every way and showed up right when he said he would.,positive,friendly|punctual
+Great experience. best price I could find for this job.,positive,price_fair
+Very satisfied. super friendly. On top of that everything was installed properly and works great.,positive,friendly|high_quality
+"Would not recommend. hours late. On top of that sloppy job, it broke again after a week — final bill was double the estimate.",negative,late|overpriced|poor_quality
+Would hire again. responds fast.,positive,fast_response
+Not happy at all. demanded extra money for no reason. On top of that arrived late without any excuse.,negative,late|overpriced
+Would hire again. explained everything patiently and nicely and replied to my request within minutes.,positive,fast_response|friendly
+"Great experience. friendly, honest and easy to talk to and everything was installed properly and works great.",positive,friendly|high_quality
+The quality of the work is excellent.,positive,high_quality
+"Really happy with this. quality is top, but so rude to me.",mixed,high_quality|rude
+"Not happy at all. always late, wasted my whole day — had a bad attitude and ignored my calls for a week.",negative,late|rude|slow_response
+"Highly recommend. transparent pricing from the start and amazing work, really well done.",positive,high_quality|price_fair
+He was very rude.,negative,rude
+Bad experience. rude and unprofessional behavior — the job took twice as long as promised.,negative,late|rude
+Would not recommend. communication was painfully slow.,negative,slow_response
+"Very satisfied. made me feel comfortable, very nice guy, plus he was punctual and ready to work.",positive,friendly|punctual
+Very disappointed. the bill was huge and he was late.,negative,late|overpriced
+"Excellent worker. right on time and didn't overcharge me at all, honest guy.",positive,price_fair|punctual
+Great experience. transparent pricing from the start.,positive,price_fair
+Excellent worker. replied to my request within minutes.,positive,fast_response
+Bad experience. such a rude person. On top of that waited forever just to get a quote.,negative,rude|slow_response
+Very satisfied. finished the job within the promised time.,positive,punctual
+Not happy at all. kept me waiting all morning.,negative,late
+Not happy at all. charged much more than the original quote and unfriendly attitude the whole time.,negative,overpriced|rude
+Very satisfied. super fast communication throughout.,positive,fast_response
+Very satisfied. excellent quality.,positive,high_quality
+Really happy with this. always on time on both days.,positive,punctual
+Bad experience. not worth the money at all. On top of that such a rude person. On top of that took long to get back to me.,negative,overpriced|rude|slow_response
+Avoid this worker. came very late.,negative,late
+Not happy at all. showed up two hours late.,negative,late
+Super friendly — replied to my request within minutes — fair price for good work.,positive,fast_response|friendly|price_fair
+Too expensive.,negative,overpriced
+Got rude with me. Also postponed twice and then came late anyway.,negative,late|rude
+Really happy with this. finished the job within the promised time.,positive,punctual
+Highly recommend. was there at 8 sharp as agreed.,positive,punctual
+Would hire again. fair quote and stuck to it — responded quickly and scheduled the visit fast.,positive,fast_response|price_fair
+Excellent worker. super friendly.,positive,friendly
+Great experience. instant reply when I contacted him. On top of that finished the job within the promised time.,positive,fast_response|punctual
+Very satisfied. on time.,positive,punctual
+"Would not recommend. added hidden costs at the end, plus was really rude on the phone.",negative,overpriced|rude
+Avoid this worker. way too expensive for what he did.,negative,overpriced
+Really happy with this. the quality of the work is excellent.,positive,high_quality
+"Would hire again. courteous and professional in every way, plus transparent pricing from the start.",positive,friendly|price_fair
+The price was very fair. Sadly he was late.,mixed,late|price_fair
+"Highly recommend. pleasant to deal with, great attitude.",positive,friendly
+Excellent quality. On top of that quick response.,positive,fast_response|high_quality
+"Very satisfied. excellent quality — always punctual. On top of that made me feel comfortable, very nice guy.",positive,friendly|high_quality|punctual
+Would hire again. showed up right when he said he would. Also the cost was lower than I expected.,positive,price_fair|punctual
+Excellent worker. good quality and durable. Also fair price for good work.,positive,high_quality|price_fair
+"Highly recommend. pleasant to deal with, great attitude. Also same day service, incredibly fast.",positive,fast_response|friendly
+Not happy at all. arrived late without any excuse. On top of that stopped responding after the first visit. Also way too expensive for what he did.,negative,late|overpriced|slow_response
+Really happy with this. came even a few minutes early.,positive,punctual
+Avoid this worker. the work quality was terrible.,negative,poor_quality
+"Very satisfied. the work quality is really good, plus finished the job within the promised time, plus fair price for good work.",positive,high_quality|price_fair|punctual
+"Not happy at all. had to hire someone else to fix his mistakes — disrespectful towards me and my home, plus had to chase him constantly for updates.",negative,poor_quality|rude|slow_response
+"The price is right. However sloppy job, it broke again after a week.",mixed,poor_quality|price_fair
+"Clean and precise work, real craftsmanship. On top of that super fast communication throughout.",positive,fast_response|high_quality
+"Excellent worker. affordable and honest pricing. Also super fast communication throughout, plus courteous and professional in every way.",positive,fast_response|friendly|price_fair
+"Would not recommend. bad work, plus was arrogant and talked down to me.",negative,poor_quality|rude
+Excellent worker. great quality work. On top of that came even a few minutes early.,positive,high_quality|punctual
+"Very disappointed. disrespectful towards me and my home, plus left a small mess.",negative,poor_quality|rude
+Bad experience. unfriendly attitude the whole time.,negative,rude
+"Had a bad attitude, plus had to chase him constantly for updates.",negative,rude|slow_response
+Very disappointed. the work quality was terrible. Also demanded extra money for no reason.,negative,overpriced|poor_quality
+Very satisfied. the cost was lower than I expected — right on time. Also got back to me right away.,positive,fast_response|price_fair|punctual
+Excellent worker. responds fast and finished the job within the promised time.,positive,fast_response|punctual
+Very expensive — waited forever just to get a quote. Also yelled at me when I pointed out a mistake.,negative,overpriced|rude|slow_response
+Very satisfied. the price is right. Sadly waited forever just to get a quote.,mixed,price_fair|slow_response
+"Would hire again. friendly, honest and easy to talk to. Sadly damaged my wall while working.",mixed,friendly|poor_quality
+"Bad experience. stopped responding after the first visit, plus kept me waiting all morning.",negative,late|slow_response
+"The work quality was terrible, plus takes forever to answer. Also yelled at me when I pointed out a mistake.",negative,poor_quality|rude|slow_response
+Added hidden costs at the end.,negative,overpriced
+Excellent worker. answered immediately and came the same day.,positive,fast_response
+Very satisfied. fast reply.,positive,fast_response
+Bad experience. slow to reply. On top of that his prices are absurdly high.,negative,overpriced|slow_response
+"Would hire again. treated my home with respect, lovely person. The downside: not worth the money at all.",mixed,friendly|overpriced
+Terrible service. cheap materials and careless work — ignored my calls for a week.,negative,poor_quality|slow_response
+"Bad experience. took days to answer my messages, plus kept me waiting all morning. On top of that quite rude when I asked questions.",negative,late|rude|slow_response
+Would not recommend. never arrived at the agreed time and overpriced for such a simple job.,negative,late|overpriced
+Not happy at all. arrived late without any excuse.,negative,late
+"Great experience. very responsive, plus the quality of the work is excellent.",positive,fast_response|high_quality
+"Would hire again. got back to me right away and the work quality is really good, plus didn't overcharge me at all, honest guy.",positive,fast_response|high_quality|price_fair
+Finished the job within the promised time.,positive,punctual
+Bad experience. arrived late without any excuse and the bill was huge — the work was awful.,negative,late|overpriced|poor_quality
+Would hire again. very quick to respond to my messages. Sadly low quality job.,mixed,fast_response|poor_quality
+Would hire again. the price was very fair. However he was late.,mixed,late|price_fair
+Highly recommend. very friendly and polite. However stopped responding after the first visit.,mixed,friendly|slow_response
+Very disappointed. missed the appointment completely — not worth the money at all.,negative,late|overpriced
+"Impolite and impatient with everything — demanded extra money for no reason, plus was late both days without warning.",negative,late|overpriced|rude
+Kept me waiting all morning.,negative,late
+Excellent worker. answered immediately and came the same day — always punctual.,positive,fast_response|punctual
+"Very satisfied. top quality job, no issues since. The downside: zero manners, very unpleasant person.",mixed,high_quality|rude
+"Not happy at all. sloppy job, it broke again after a week. On top of that kept me waiting all morning — the bill was huge.",negative,late|overpriced|poor_quality
+Highly recommend. transparent pricing from the start. On top of that very quick to respond to my messages.,positive,fast_response|price_fair
+Great experience. polite and helpful.,positive,friendly
+Terrible service. did a horrible job. On top of that way too expensive for what he did. On top of that such a rude person.,negative,overpriced|poor_quality|rude
+"Got back to me right away and friendly, honest and easy to talk to.",positive,fast_response|friendly
+Avoid this worker. missed the appointment completely.,negative,late
+Bad experience. got aggressive when I asked questions.,negative,rude
+"Very satisfied. polite and helpful, plus solid work that will last for years.",positive,friendly|high_quality
+Excellent worker. fast reply.,positive,fast_response
+Would hire again. kept to the agreed schedule perfectly.,positive,punctual
+"Very satisfied. arrived exactly on time, but missed the appointment completely.",mixed,late|punctual
+Very disappointed. so rude to me. Also did a horrible job.,negative,poor_quality|rude
+Excellent worker. very friendly the whole time.,positive,friendly
+"Excellent worker. didn't overcharge me at all, honest guy. On top of that solid work.",positive,high_quality|price_fair
+Great experience. the cost was lower than I expected.,positive,price_fair
+Very satisfied. he was punctual and ready to work and transparent pricing from the start.,positive,price_fair|punctual
+"Great experience. the price is right and friendly, honest and easy to talk to. Also responded quickly and scheduled the visit fast.",positive,fast_response|friendly|price_fair
+Would not recommend. did not respect the schedule at all.,negative,late
+"Very satisfied. such a kind and respectful person, plus replied to my request within minutes — was there at 8 sharp as agreed.",positive,fast_response|friendly|punctual
+Very disappointed. demanded extra money for no reason and hours late.,negative,late|overpriced
+"Top quality job, no issues since.",positive,high_quality
+Terrible service. kept me waiting all morning.,negative,late
+"Excellent worker. kept to the agreed schedule perfectly. On top of that amazing work, really well done.",positive,high_quality|punctual
+Really happy with this. replied to my request within minutes.,positive,fast_response
+"Avoid this worker. postponed twice and then came late anyway, plus slow to reply. Also demanded extra money for no reason.",negative,late|overpriced|slow_response
+"Would hire again. amazing work, really well done.",positive,high_quality
+"Terrible service. bad work, plus never replies, impossible to reach.",negative,poor_quality|slow_response
+Would not recommend. yelled at me when I pointed out a mistake and communication was slow.,negative,rude|slow_response
+Not happy at all. he was very rude — the work quality was terrible — demanded extra money for no reason.,negative,overpriced|poor_quality|rude
+Very satisfied. solid quality work. Sadly had a bad attitude.,mixed,high_quality|rude
+Bad experience. the job took twice as long as promised and communication was painfully slow.,negative,late|slow_response
+Very satisfied. quality is top. On top of that great value for money.,positive,high_quality|price_fair
+"Would not recommend. always late, wasted my whole day.",negative,late
+Great experience. showed up right when he said he would.,positive,punctual
+Not happy at all. postponed twice and then came late anyway.,negative,late
+Highly recommend. very friendly and polite. Sadly response time could be faster.,mixed,friendly|slow_response
+Not happy at all. damaged my wall while working.,negative,poor_quality
+Highly recommend. explained everything patiently and nicely.,positive,friendly
+Excellent worker. fast reply. Sadly response time could be faster.,mixed,fast_response|slow_response
+Not happy at all. cheap materials and careless work and way too expensive for what he did. On top of that such a rude person.,negative,overpriced|poor_quality|rude
+"Would hire again. kept to the agreed schedule perfectly, but takes forever to answer.",mixed,punctual|slow_response
+"Highly recommend. got back to me right away. On top of that very punctual, respected my schedule.",positive,fast_response|punctual
+Not happy at all. rude and unprofessional behavior.,negative,rude
+Not happy at all. was late both days without warning.,negative,late
+Bad experience. the problem came back two days later — rude and unprofessional behavior.,negative,poor_quality|rude
+Really happy with this. such a kind and respectful person. Also very quick to respond to my messages.,positive,fast_response|friendly
+Really happy with this. came even a few minutes early. The downside: such a rude person.,mixed,punctual|rude
+"Bad experience. poor workmanship, crooked and leaking.",negative,poor_quality
+Would hire again. on time. Sadly took long to get back to me.,mixed,punctual|slow_response
+Always on time on both days.,positive,punctual
+Finished the job within the promised time. On top of that responds fast.,positive,fast_response|punctual
+Really happy with this. nice guy — very quick to respond to my messages. On top of that attention to detail was impressive.,positive,fast_response|friendly|high_quality
+"Highly recommend. quick response, but he was very rude.",mixed,fast_response|rude
+Excellent worker. cheap and good. However waited forever just to get a quote.,mixed,price_fair|slow_response
+"Very disappointed. way too expensive for what he did, plus got rude with me.",negative,overpriced|rude
+Would hire again. did a quality job.,positive,high_quality
+Would not recommend. arrived late without any excuse. On top of that he was very rude.,negative,late|rude
+"Excellent worker. super friendly, plus always on time on both days.",positive,friendly|punctual
+Had to chase him constantly for updates. On top of that low quality job.,negative,poor_quality|slow_response
+"Excellent worker. courteous and professional in every way, but cheap materials and careless work.",mixed,friendly|poor_quality
+Very satisfied. fast reply — super friendly.,positive,fast_response|friendly
+"Great experience. made me feel comfortable, very nice guy.",positive,friendly
+Showed up two hours late.,negative,late
+Not happy at all. his prices are absurdly high. Also takes forever to answer.,negative,overpriced|slow_response
+Really happy with this. finished the job within the promised time. Also left everything clean and tidy after finishing.,positive,high_quality|punctual
+Not worth the money at all — damaged my wall while working.,negative,overpriced|poor_quality
+Great experience. his work is really good.,positive,high_quality
+Avoid this worker. arrived late without any excuse.,negative,late
+Would not recommend. not responsive at all.,negative,slow_response
+"Excellent worker. always on time on both days, plus amazing work, really well done.",positive,high_quality|punctual
+"Excellent worker. transparent pricing from the start. On top of that finished the job within the promised time — made me feel comfortable, very nice guy.",positive,friendly|price_fair|punctual
+Very disappointed. came very late.,negative,late
+Everything was installed properly and works great. Also very quick to respond to my messages.,positive,fast_response|high_quality
+Terrible service. such a rude person. On top of that bad quality.,negative,poor_quality|rude
+Fixed everything perfectly. However took long to get back to me.,mixed,high_quality|slow_response
+Bad work.,negative,poor_quality
+Bad experience. took long to get back to me.,negative,slow_response
+Terrible service. rude and unprofessional behavior and took days to answer my messages.,negative,rude|slow_response
+"Bad experience. the installation was done wrong. Also the bill was huge, plus yelled at me when I pointed out a mistake.",negative,overpriced|poor_quality|rude
+Terrible service. added hidden costs at the end.,negative,overpriced
+Avoid this worker. showed up two hours late.,negative,late
+Excellent worker. instant reply when I contacted him. Sadly the bill was huge.,mixed,fast_response|overpriced
+Really happy with this. fair price for good work. Sadly the work was awful.,mixed,poor_quality|price_fair
+Would not recommend. slow to reply.,negative,slow_response
+Really happy with this. very quick to respond to my messages.,positive,fast_response
+Very disappointed. quite rude when I asked questions.,negative,rude
+Right on time. Also attention to detail was impressive and transparent pricing from the start.,positive,high_quality|price_fair|punctual
+Great experience. responded quickly and scheduled the visit fast.,positive,fast_response
+Highly recommend. very friendly the whole time.,positive,friendly
+Very disappointed. the price was a complete rip off — waited forever just to get a quote.,negative,overpriced|slow_response
+Really happy with this. kept to the agreed schedule perfectly — best price I could find for this job.,positive,price_fair|punctual
+Very satisfied. good price.,positive,price_fair
+Great experience. very reasonable price for the work done — fast reply. Also his work is really good.,positive,fast_response|high_quality|price_fair
+"Excellent worker. pleasant to deal with, great attitude.",positive,friendly
+"Would not recommend. never replies, impossible to reach. On top of that had to hire someone else to fix his mistakes.",negative,poor_quality|slow_response
+Excellent worker. finished the job within the promised time.,positive,punctual
+Not happy at all. hours late. On top of that took days to answer my messages. On top of that unfriendly attitude the whole time.,negative,late|rude|slow_response
+Great experience. instant reply when I contacted him. Also excellent quality.,positive,fast_response|high_quality
+"Cheap and good, plus very friendly and polite.",positive,friendly|price_fair
+Not happy at all. so rude to me. On top of that cheap materials and careless work and not responsive at all.,negative,poor_quality|rude|slow_response
+Would hire again. polite and helpful. Sadly bad work.,mixed,friendly|poor_quality
+Not happy at all. the work quality was terrible.,negative,poor_quality
+Not responsive at all.,negative,slow_response
+"Had to chase him constantly for updates. Also his prices are absurdly high, plus sloppy job, it broke again after a week.",negative,overpriced|poor_quality|slow_response
+Really happy with this. the work quality is really good. Also nice and friendly.,positive,friendly|high_quality
+"Would hire again. right on time. Also didn't overcharge me at all, honest guy.",positive,price_fair|punctual
+"Avoid this worker. very unprofessional result, had to redo it.",negative,poor_quality
+Would not recommend. not worth the money at all.,negative,overpriced
+"Terrible service. always late, wasted my whole day and got rude with me.",negative,late|rude
+Would not recommend. kept me waiting all morning.,negative,late
+"Polite and helpful, plus charged exactly what was quoted, no surprises.",positive,friendly|price_fair
+Bad experience. got rude with me — the work quality was terrible.,negative,poor_quality|rude
+Highly recommend. replied to my request within minutes.,positive,fast_response
+"Bad experience. left a small mess. Also zero manners, very unpleasant person. Also final bill was double the estimate.",negative,overpriced|poor_quality|rude
+Would hire again. super fast communication throughout.,positive,fast_response
+"Bad experience. too expensive and took days to answer my messages, plus left a small mess.",negative,overpriced|poor_quality|slow_response
+"Communication was slow, plus poor workmanship, crooked and leaking.",negative,poor_quality|slow_response
+Not happy at all. yelled at me when I pointed out a mistake.,negative,rude
+"Would hire again. very responsive. On top of that charged exactly what was quoted, no surprises.",positive,fast_response|price_fair
+Really happy with this. did a quality job. Also polite and helpful.,positive,friendly|high_quality
+"Would hire again. very punctual, respected my schedule.",positive,punctual
+Terrible service. way too expensive for what he did.,negative,overpriced
+Great experience. right on time. Unfortunately arrived late without any excuse.,mixed,late|punctual
+Everything was installed properly and works great.,positive,high_quality
+Not happy at all. damaged my wall while working.,negative,poor_quality
+Bad experience. unfriendly attitude the whole time and the work was awful.,negative,poor_quality|rude
+"The installation was done wrong, plus added hidden costs at the end.",negative,overpriced|poor_quality
+Really happy with this. his work is really good and courteous and professional in every way.,positive,friendly|high_quality
+"Would not recommend. never replies, impossible to reach. Also not worth the money at all.",negative,overpriced|slow_response
+Avoid this worker. had to hire someone else to fix his mistakes.,negative,poor_quality
+Very quick to respond to my messages. Sadly final bill was double the estimate.,mixed,fast_response|overpriced
+Would hire again. super fast communication throughout. Also explained everything patiently and nicely.,positive,fast_response|friendly
+Very satisfied. very friendly and polite.,positive,friendly
+"Very disappointed. way too expensive for what he did, plus bad work — disrespectful towards me and my home.",negative,overpriced|poor_quality|rude
+"Excellent worker. kind person. On top of that finished the job within the promised time. Also same day service, incredibly fast.",positive,fast_response|friendly|punctual
+"Avoid this worker. very unprofessional result, had to redo it — communication was painfully slow.",negative,poor_quality|slow_response
+Very disappointed. postponed twice and then came late anyway.,negative,late
+Highly recommend. nice and friendly.,positive,friendly
+Avoid this worker. did a horrible job.,negative,poor_quality
+Really happy with this. he was punctual and ready to work. However his prices are absurdly high.,mixed,overpriced|punctual
+Would not recommend. unfriendly attitude the whole time. Also not worth the money at all.,negative,overpriced|rude
+Kept to the agreed schedule perfectly. On top of that such a kind and respectful person.,positive,friendly|punctual
+Would hire again. got back to me right away.,positive,fast_response
+Would not recommend. the work quality was terrible.,negative,poor_quality
+Very disappointed. did a horrible job.,negative,poor_quality
+Not happy at all. waited forever just to get a quote. On top of that was arrogant and talked down to me.,negative,rude|slow_response
+"Really happy with this. was there at 8 sharp as agreed, plus nice and friendly.",positive,friendly|punctual
+Would not recommend. the installation was done wrong.,negative,poor_quality
+Really happy with this. kind person. Unfortunately way too expensive for what he did.,mixed,friendly|overpriced
+Not happy at all. took long to get back to me.,negative,slow_response
+Bad experience. was late both days without warning and response time could be faster.,negative,late|slow_response
+Bad experience. the bill was huge.,negative,overpriced
+"The work quality is really good, but was late both days without warning.",mixed,high_quality|late
+"Very satisfied. solid work — same day service, incredibly fast and such a kind and respectful person.",positive,fast_response|friendly|high_quality
+Would hire again. fair price for good work. Sadly the work was awful.,mixed,poor_quality|price_fair
+"Amazing work, really well done. Also right on time.",positive,high_quality|punctual
+Bad experience. communication was slow — his prices are absurdly high.,negative,overpriced|slow_response
+Bad experience. rude and unprofessional behavior and showed up two hours late.,negative,late|rude
+Instant reply when I contacted him — finished the job within the promised time.,positive,fast_response|punctual
+Very satisfied. affordable and honest pricing. The downside: quite rude when I asked questions.,mixed,price_fair|rude
+Very disappointed. was late both days without warning.,negative,late
+Excellent worker. fair price for good work and left everything clean and tidy after finishing.,positive,high_quality|price_fair
+Not happy at all. the installation was done wrong. Also postponed twice and then came late anyway. On top of that way too expensive for what he did.,negative,late|overpriced|poor_quality
+Excellent worker. responds fast. The downside: he was late.,mixed,fast_response|late
+Really happy with this. quick response.,positive,fast_response
+Great experience. great value for money.,positive,price_fair
+Not happy at all. very rude and dismissive. Also response time could be faster.,negative,rude|slow_response
+Excellent worker. transparent pricing from the start.,positive,price_fair
+Very satisfied. showed up right when he said he would.,positive,punctual
+"Not happy at all. never replies, impossible to reach — the problem came back two days later, plus way too expensive for what he did.",negative,overpriced|poor_quality|slow_response
+Very disappointed. his prices are absurdly high and took long to get back to me and left a mess and the repair failed.,negative,overpriced|poor_quality|slow_response
+Very satisfied. kind person.,positive,friendly
+"Excellent worker. got back to me right away, plus solid quality work.",positive,fast_response|high_quality
+"Very satisfied. fair quote and stuck to it, plus courteous and professional in every way.",positive,friendly|price_fair
+Would not recommend. arrived late without any excuse. On top of that his prices are absurdly high.,negative,late|overpriced
+Really happy with this. arrived exactly on time.,positive,punctual
+"Excellent worker. pleasant to deal with, great attitude. On top of that the price is right.",positive,friendly|price_fair
+Highly recommend. his work is really good. Sadly extremely slow communication.,mixed,high_quality|slow_response
+Very disappointed. demanded extra money for no reason.,negative,overpriced
+Excellent worker. on time.,positive,punctual
+Would not recommend. took days to answer my messages.,negative,slow_response
+"Very satisfied. made me feel comfortable, very nice guy.",positive,friendly
+Terrible service. was arrogant and talked down to me.,negative,rude
+Really happy with this. fast reply. However arrived late without any excuse.,mixed,fast_response|late
+"Not happy at all. waited forever just to get a quote, plus demanded extra money for no reason.",negative,overpriced|slow_response
+Terrible service. was arrogant and talked down to me. Also low quality job.,negative,poor_quality|rude
+"The bill was huge, plus always late, wasted my whole day — zero manners, very unpleasant person.",negative,late|overpriced|rude
+"Pleasant to deal with, great attitude, plus right on time.",positive,friendly|punctual
+Bad experience. had to hire someone else to fix his mistakes.,negative,poor_quality
+"Bad experience. demanded extra money for no reason — he was late, plus never replies, impossible to reach.",negative,late|overpriced|slow_response
+Would not recommend. had to chase him constantly for updates.,negative,slow_response
+Would hire again. outstanding work on my bathroom.,positive,high_quality
+Great experience. affordable and honest pricing. Unfortunately very expensive.,mixed,overpriced|price_fair
+Would hire again. very quick to respond to my messages.,positive,fast_response
+"Would not recommend. sloppy job, it broke again after a week — arrived late without any excuse and was arrogant and talked down to me.",negative,late|poor_quality|rude
+Would hire again. nice and friendly — finished the job within the promised time.,positive,friendly|punctual
+Not happy at all. got rude with me.,negative,rude
+Would hire again. super friendly and the repair was done perfectly. On top of that answered immediately and came the same day.,positive,fast_response|friendly|high_quality
+"Poor workmanship, crooked and leaking and takes forever to answer. Also the price was a complete rip off.",negative,overpriced|poor_quality|slow_response
+"Great experience. was there at 8 sharp as agreed, plus solid work.",positive,high_quality|punctual
+Would not recommend. waited forever just to get a quote — was late both days without warning.,negative,late|slow_response
+Got back to me right away.,positive,fast_response
+Responds fast.,positive,fast_response
+Bad experience. did not respect the schedule at all.,negative,late
+Would hire again. the work is very good.,positive,high_quality
+"Very satisfied. very punctual, respected my schedule, plus got back to me right away.",positive,fast_response|punctual
+"Would hire again. very responsive, plus super friendly.",positive,fast_response|friendly
+Would hire again. such a kind and respectful person.,positive,friendly
+"Avoid this worker. response time could be faster, plus bad work, plus impolite and impatient with everything.",negative,poor_quality|rude|slow_response
+"Would hire again. super fast communication throughout, plus fair price for good work and good quality and durable.",positive,fast_response|high_quality|price_fair
+"Not happy at all. sloppy job, it broke again after a week.",negative,poor_quality
+"Very satisfied. nice and friendly, but way too expensive for what he did.",mixed,friendly|overpriced
+"Would hire again. clean and precise work, real craftsmanship and very punctual, respected my schedule and charged exactly what was quoted, no surprises.",positive,high_quality|price_fair|punctual
+Bad experience. not worth the money at all.,negative,overpriced
+Great experience. polite and helpful. Also was there at 8 sharp as agreed.,positive,friendly|punctual
+Would not recommend. was arrogant and talked down to me.,negative,rude
+Bad experience. ignored my calls for a week.,negative,slow_response
+Great value for money. On top of that attention to detail was impressive.,positive,high_quality|price_fair
+Not happy at all. expensive and not worth it — had to chase him constantly for updates.,negative,overpriced|slow_response
+Terrible service. had a bad attitude — ignored my calls for a week.,negative,rude|slow_response
+"Kept to the agreed schedule perfectly. On top of that cheap and good, plus great quality work.",positive,high_quality|price_fair|punctual
+"Very satisfied. very punctual, respected my schedule and responded quickly and scheduled the visit fast.",positive,fast_response|punctual
+"Bad experience. zero manners, very unpleasant person, plus had to hire someone else to fix his mistakes.",negative,poor_quality|rude
+"Excellent worker. very quick to respond to my messages, but got aggressive when I asked questions.",mixed,fast_response|rude
+"Highly recommend. very punctual, respected my schedule, plus amazing work, really well done.",positive,high_quality|punctual
+"Not responsive at all — sloppy job, it broke again after a week — showed up two hours late.",negative,late|poor_quality|slow_response
+Not happy at all. was late both days without warning.,negative,late
+Excellent worker. the quality of the work is excellent. On top of that fair quote and stuck to it. Also he was punctual and ready to work.,positive,high_quality|price_fair|punctual
+Would not recommend. takes forever to answer.,negative,slow_response
+Excellent worker. super friendly — on time.,positive,friendly|punctual
+Quick response.,positive,fast_response
+Avoid this worker. too expensive. On top of that postponed twice and then came late anyway.,negative,late|overpriced
+"Not happy at all. had to chase him constantly for updates, plus was really rude on the phone.",negative,rude|slow_response
+Best price I could find for this job.,positive,price_fair
+"Charged exactly what was quoted, no surprises. On top of that always punctual.",positive,price_fair|punctual
+"Amazing work, really well done, plus the cost was lower than I expected, plus responded quickly and scheduled the visit fast.",positive,fast_response|high_quality|price_fair
+Would not recommend. rude and unprofessional behavior. On top of that communication was painfully slow.,negative,rude|slow_response
+Highly recommend. showed up right when he said he would.,positive,punctual
+"Not happy at all. missed the appointment completely, plus way too expensive for what he did.",negative,late|overpriced
+Very disappointed. never arrived at the agreed time and ignored my calls for a week.,negative,late|slow_response
+"Showed up right when he said he would, plus very responsive.",positive,fast_response|punctual
+"Very disappointed. sloppy job, it broke again after a week.",negative,poor_quality
+Very disappointed. quite rude when I asked questions.,negative,rude
+Avoid this worker. the price was a complete rip off. On top of that was arrogant and talked down to me.,negative,overpriced|rude
+Would not recommend. left a mess and the repair failed. Also way too expensive for what he did.,negative,overpriced|poor_quality
+"Highly recommend. flawless workmanship, everything works perfectly.",positive,high_quality
+Would not recommend. the problem came back two days later. Also waited forever just to get a quote.,negative,poor_quality|slow_response
+Yelled at me when I pointed out a mistake — added hidden costs at the end and the installation was done wrong.,negative,overpriced|poor_quality|rude
+Avoid this worker. ignored my calls for a week.,negative,slow_response
+Highly recommend. fixed everything perfectly — instant reply when I contacted him.,positive,fast_response|high_quality
+"Would not recommend. never replies, impossible to reach. On top of that very expensive.",negative,overpriced|slow_response
+"Very satisfied. same day service, incredibly fast, plus the work quality is really good.",positive,fast_response|high_quality
+Impolite and impatient with everything — way too expensive for what he did and stopped responding after the first visit.,negative,overpriced|rude|slow_response
+Very satisfied. good price. Unfortunately takes forever to answer.,mixed,price_fair|slow_response
+"Never replies, impossible to reach — poor workmanship, crooked and leaking. Also never arrived at the agreed time.",negative,late|poor_quality|slow_response
+"Excellent worker. very punctual, respected my schedule. Also responds fast.",positive,fast_response|punctual
+Not happy at all. cheap materials and careless work. Also ignored my calls for a week. Also disrespectful towards me and my home.,negative,poor_quality|rude|slow_response
+Excellent worker. on time. On top of that best price I could find for this job.,positive,price_fair|punctual
+The bill was huge — he was late.,negative,late|overpriced
+Avoid this worker. got rude with me.,negative,rude
+"Would hire again. on time, plus nice and friendly.",positive,friendly|punctual
+Would not recommend. unfriendly attitude the whole time.,negative,rude
+Terrible service. left a mess and the repair failed — arrived late without any excuse.,negative,late|poor_quality
+Kind person.,positive,friendly
+"Postponed twice and then came late anyway, plus never replies, impossible to reach.",negative,late|slow_response
+Very satisfied. very quick to respond to my messages. Unfortunately impolite and impatient with everything.,mixed,fast_response|rude
+"Very satisfied. top quality job, no issues since.",positive,high_quality
+Really happy with this. replied to my request within minutes.,positive,fast_response
+Would not recommend. charged much more than the original quote. Also ignored my calls for a week.,negative,overpriced|slow_response
+Great experience. super friendly.,positive,friendly
+Very disappointed. did a horrible job. On top of that too expensive.,negative,overpriced|poor_quality
+"Would not recommend. not worth the money at all — always late, wasted my whole day.",negative,late|overpriced
+Great experience. very quick to respond to my messages.,positive,fast_response
+Fair price for good work. The downside: missed the appointment completely.,mixed,late|price_fair
+"Would hire again. very friendly and polite, but hours late.",mixed,friendly|late
+"Very satisfied. kind person. On top of that good quality and durable and very punctual, respected my schedule.",positive,friendly|high_quality|punctual
+"Would not recommend. very unprofessional result, had to redo it. Also never arrived at the agreed time. Also response time could be faster.",negative,late|poor_quality|slow_response
+Would not recommend. extremely slow communication.,negative,slow_response
+Would hire again. arrived exactly on time. Also perfect job.,positive,high_quality|punctual
+"Bad experience. the problem came back two days later. Also zero manners, very unpleasant person.",negative,poor_quality|rude
+Excellent worker. always punctual and super fast communication throughout.,positive,fast_response|punctual
+Bad experience. not worth the money at all. Also quite rude when I asked questions.,negative,overpriced|rude
+"Very punctual, respected my schedule — very reasonable price for the work done — very quick to respond to my messages.",positive,fast_response|price_fair|punctual
+Would hire again. quick response. The downside: added hidden costs at the end.,mixed,fast_response|overpriced
+Very disappointed. stopped responding after the first visit.,negative,slow_response
+"Friendly, honest and easy to talk to and responds fast.",positive,fast_response|friendly
+"Great experience. treated my home with respect, lovely person. On top of that good quality and durable.",positive,friendly|high_quality
+Would not recommend. kept me waiting all morning.,negative,late
+Excellent worker. replied to my request within minutes.,positive,fast_response
+"Very satisfied. charged exactly what was quoted, no surprises and very friendly and polite and very punctual, respected my schedule.",positive,friendly|price_fair|punctual
+Would hire again. responded quickly and scheduled the visit fast and fixed everything perfectly.,positive,fast_response|high_quality
+"Very disappointed. zero manners, very unpleasant person.",negative,rude
+Great experience. finished the job within the promised time.,positive,punctual
+Avoid this worker. too expensive. On top of that hours late and extremely slow communication.,negative,late|overpriced|slow_response
+Would not recommend. such a rude person.,negative,rude
+"Really happy with this. friendly, honest and easy to talk to and left everything clean and tidy after finishing — always punctual.",positive,friendly|high_quality|punctual
+Great experience. fair price for good work — fast reply.,positive,fast_response|price_fair
+"Bad experience. had to chase him constantly for updates. On top of that sloppy job, it broke again after a week. Also not worth the money at all.",negative,overpriced|poor_quality|slow_response
+Avoid this worker. never arrived at the agreed time.,negative,late
+Terrible service. not worth the money at all and the work quality was terrible.,negative,overpriced|poor_quality
+Excellent worker. perfect job.,positive,high_quality
+"Great experience. fast reply. On top of that his work is really good, plus on time.",positive,fast_response|high_quality|punctual
+"Would hire again. very reasonable price for the work done. On top of that very punctual, respected my schedule and super fast communication throughout.",positive,fast_response|price_fair|punctual
+Added hidden costs at the end.,negative,overpriced
+Bad experience. takes forever to answer and charged much more than the original quote.,negative,overpriced|slow_response
+Avoid this worker. the job took twice as long as promised. Also disrespectful towards me and my home.,negative,late|rude
+Highly recommend. such a kind and respectful person.,positive,friendly
+Bad experience. showed up two hours late.,negative,late
+Great experience. showed up right when he said he would.,positive,punctual
+Very satisfied. responded quickly and scheduled the visit fast. However was really rude on the phone.,mixed,fast_response|rude
+"Great experience. charged exactly what was quoted, no surprises.",positive,price_fair
+"Highly recommend. outstanding work on my bathroom, plus instant reply when I contacted him, plus was there at 8 sharp as agreed.",positive,fast_response|high_quality|punctual
+"Very disappointed. took long to get back to me, plus poor workmanship, crooked and leaking.",negative,poor_quality|slow_response
+Very disappointed. unfriendly attitude the whole time. On top of that never arrived at the agreed time.,negative,late|rude
+Would not recommend. was really rude on the phone.,negative,rude
+Excellent worker. on time. Unfortunately yelled at me when I pointed out a mistake.,mixed,punctual|rude
+"Highly recommend. fair quote and stuck to it, plus got back to me right away.",positive,fast_response|price_fair
+Very satisfied. solid work that will last for years.,positive,high_quality
+"Really happy with this. very friendly and polite. On top of that super fast communication throughout — very professional result, looks amazing.",positive,fast_response|friendly|high_quality
+Not happy at all. final bill was double the estimate.,negative,overpriced
+"Terrible service. not worth the money at all, plus such a rude person.",negative,overpriced|rude
+Would not recommend. got rude with me.,negative,rude
+Answered immediately and came the same day. However bad work.,mixed,fast_response|poor_quality
+Would not recommend. stopped responding after the first visit.,negative,slow_response
+Bad experience. was late both days without warning — took days to answer my messages.,negative,late|slow_response
+Very satisfied. cheap and good and replied to my request within minutes.,positive,fast_response|price_fair
+Great experience. good quality and durable.,positive,high_quality
+Very satisfied. super fast communication throughout.,positive,fast_response
+Excellent worker. always on time on both days.,positive,punctual
+"Solid work that will last for years, plus cheap and good.",positive,high_quality|price_fair
+Would not recommend. postponed twice and then came late anyway. Also had a bad attitude.,negative,late|rude
+Avoid this worker. kept me waiting all morning.,negative,late
+Bad experience. came very late — stopped responding after the first visit. On top of that was really rude on the phone.,negative,late|rude|slow_response
+Great experience. very responsive.,positive,fast_response
+"Avoid this worker. very expensive. On top of that got aggressive when I asked questions and very unprofessional result, had to redo it.",negative,overpriced|poor_quality|rude
+Terrible service. had to hire someone else to fix his mistakes.,negative,poor_quality
+Bad experience. did not respect the schedule at all.,negative,late
+"Really happy with this. instant reply when I contacted him, plus kept to the agreed schedule perfectly.",positive,fast_response|punctual
+Great experience. courteous and professional in every way. However very expensive.,mixed,friendly|overpriced
+Great experience. always punctual.,positive,punctual
+Bad experience. extremely slow communication. Also never arrived at the agreed time.,negative,late|slow_response
+Avoid this worker. kept me waiting all morning. Also was arrogant and talked down to me.,negative,late|rude
+Not happy at all. sloppy work.,negative,poor_quality
+Highly recommend. very reasonable price for the work done.,positive,price_fair
+Would not recommend. postponed twice and then came late anyway.,negative,late
+"Very satisfied. same day service, incredibly fast. On top of that treated my home with respect, lovely person.",positive,fast_response|friendly
+Not happy at all. quite rude when I asked questions.,negative,rude
+"Very satisfied. amazing work, really well done — always punctual. On top of that friendly, honest and easy to talk to.",positive,friendly|high_quality|punctual
+"Really happy with this. best price I could find for this job, plus top quality job, no issues since.",positive,high_quality|price_fair
+Terrible service. took days to answer my messages. Also he was late.,negative,late|slow_response
+Great experience. very reasonable price for the work done.,positive,price_fair
+Really happy with this. always on time on both days.,positive,punctual
+"Excellent worker. kept to the agreed schedule perfectly, but did not respect the schedule at all.",mixed,late|punctual
+"Not happy at all. took long to get back to me. Also always late, wasted my whole day and did a horrible job.",negative,late|poor_quality|slow_response
+"Very disappointed. unfriendly attitude the whole time, plus missed the appointment completely.",negative,late|rude
+Not happy at all. rude and unprofessional behavior. On top of that not worth the money at all.,negative,overpriced|rude
+Highly recommend. solid work that will last for years. Unfortunately arrived late without any excuse.,mixed,high_quality|late
+Terrible service. took long to get back to me. On top of that very rude and dismissive.,negative,rude|slow_response
+Really happy with this. finished the job within the promised time.,positive,punctual
+Great experience. polite and helpful — the quality of the work is excellent and got back to me right away.,positive,fast_response|friendly|high_quality
+Not happy at all. demanded extra money for no reason and stopped responding after the first visit — the installation was done wrong.,negative,overpriced|poor_quality|slow_response
+Bad experience. hours late.,negative,late
+Would hire again. polite and helpful.,positive,friendly
+Had to chase him constantly for updates and sloppy work.,negative,poor_quality|slow_response
+Bad experience. his prices are absurdly high. On top of that had a bad attitude.,negative,overpriced|rude
+Terrible service. hours late.,negative,late
+"Excellent worker. excellent quality, but he was late.",mixed,high_quality|late
+Terrible service. demanded extra money for no reason.,negative,overpriced
+Very disappointed. the job took twice as long as promised.,negative,late
+Stopped responding after the first visit. Also way too expensive for what he did.,negative,overpriced|slow_response
+"Excellent worker. on time, plus quick response.",positive,fast_response|punctual
+Communication was slow and hours late and disrespectful towards me and my home.,negative,late|rude|slow_response
+Very satisfied. nice and friendly.,positive,friendly
+Terrible service. postponed twice and then came late anyway. Also quite rude when I asked questions. On top of that overpriced for such a simple job.,negative,late|overpriced|rude
+Excellent worker. instant reply when I contacted him.,positive,fast_response
+Terrible service. did not respect the schedule at all.,negative,late
+Would hire again. best price I could find for this job. On top of that right on time.,positive,price_fair|punctual
+Not happy at all. was late both days without warning.,negative,late
+Courteous and professional in every way.,positive,friendly
+Not happy at all. was arrogant and talked down to me.,negative,rude
+Would hire again. fair price for good work. Sadly had to hire someone else to fix his mistakes.,mixed,poor_quality|price_fair
+Terrible service. showed up two hours late.,negative,late
+Very satisfied. got back to me right away.,positive,fast_response
+Would not recommend. bad quality.,negative,poor_quality
+"Would hire again. perfect job. On top of that treated my home with respect, lovely person, plus transparent pricing from the start.",positive,friendly|high_quality|price_fair
+Quick response and the cost was lower than I expected.,positive,fast_response|price_fair
+Really happy with this. good price.,positive,price_fair
+Excellent worker. courteous and professional in every way.,positive,friendly
+Would hire again. instant reply when I contacted him — affordable and honest pricing.,positive,fast_response|price_fair
+He was punctual and ready to work.,positive,punctual
+Excellent worker. came even a few minutes early and the repair was done perfectly.,positive,high_quality|punctual
+Not happy at all. missed the appointment completely.,negative,late
+Very satisfied. fast reply.,positive,fast_response
+Very disappointed. got rude with me.,negative,rude
+Avoid this worker. came very late and final bill was double the estimate.,negative,late|overpriced
+Would not recommend. added hidden costs at the end.,negative,overpriced
+"Missed the appointment completely and sloppy job, it broke again after a week, plus final bill was double the estimate.",negative,late|overpriced|poor_quality
+Very satisfied. the cost was lower than I expected. On top of that everything was installed properly and works great — fast reply.,positive,fast_response|high_quality|price_fair
+Very disappointed. low quality job.,negative,poor_quality
+Excellent worker. was there at 8 sharp as agreed.,positive,punctual
+Really happy with this. very friendly the whole time and transparent pricing from the start.,positive,friendly|price_fair
+Bad experience. the installation was done wrong.,negative,poor_quality
+"Excellent worker. very punctual, respected my schedule. The downside: not worth the money at all.",mixed,overpriced|punctual
+Excellent worker. answered immediately and came the same day.,positive,fast_response
+Great experience. was there at 8 sharp as agreed.,positive,punctual
+Highly recommend. the price is right.,positive,price_fair
+"Not happy at all. communication was painfully slow, plus expensive and not worth it, plus always late, wasted my whole day.",negative,late|overpriced|slow_response
+Very disappointed. left a small mess.,negative,poor_quality
+Terrible service. was arrogant and talked down to me.,negative,rude
+"Excellent worker. friendly, honest and easy to talk to — very responsive.",positive,fast_response|friendly
+"Excellent worker. fair price for good work and super fast communication throughout, plus polite and helpful.",positive,fast_response|friendly|price_fair
+Terrible service. missed the appointment completely.,negative,late
+Highly recommend. super fast communication throughout.,positive,fast_response
+Avoid this worker. he was late — sloppy work.,negative,late|poor_quality
+Would not recommend. extremely slow communication. Also way too expensive for what he did.,negative,overpriced|slow_response
+Highly recommend. very friendly and polite. Also fair quote and stuck to it.,positive,friendly|price_fair
+Bad experience. not worth the money at all.,negative,overpriced
+"Sloppy job, it broke again after a week. Also slow to reply.",negative,poor_quality|slow_response
+Avoid this worker. so rude to me.,negative,rude
+Very disappointed. damaged my wall while working.,negative,poor_quality
+"Very disappointed. showed up two hours late and never replies, impossible to reach.",negative,late|slow_response
+"Excellent worker. treated my home with respect, lovely person.",positive,friendly
+"Highly recommend. his work is really good, plus kept to the agreed schedule perfectly.",positive,high_quality|punctual
+Great experience. fair quote and stuck to it.,positive,price_fair
+Very satisfied. the work quality is really good.,positive,high_quality
+Not happy at all. yelled at me when I pointed out a mistake. Also he was late and not worth the money at all.,negative,late|overpriced|rude
+Highly recommend. responds fast.,positive,fast_response
+Excellent worker. good price. On top of that his work is really good. Also super friendly.,positive,friendly|high_quality|price_fair
+Way too expensive for what he did.,negative,overpriced
+Really happy with this. the cost was lower than I expected. The downside: never arrived at the agreed time.,mixed,late|price_fair
+"Highly recommend. very quick to respond to my messages, plus arrived exactly on time.",positive,fast_response|punctual
+Would hire again. solid quality work.,positive,high_quality
+Very satisfied. outstanding work on my bathroom and super fast communication throughout.,positive,fast_response|high_quality
+Bad experience. arrived late without any excuse.,negative,late
+Terrible service. slow to reply.,negative,slow_response
+"Excellent worker. very friendly and polite, but not worth the money at all.",mixed,friendly|overpriced
+"Avoid this worker. poor workmanship, crooked and leaking and very rude and dismissive.",negative,poor_quality|rude
+Really happy with this. quick response.,positive,fast_response
+"Highly recommend. very responsive. Also quality is top, plus nice guy.",positive,fast_response|friendly|high_quality
+"Bad experience. overpriced for such a simple job, plus always late, wasted my whole day.",negative,late|overpriced
+"Great experience. arrived exactly on time, but did not respect the schedule at all.",mixed,late|punctual
+Would hire again. the cost was lower than I expected. Unfortunately the work was awful.,mixed,poor_quality|price_fair
+"Never replies, impossible to reach. Also sloppy work — way too expensive for what he did.",negative,overpriced|poor_quality|slow_response
+"Never replies, impossible to reach.",negative,slow_response
+Not happy at all. was really rude on the phone.,negative,rude
+The work is very good.,positive,high_quality
+Not happy at all. rude and unprofessional behavior.,negative,rude
+Very disappointed. communication was painfully slow.,negative,slow_response
+"Great experience. the repair was done perfectly, but communication was slow.",mixed,high_quality|slow_response
+Very satisfied. left everything clean and tidy after finishing.,positive,high_quality
+"Bad experience. the installation was done wrong, plus hours late, plus had a bad attitude.",negative,late|poor_quality|rude
+"Would hire again. didn't overcharge me at all, honest guy.",positive,price_fair
+Avoid this worker. got rude with me.,negative,rude
+"Avoid this worker. so rude to me, plus kept me waiting all morning.",negative,late|rude
+"Really happy with this. everything was installed properly and works great, plus right on time.",positive,high_quality|punctual
+Really happy with this. showed up right when he said he would and the price was very fair.,positive,price_fair|punctual
+Very satisfied. responds fast. On top of that very friendly and polite.,positive,fast_response|friendly
+Not happy at all. he was late.,negative,late
+Not happy at all. kept me waiting all morning and he was very rude.,negative,late|rude
+Expensive and not worth it.,negative,overpriced
+Highly recommend. perfect job.,positive,high_quality
+Terrible service. overpriced for such a simple job and the problem came back two days later.,negative,overpriced|poor_quality
+"Had a bad attitude, plus response time could be faster.",negative,rude|slow_response
+Excellent worker. answered immediately and came the same day.,positive,fast_response
+Avoid this worker. was arrogant and talked down to me and left a mess and the repair failed.,negative,poor_quality|rude
+"Avoid this worker. zero manners, very unpleasant person.",negative,rude
+"Charged exactly what was quoted, no surprises.",positive,price_fair
+"Avoid this worker. zero manners, very unpleasant person.",negative,rude
+Excellent worker. responds fast.,positive,fast_response
+Really happy with this. always on time on both days.,positive,punctual
+Bad experience. kept me waiting all morning.,negative,late
+Highly recommend. polite and helpful. On top of that answered immediately and came the same day and great value for money.,positive,fast_response|friendly|price_fair
+"Avoid this worker. sloppy job, it broke again after a week.",negative,poor_quality
+Would not recommend. the job took twice as long as promised. On top of that way too expensive for what he did — waited forever just to get a quote.,negative,late|overpriced|slow_response
+Very satisfied. transparent pricing from the start.,positive,price_fair
+"Super friendly. On top of that got back to me right away and amazing work, really well done.",positive,fast_response|friendly|high_quality
+"Bad experience. so rude to me. Also always late, wasted my whole day.",negative,late|rude
+Arrived exactly on time. The downside: arrived late without any excuse.,mixed,late|punctual
+Not happy at all. hours late.,negative,late
+Bad experience. bad quality — he was very rude.,negative,poor_quality|rude
+Very disappointed. his prices are absurdly high.,negative,overpriced
+Avoid this worker. way too expensive for what he did. Also took days to answer my messages.,negative,overpriced|slow_response
+"Not happy at all. overpriced for such a simple job, plus so rude to me.",negative,overpriced|rude
+Would not recommend. had to chase him constantly for updates. On top of that the problem came back two days later and did not respect the schedule at all.,negative,late|poor_quality|slow_response
+Would not recommend. arrived late without any excuse.,negative,late
+Avoid this worker. way too expensive for what he did and stopped responding after the first visit.,negative,overpriced|slow_response
+"Not happy at all. very unprofessional result, had to redo it, plus his prices are absurdly high.",negative,overpriced|poor_quality
+Not happy at all. bad work.,negative,poor_quality
+"Very satisfied. made me feel comfortable, very nice guy.",positive,friendly
+"Very satisfied. got back to me right away. On top of that fair price for good work — treated my home with respect, lovely person.",positive,fast_response|friendly|price_fair
+Bad experience. was arrogant and talked down to me. Also missed the appointment completely — added hidden costs at the end.,negative,late|overpriced|rude
+"Arrived exactly on time, plus very friendly the whole time. Also very reasonable price for the work done.",positive,friendly|price_fair|punctual
+Bad experience. had to hire someone else to fix his mistakes.,negative,poor_quality
+Would hire again. great value for money. On top of that always on time on both days.,positive,price_fair|punctual
+Very disappointed. the installation was done wrong.,negative,poor_quality
+"Really happy with this. made me feel comfortable, very nice guy.",positive,friendly
+Would hire again. responds fast. Also transparent pricing from the start.,positive,fast_response|price_fair
+Not happy at all. never arrived at the agreed time and had to hire someone else to fix his mistakes. On top of that response time could be faster.,negative,late|poor_quality|slow_response
+Great experience. on time. Sadly such a rude person.,mixed,punctual|rude
+"Highly recommend. good quality and durable. On top of that got back to me right away, plus he was punctual and ready to work.",positive,fast_response|high_quality|punctual
+"Terrible service. response time could be faster, plus added hidden costs at the end.",negative,overpriced|slow_response
+"Bad work, plus zero manners, very unpleasant person.",negative,poor_quality|rude
+Highly recommend. excellent quality. Unfortunately left a mess and the repair failed.,mixed,high_quality|poor_quality
+Excellent worker. fair quote and stuck to it. Also very quick to respond to my messages.,positive,fast_response|price_fair
+Bad experience. cheap materials and careless work and disrespectful towards me and my home.,negative,poor_quality|rude
+Terrible service. missed the appointment completely — the work quality was terrible.,negative,late|poor_quality
+"Excellent worker. quality is top — treated my home with respect, lovely person.",positive,friendly|high_quality
+Highly recommend. always on time on both days.,positive,punctual
+Unfriendly attitude the whole time. Also the job took twice as long as promised.,negative,late|rude
+Really happy with this. very friendly and polite.,positive,friendly
+"Treated my home with respect, lovely person — fixed everything perfectly — always on time on both days.",positive,friendly|high_quality|punctual
+Fair price for good work. The downside: ignored my calls for a week.,mixed,price_fair|slow_response
+Very satisfied. arrived exactly on time — polite and helpful.,positive,friendly|punctual
+"Very disappointed. arrived late without any excuse. Also bad quality, plus never replies, impossible to reach.",negative,late|poor_quality|slow_response
+Really happy with this. quality is top. Also was there at 8 sharp as agreed.,positive,high_quality|punctual
+Terrible service. overpriced for such a simple job. On top of that never arrived at the agreed time.,negative,late|overpriced
+"Avoid this worker. response time could be faster, plus added hidden costs at the end.",negative,overpriced|slow_response
+Excellent worker. great quality work. However quite rude when I asked questions.,mixed,high_quality|rude
+Very satisfied. solid work — nice guy.,positive,friendly|high_quality
+Excellent worker. the price was very fair — the quality of the work is excellent.,positive,high_quality|price_fair
+Really happy with this. always on time on both days. Also good quality and durable.,positive,high_quality|punctual
+Avoid this worker. came very late.,negative,late
+Excellent worker. great quality work.,positive,high_quality
+Took long to get back to me.,negative,slow_response
+"Excellent worker. charged exactly what was quoted, no surprises.",positive,price_fair
+Extremely slow communication.,negative,slow_response
+"Good price. On top of that made me feel comfortable, very nice guy.",positive,friendly|price_fair
+Highly recommend. solid work that will last for years and responds fast.,positive,fast_response|high_quality
+Would hire again. finished the job within the promised time.,positive,punctual
+Bad experience. rude and unprofessional behavior.,negative,rude
+Very satisfied. nice guy. Also best price I could find for this job — right on time.,positive,friendly|price_fair|punctual
+"Would hire again. treated my home with respect, lovely person.",positive,friendly
+"Amazing work, really well done. Sadly took long to get back to me.",mixed,high_quality|slow_response
+Very responsive and the work quality is really good.,positive,fast_response|high_quality
+Really happy with this. nice and friendly. Sadly communication was slow.,mixed,friendly|slow_response
+Excellent worker. he was punctual and ready to work.,positive,punctual
+Very satisfied. kind person.,positive,friendly
+Really happy with this. solid quality work.,positive,high_quality
+Terrible service. charged much more than the original quote.,negative,overpriced
+Really happy with this. good price.,positive,price_fair
+Great experience. the work is very good.,positive,high_quality
+"Bad experience. very unprofessional result, had to redo it. On top of that very expensive. On top of that he was late.",negative,late|overpriced|poor_quality
+Not happy at all. missed the appointment completely.,negative,late
+"Excellent worker. always punctual and didn't overcharge me at all, honest guy.",positive,price_fair|punctual
+Very satisfied. came even a few minutes early. Sadly overpriced for such a simple job.,mixed,overpriced|punctual
+Really happy with this. responded quickly and scheduled the visit fast. Also the work quality is really good.,positive,fast_response|high_quality
+"Great experience. quick response, plus nice guy.",positive,fast_response|friendly
+Terrible service. waited forever just to get a quote.,negative,slow_response
+Terrible service. cheap materials and careless work. Also demanded extra money for no reason.,negative,overpriced|poor_quality
+Would not recommend. communication was painfully slow and postponed twice and then came late anyway.,negative,late|slow_response
+"Really happy with this. very professional result, looks amazing.",positive,high_quality
+"Highly recommend. always on time on both days, plus great value for money.",positive,price_fair|punctual
+Very satisfied. fair price for good work. Unfortunately disrespectful towards me and my home.,mixed,price_fair|rude
+Damaged my wall while working.,negative,poor_quality
+Very satisfied. fair quote and stuck to it. On top of that quick response and fixed everything perfectly.,positive,fast_response|high_quality|price_fair
+"Highly recommend. affordable and honest pricing. On top of that top quality job, no issues since.",positive,high_quality|price_fair
+"Very satisfied. did a quality job, but his prices are absurdly high.",mixed,high_quality|overpriced
+Stopped responding after the first visit and damaged my wall while working.,negative,poor_quality|slow_response
+"Great experience. amazing work, really well done and explained everything patiently and nicely and super fast communication throughout.",positive,fast_response|friendly|high_quality
+Responded quickly and scheduled the visit fast. On top of that fair price for good work. Also arrived exactly on time.,positive,fast_response|price_fair|punctual
+Terrible service. cheap materials and careless work — too expensive.,negative,overpriced|poor_quality
+Terrible service. damaged my wall while working.,negative,poor_quality
+Ignored my calls for a week — final bill was double the estimate.,negative,overpriced|slow_response
+Highly recommend. explained everything patiently and nicely. Sadly waited forever just to get a quote.,mixed,friendly|slow_response
+Very satisfied. fixed everything perfectly.,positive,high_quality
+Terrible service. cheap materials and careless work. Also extremely slow communication.,negative,poor_quality|slow_response
+Bad experience. expensive and not worth it.,negative,overpriced
+"Excellent worker. explained everything patiently and nicely — the work is very good. Also same day service, incredibly fast.",positive,fast_response|friendly|high_quality
+Terrible service. was arrogant and talked down to me.,negative,rude
+Excellent worker. solid work that will last for years.,positive,high_quality
+"Excellent worker. very punctual, respected my schedule. However unfriendly attitude the whole time.",mixed,punctual|rude
+Not happy at all. was arrogant and talked down to me and communication was painfully slow — cheap materials and careless work.,negative,poor_quality|rude|slow_response
+Arrived late without any excuse.,negative,late
+Highly recommend. finished the job within the promised time and excellent quality.,positive,high_quality|punctual
+Very satisfied. polite and helpful and transparent pricing from the start.,positive,friendly|price_fair
+"Would not recommend. disrespectful towards me and my home, plus hours late.",negative,late|rude
+"Excellent worker. answered immediately and came the same day, plus friendly, honest and easy to talk to.",positive,fast_response|friendly
+"Highly recommend. didn't overcharge me at all, honest guy. Sadly expensive and not worth it.",mixed,overpriced|price_fair
+Not happy at all. stopped responding after the first visit — missed the appointment completely — the installation was done wrong.,negative,late|poor_quality|slow_response
+Excellent worker. always on time on both days and quality is top.,positive,high_quality|punctual
+Would hire again. left everything clean and tidy after finishing.,positive,high_quality
+"Great experience. charged exactly what was quoted, no surprises.",positive,price_fair
+Very satisfied. very friendly the whole time. Also the work is very good.,positive,friendly|high_quality
+Overpriced for such a simple job.,negative,overpriced
+Would not recommend. the installation was done wrong. Also communication was slow. Also unfriendly attitude the whole time.,negative,poor_quality|rude|slow_response
+Bad experience. postponed twice and then came late anyway and ignored my calls for a week.,negative,late|slow_response
+Great experience. instant reply when I contacted him.,positive,fast_response
+Really happy with this. super friendly.,positive,friendly
+Great experience. nice guy. On top of that fair quote and stuck to it.,positive,friendly|price_fair
+Such a rude person.,negative,rude
+"Excellent worker. the price was very fair, plus super fast communication throughout.",positive,fast_response|price_fair
+Not happy at all. communication was painfully slow.,negative,slow_response
+"Bad experience. never replies, impossible to reach.",negative,slow_response
+Would hire again. very quick to respond to my messages.,positive,fast_response
+Really happy with this. always punctual.,positive,punctual
+Really happy with this. fair quote and stuck to it. Also finished the job within the promised time.,positive,price_fair|punctual
+Really happy with this. transparent pricing from the start. On top of that kept to the agreed schedule perfectly and left everything clean and tidy after finishing.,positive,high_quality|price_fair|punctual
+Quick response and his work is really good.,positive,fast_response|high_quality
+Explained everything patiently and nicely.,positive,friendly
+Excellent worker. perfect job. On top of that got back to me right away.,positive,fast_response|high_quality
+"Would hire again. fair quote and stuck to it and made me feel comfortable, very nice guy.",positive,friendly|price_fair
+"Terrible service. way too expensive for what he did, plus left a mess and the repair failed — waited forever just to get a quote.",negative,overpriced|poor_quality|slow_response
+"Bad experience. poor workmanship, crooked and leaking.",negative,poor_quality
+"Really happy with this. kept to the agreed schedule perfectly — very friendly and polite, plus best price I could find for this job.",positive,friendly|price_fair|punctual
+Finished the job within the promised time. Sadly the installation was done wrong.,mixed,poor_quality|punctual
+"Would hire again. the cost was lower than I expected and very friendly and polite, plus top quality job, no issues since.",positive,friendly|high_quality|price_fair
+Bad experience. the bill was huge.,negative,overpriced
+Highly recommend. nice and friendly. Sadly arrived late without any excuse.,mixed,friendly|late
+"Always on time on both days, plus fair quote and stuck to it and top quality job, no issues since.",positive,high_quality|price_fair|punctual
+"Would hire again. same day service, incredibly fast.",positive,fast_response
+Would hire again. right on time and kind person.,positive,friendly|punctual
+"Would hire again. the quality of the work is excellent, but not responsive at all.",mixed,high_quality|slow_response
+"Very satisfied. friendly, honest and easy to talk to. Also the work is very good.",positive,friendly|high_quality
+Excellent worker. very responsive.,positive,fast_response
+Great experience. attention to detail was impressive. On top of that kept to the agreed schedule perfectly.,positive,high_quality|punctual
+"Highly recommend. top quality job, no issues since — fast reply.",positive,fast_response|high_quality
+"Really happy with this. treated my home with respect, lovely person.",positive,friendly
+Very disappointed. slow to reply.,negative,slow_response
+Not happy at all. his prices are absurdly high — quite rude when I asked questions.,negative,overpriced|rude
+Would not recommend. postponed twice and then came late anyway — expensive and not worth it.,negative,late|overpriced
+"Would not recommend. the work quality was terrible, plus waited forever just to get a quote.",negative,poor_quality|slow_response
+Ignored my calls for a week.,negative,slow_response
+Terrible service. response time could be faster.,negative,slow_response
+Not happy at all. had a bad attitude.,negative,rude
+"Very satisfied. kept to the agreed schedule perfectly, plus made me feel comfortable, very nice guy.",positive,friendly|punctual
+The work quality was terrible.,negative,poor_quality
+Excellent worker. quick response.,positive,fast_response
+Bad experience. charged much more than the original quote.,negative,overpriced
+Fair quote and stuck to it. Sadly way too expensive for what he did.,mixed,overpriced|price_fair
+"Very satisfied. perfect job, plus finished the job within the promised time.",positive,high_quality|punctual
+Would not recommend. charged much more than the original quote. On top of that the work quality was terrible.,negative,overpriced|poor_quality
+Not happy at all. the price was a complete rip off.,negative,overpriced
+Avoid this worker. yelled at me when I pointed out a mistake and arrived late without any excuse.,negative,late|rude
+Would hire again. always punctual and polite and helpful.,positive,friendly|punctual
+"Very satisfied. flawless workmanship, everything works perfectly. On top of that fair quote and stuck to it.",positive,high_quality|price_fair
+Really happy with this. everything was installed properly and works great.,positive,high_quality
+Would hire again. always punctual and courteous and professional in every way.,positive,friendly|punctual
+"Would hire again. very punctual, respected my schedule and perfect job, plus the cost was lower than I expected.",positive,high_quality|price_fair|punctual
+"Really happy with this. was there at 8 sharp as agreed. The downside: never replies, impossible to reach.",mixed,punctual|slow_response
+Avoid this worker. did not respect the schedule at all.,negative,late
+"Would not recommend. missed the appointment completely — very unprofessional result, had to redo it and the price was a complete rip off.",negative,late|overpriced|poor_quality
+Arrived late without any excuse.,negative,late
+Would not recommend. communication was painfully slow.,negative,slow_response
+Would not recommend. had a bad attitude — the price was a complete rip off.,negative,overpriced|rude
+Not happy at all. ignored my calls for a week.,negative,slow_response
+Would not recommend. the work was awful.,negative,poor_quality
+"Very quick to respond to my messages — treated my home with respect, lovely person.",positive,fast_response|friendly
+Bad experience. not responsive at all. Also so rude to me.,negative,rude|slow_response
+Great experience. fast reply.,positive,fast_response
+Terrible service. left a small mess and missed the appointment completely.,negative,late|poor_quality
+"Excellent worker. fair quote and stuck to it, plus very responsive.",positive,fast_response|price_fair
+"Very satisfied. replied to my request within minutes — top quality job, no issues since.",positive,fast_response|high_quality
+Very satisfied. courteous and professional in every way.,positive,friendly
+"Very satisfied. polite and helpful, plus super fast communication throughout, plus affordable and honest pricing.",positive,fast_response|friendly|price_fair
+Communication was painfully slow. Also the job took twice as long as promised.,negative,late|slow_response
+"Bad experience. hours late, plus added hidden costs at the end.",negative,late|overpriced
+Demanded extra money for no reason. Also came very late. On top of that waited forever just to get a quote.,negative,late|overpriced|slow_response
+"Highly recommend. fast reply, but expensive and not worth it.",mixed,fast_response|overpriced
+"Very satisfied. didn't overcharge me at all, honest guy.",positive,price_fair
+Excellent worker. instant reply when I contacted him. Sadly was arrogant and talked down to me.,mixed,fast_response|rude
+Very satisfied. everything was installed properly and works great.,positive,high_quality
+Really happy with this. super friendly — solid quality work.,positive,friendly|high_quality
+Avoid this worker. got rude with me and was late both days without warning.,negative,late|rude
+"Great experience. best price I could find for this job. The downside: poor workmanship, crooked and leaking.",mixed,poor_quality|price_fair
+Great experience. cheap and good — explained everything patiently and nicely.,positive,friendly|price_fair
+Would hire again. excellent quality. Unfortunately the work quality was terrible.,mixed,high_quality|poor_quality
+Would hire again. the price is right and outstanding work on my bathroom.,positive,high_quality|price_fair
+Would not recommend. had to hire someone else to fix his mistakes — expensive and not worth it.,negative,overpriced|poor_quality
+"Would not recommend. poor workmanship, crooked and leaking.",negative,poor_quality
+Would hire again. attention to detail was impressive and got back to me right away.,positive,fast_response|high_quality
+"Highly recommend. instant reply when I contacted him, plus kept to the agreed schedule perfectly.",positive,fast_response|punctual
+"Great experience. made me feel comfortable, very nice guy. Also transparent pricing from the start.",positive,friendly|price_fair
+Terrible service. the job took twice as long as promised.,negative,late
+"Great experience. showed up right when he said he would. Also very responsive. Also pleasant to deal with, great attitude.",positive,fast_response|friendly|punctual
+Highly recommend. arrived exactly on time. Also did a quality job.,positive,high_quality|punctual
+Would hire again. fair quote and stuck to it and courteous and professional in every way — got back to me right away.,positive,fast_response|friendly|price_fair
+"Very satisfied. responded quickly and scheduled the visit fast. Sadly very unprofessional result, had to redo it.",mixed,fast_response|poor_quality
+Super friendly — the repair was done perfectly. On top of that always punctual.,positive,friendly|high_quality|punctual
+Bad experience. disrespectful towards me and my home and low quality job.,negative,poor_quality|rude
+Very satisfied. fair quote and stuck to it — super friendly.,positive,friendly|price_fair
+Not happy at all. overpriced for such a simple job.,negative,overpriced
+Avoid this worker. takes forever to answer.,negative,slow_response
+Very disappointed. unfriendly attitude the whole time.,negative,rude
+Bad experience. hours late.,negative,late
+Would hire again. got back to me right away. Also quality is top.,positive,fast_response|high_quality
+Really happy with this. kept to the agreed schedule perfectly. Unfortunately expensive and not worth it.,mixed,overpriced|punctual
+"Bad experience. always late, wasted my whole day and rude and unprofessional behavior.",negative,late|rude
+Not happy at all. the work was awful.,negative,poor_quality
+Would not recommend. left a mess and the repair failed — takes forever to answer.,negative,poor_quality|slow_response
+Highly recommend. kept to the agreed schedule perfectly.,positive,punctual
+Really happy with this. such a kind and respectful person.,positive,friendly
+Would hire again. good quality and durable — polite and helpful.,positive,friendly|high_quality
+"The work quality is really good, but cheap materials and careless work.",mixed,high_quality|poor_quality
+Would not recommend. was late both days without warning. On top of that unfriendly attitude the whole time. On top of that had to chase him constantly for updates.,negative,late|rude|slow_response
+"Really happy with this. solid work, plus responds fast. On top of that courteous and professional in every way.",positive,fast_response|friendly|high_quality
+"Avoid this worker. very expensive, plus unfriendly attitude the whole time.",negative,overpriced|rude
+"Great experience. made me feel comfortable, very nice guy.",positive,friendly

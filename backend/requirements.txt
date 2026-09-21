@@ -1,1 +1,8 @@
-
+# NextJob API - Python packages (tested on Python 3.14.4)
+flask==3.1.3
+pyjwt==2.14.0
+mysql-connector-python==26.7.0
+gunicorn==26.2.0
+# must stay at the version the models in ml/models/ were trained with;
+# after retraining (ml/train_model.py) this can be raised
+scikit-learn==1.8.0
