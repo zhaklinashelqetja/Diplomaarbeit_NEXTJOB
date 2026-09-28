@@ -1,0 +1,32 @@
+# NextJob API - gunicorn as a systemd service
+#
+# Install:
+#   sudo cp deploy/nextjob-api.service /etc/systemd/system/
+#   sudo systemctl daemon-reload
+#   sudo systemctl enable --now nextjob-api
+#
+# After new code (git pull):  sudo systemctl restart nextjob-api
+# Logs:                       sudo journalctl -u nextjob-api -f
+
+[Unit]
+Description=NextJob API (gunicorn)
+After=network.target mysql.service
+Wants=mysql.service
+
+[Service]
+User=nextjob
+Group=nextjob
+WorkingDirectory=/opt/nextjob/repo/backend
+# SECRET_KEY, DB_PASSWORD, UPLOAD_FOLDER, ... (root-only file, see backend/.env.example)
+EnvironmentFile=/etc/nextjob/nextjob.env
+ExecStart=/opt/nextjob/venv/bin/gunicorn --workers 4 --bind 127.0.0.1:8000 --access-logfile - --no-control-socket "app:create_app()"
+Restart=on-failure
+RestartSec=3
+
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=full
+ProtectHome=true
+
+[Install]
+WantedBy=multi-user.target
