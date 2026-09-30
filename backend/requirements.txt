@@ -6,3 +6,4 @@ gunicorn==26.2.0
 # must stay at the version the models in ml/models/ were trained with;
 # after retraining (ml/train_model.py) this can be raised
 scikit-learn==1.8.0
+requests
