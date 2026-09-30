@@ -26,7 +26,7 @@ def create_app():
     app.config.from_object(Config)
     os.makedirs(app.config["UPLOAD_FOLDER"], exist_ok=True)
 
-    for bp in (auth_bp, user_bp, worker_bp, problem_bp, misc_bp, analysis_bp):
+    for bp in (auth_bp, user_bp, worker_bp, problem_bp, misc_bp, analysis_bp, chat_bp):
         app.register_blueprint(bp)
 
     app.teardown_appcontext(db.close_db)
