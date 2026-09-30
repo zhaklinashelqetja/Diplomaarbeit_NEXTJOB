@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>NextJob — API Test Console</title>
+<style>
+  /* no design, just readability */
+  body { font-family: monospace; max-width: 900px; margin: 20px auto; }
+  fieldset { margin-bottom: 12px; }
+  pre { background: #eee; padding: 8px; max-height: 300px; overflow: auto; white-space: pre-wrap; }
+  input, select, textarea { margin: 2px; }
+  #who { font-weight: bold; }
+</style>
+</head>\
+<!-- ============ NextJob Chatbot Widget (self-contained) ============ -->
+<style>
+#nj-chat-btn{position:fixed;bottom:20px;right:20px;width:58px;height:58px;
+ border-radius:50%;background:#2563eb;color:#fff;font-size:26px;border:none;
+ cursor:pointer;box-shadow:0 4px 14px rgba(0,0,0,.3);z-index:9998}
+#nj-chat{position:fixed;bottom:90px;right:20px;width:340px;max-width:92vw;
+ height:460px;background:#fff;border-radius:14px;box-shadow:0 8px 30px
+ rgba(0,0,0,.35);display:none;flex-direction:column;overflow:hidden;
+ z-index:9999;font-family:system-ui,sans-serif}
+#nj-chat.open{display:flex}
+#nj-head{background:#2563eb;color:#fff;padding:12px 14px;font-weight:600}
+#nj-msgs{flex:1;overflow-y:auto;padding:12px;display:flex;
+ flex-direction:column;gap:8px;background:#f4f6fa}
+.nj-m{max-width:85%;padding:8px 11px;border-radius:12px;font-size:14px;
+ line-height:1.35;white-space:pre-wrap}
+.nj-user{align-self:flex-end;background:#2563eb;color:#fff;
+ border-bottom-right-radius:3px}
+.nj-bot{align-self:flex-start;background:#fff;border:1px solid #e2e6ee;
+ border-bottom-left-radius:3px}
+#nj-form{display:flex;border-top:1px solid #e2e6ee}
+#nj-in{flex:1;border:none;padding:12px;font-size:14px;outline:none}
+#nj-send{border:none;background:#2563eb;color:#fff;padding:0 16px;
+ cursor:pointer;font-size:16px}
+#nj-login{padding:14px;display:flex;flex-direction:column;gap:8px}
+#nj-login input{padding:9px;border:1px solid #cbd2dd;border-radius:8px;
+ font-size:14px}
+#nj-login button{padding:9px;border:none;border-radius:8px;
+ background:#2563eb;color:#fff;font-size:14px;cursor:pointer}
+</style>
+
+<button id="nj-chat-btn" title="Asistenti NextJob">💬</button>
+<div id="nj-chat">
+  <div id="nj-head">Asistenti NextJob 🤖</div>
+  <div id="nj-msgs"></div>
+  <div id="nj-login" style="display:none">
+    <div style="font-size:13px;color:#555">Kycu per te perdorur asistentin:</div>
+    <input id="nj-email" type="email" placeholder="Email">
+    <input id="nj-pass" type="password" placeholder="Fjalekalimi">
+    <button id="nj-login-btn">Kycu</button>
+    <div id="nj-login-err" style="color:#c0392b;font-size:12px"></div>
+  </div>
+  <form id="nj-form">
+    <input id="nj-in" placeholder="Shkruaj pyetjen..." autocomplete="off">
+    <button id="nj-send" type="submit">➤</button>
+  </form>
+</div>
+
+<script>
+(function(){
+  const $=id=>document.getElementById(id);
+  const msgs=$('nj-msgs'), form=$('nj-form'), input=$('nj-in');
+  let token=localStorage.getItem('nj_token')||localStorage.getItem('token')||'';
+
+  function add(text, cls){
+    const d=document.createElement('div');
+    d.className='nj-m '+cls; d.textContent=text;
+    msgs.appendChild(d); msgs.scrollTop=msgs.scrollHeight; return d;
+  }
+  function showLogin(show){
+    $('nj-login').style.display=show?'flex':'none';
+    form.style.display=show?'none':'flex';
+  }
+  $('nj-chat-btn').onclick=()=>{
+    $('nj-chat').classList.toggle('open');
+    showLogin(!token);
+    if(token && !msgs.childElementCount)
+      add('Pershendetje! Une jam asistenti i NextJob. Me pyet p.sh. '+
+          '"Me gjej nje hidraulik te lire" ose "Cili elektricist ka '+
+          'vleresimet me te mira?"','nj-bot');
+  };
+  $('nj-login-btn').onclick=async()=>{
+    try{
+      const r=await fetch('/api/auth/login',{method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({email:$('nj-email').value,
+                             password:$('nj-pass').value})});
+      const j=await r.json();
+      if(!r.ok||!j.token) throw new Error(j.error||'Kycja deshtoi');
+      token=j.token; localStorage.setItem('nj_token',token);
+      showLogin(false);
+      add('Pershendetje! Si mund te te ndihmoj?','nj-bot');
+    }catch(e){ $('nj-login-err').textContent=e.message; }
+  };
+  form.onsubmit=async ev=>{
+    ev.preventDefault();
+    const q=input.value.trim(); if(!q) return;
+    input.value=''; add(q,'nj-user');
+    const w=add('Po mendoj…','nj-bot');
+    try{
+      const r=await fetch('/api/chat',{method:'POST',
+        headers:{'Content-Type':'application/json',
+                 'Authorization':'Bearer '+token},
+        body:JSON.stringify({message:q})});
+      const j=await r.json();
+      if(r.status===401){token='';localStorage.removeItem('nj_token');
+        showLogin(true); w.textContent='Sesioni skadoi — kycu perseri.';return;}
+      w.textContent=j.reply||j.error||'Gabim i panjohur.';
+    }catch(e){ w.textContent='Gabim rrjeti: '+e.message; }
+  };
+})();
+</script>
+<!-- ============ /NextJob Chatbot Widget ============ -->
+
+<body>
+<h2>NextJob API Test Console</h2>
+<p>Logged in as: <span id="who">nobody</span></p>
+
+<fieldset><legend>1. Login / Register</legend>
+  <input id="email" placeholder="email" value="arben.hoxha@test.al">
+  <input id="password" type="password" placeholder="password" value="test1234">
+  <button onclick="login()">Login</button>
+  <br>
+  <input id="r_first" placeholder="first name">
+  <input id="r_last" placeholder="last name">
+  <button onclick="registerUser()">Register (uses email+password above)</button>
+</fieldset>
+
+<fieldset><legend>2. Problems</legend>
+  <button onclick="api('GET','/problems')">List open problems</button>
+  <button onclick="api('GET','/problems/mine')">My problems</button>
+  <button onclick="api('GET','/categories')">Categories</button>
+  <br>
+  <input id="p_title" placeholder="title">
+  <input id="p_desc" placeholder="description">
+  <input id="p_cat" placeholder="category_id" size="10">
+  <input id="p_loc" placeholder="location" value="Shkoder">
+  <input id="p_phone" placeholder="phone">
+  <input id="p_budget" placeholder="budget" size="6">
+  <button onclick="postProblem()">Post problem</button>
+  <br>
+  problem_id: <input id="p_id" size="5">
+  <button onclick="api('GET', '/problems/' + v('p_id'))">Detail</button>
+  <button onclick="api('GET', '/problems/' + v('p_id') + '/offers')">Its offers (owner)</button>
+  <button onclick="api('PUT', '/problems/' + v('p_id') + '/complete')">Complete</button>
+  <input id="rev_rating" placeholder="rating 1-5" size="8">
+  <input id="rev_text" placeholder="review text">
+  <button onclick="api('POST', '/problems/' + v('p_id') + '/review',
+      {rating: +v('rev_rating'), text: v('rev_text')})">Review</button>
+</fieldset>
+
+<fieldset><legend>3. Worker side</legend>
+  <input id="w_headline" placeholder="headline">
+  <input id="w_area" placeholder="service area" value="Shkoder">
+  <button onclick="api('POST','/workers/me',{headline:v('w_headline'),service_area:v('w_area')})">Become worker</button>
+  <input id="w_cats" placeholder="category ids e.g. 1,2" size="14">
+  <button onclick="api('PUT','/workers/me/categories',{category_ids:v('w_cats').split(',').map(Number)})">Set trades</button>
+  <br>
+  <button onclick="api('GET','/workers/me/feed')">My For You feed</button>
+  <button onclick="api('GET','/workers/me/offers')">My offers</button>
+  <button onclick="api('GET','/workers/me/jobs')">My jobs</button>
+  <button onclick="api('GET','/workers?sort=avg_rating')">Search workers by rating</button>
+  <br>
+  offer on problem_id <input id="o_pid" size="5"> price <input id="o_price" size="6">
+  <button onclick="api('POST','/problems/'+v('o_pid')+'/offers',{price:+v('o_price'),message:'test offer'})">Make offer</button>
+  <br>
+  offer_id <input id="o_id" size="5">
+  <button onclick="api('PUT','/offers/'+v('o_id')+'/accept')">Accept (as customer)</button>
+  <button onclick="api('PUT','/offers/'+v('o_id')+'/withdraw')">Withdraw (as worker)</button>
+</fieldset>
+
+<fieldset><legend>4. Misc</legend>
+  <button onclick="api('GET','/notifications')">Notifications</button>
+  <button onclick="api('PUT','/notifications/read')">Mark all read</button>
+  <button onclick="api('GET','/auth/me')">Who am I</button>
+  <button onclick="api('GET','/admin/stats')">Admin stats (admin@nextjob.al only)</button>
+</fieldset>
+
+<h3>Last response <span id="status"></span></h3>
+<pre id="out">—</pre>
+
+<script>
+const BASE = "/api";      // same origin -> no CORS issues
+let token = null;
+
+const v = id => document.getElementById(id).value;
+
+async function api(method, path, body) {
+  const opts = { method, headers: {} };
+  if (token) opts.headers["Authorization"] = "Bearer " + token;
+  if (body) {
+    opts.headers["Content-Type"] = "application/json";
+    opts.body = JSON.stringify(body);
+  }
+  const res = await fetch(BASE + path, opts);
+  let data;
+  try { data = await res.json(); } catch { data = "(no json)"; }
+  document.getElementById("status").textContent =
+      "HTTP " + res.status + "  (" + method + " " + path + ")";
+  document.getElementById("out").textContent = JSON.stringify(data, null, 2);
+  return { status: res.status, data };
+}
+
+async function login() {
+  const r = await api("POST", "/auth/login",
+      { email: v("email"), password: v("password") });
+  if (r.status === 200) {
+    token = r.data.token;
+    document.getElementById("who").textContent =
+        v("email") + " (user_id " + r.data.user_id + ")";
+  }
+}
+
+async function registerUser() {
+  const r = await api("POST", "/auth/register", {
+    first_name: v("r_first"), last_name: v("r_last"),
+    email: v("email"), password: v("password")
+  });
+  if (r.status === 201) {
+    token = r.data.token;
+    document.getElementById("who").textContent =
+        v("email") + " (user_id " + r.data.user_id + ")";
+  }
+}
+
+function postProblem() {
+  api("POST", "/problems", {
+    category_id: +v("p_cat"), title: v("p_title"),
+    description: v("p_desc") || v("p_title"), location: v("p_loc"),
+    contact_phone: v("p_phone") || "069000000",
+    budget: v("p_budget") ? +v("p_budget") : null
+  });
+}
+</script>
+</body>
+</html>
