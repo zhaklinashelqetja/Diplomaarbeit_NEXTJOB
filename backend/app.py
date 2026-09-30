@@ -18,6 +18,7 @@ from routes.worker_routes import bp as worker_bp
 from routes.problem_routes import bp as problem_bp
 from routes.misc_routes import bp as misc_bp
 from routes.analysis_routes import bp as analysis_bp
+from routes.chat_routes import bp as chat_bp
 
 
 def create_app():
