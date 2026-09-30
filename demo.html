@@ -1,0 +1,992 @@
+<!DOCTYPE html>
+<html lang="sq">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>NextJob — Gjej mjeshtrin e duhur</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#0f172a; --muted:#64748b; --faint:#94a3b8;
+  --primary:#2563eb; --primary-700:#1d4ed8; --primary-50:#eff4ff;
+  --accent:#f59e0b; --accent-50:#fff7e8;
+  --bg:#f5f7fb; --surface:#ffffff; --surface-2:#fafbfe;
+  --border:#e4e9f2; --border-strong:#d3dbe8;
+  --success:#16a34a; --success-50:#e9f7ee;
+  --danger:#dc2626; --danger-50:#fdecec;
+  --radius:14px; --radius-sm:10px;
+  --shadow:0 1px 2px rgba(15,23,42,.04), 0 8px 24px -12px rgba(15,23,42,.12);
+  --shadow-lg:0 12px 40px -12px rgba(15,23,42,.25);
+  --sans:'Inter',system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
+  --display:'Plus Jakarta Sans',var(--sans);
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{font-family:var(--sans);background:var(--bg);color:var(--ink);
+  font-size:15px;line-height:1.5;-webkit-font-smoothing:antialiased}
+h1,h2,h3,h4{font-family:var(--display);margin:0;line-height:1.2;letter-spacing:-.01em}
+button{font-family:inherit;cursor:pointer}
+input,select,textarea{font-family:inherit;font-size:15px}
+a{color:var(--primary);text-decoration:none}
+.hidden{display:none !important}
+
+/* ---------- buttons ---------- */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;
+  border:1px solid transparent;border-radius:10px;padding:10px 16px;
+  font-weight:600;font-size:14px;transition:.15s;white-space:nowrap}
+.btn:active{transform:translateY(1px)}
+.btn-primary{background:var(--primary);color:#fff}
+.btn-primary:hover{background:var(--primary-700)}
+.btn-accent{background:var(--accent);color:#3b2a06}
+.btn-accent:hover{filter:brightness(.96)}
+.btn-ghost{background:var(--surface);color:var(--ink);border-color:var(--border-strong)}
+.btn-ghost:hover{background:var(--surface-2);border-color:var(--faint)}
+.btn-soft{background:var(--primary-50);color:var(--primary-700)}
+.btn-soft:hover{background:#e2ecff}
+.btn-danger{background:var(--danger-50);color:var(--danger)}
+.btn-danger:hover{background:#fbdcdc}
+.btn-success{background:var(--success);color:#fff}
+.btn-sm{padding:7px 12px;font-size:13px;border-radius:8px}
+.btn-block{width:100%}
+.btn:disabled{opacity:.55;cursor:not-allowed}
+
+/* ---------- inputs ---------- */
+.field{display:flex;flex-direction:column;gap:6px;margin-bottom:14px}
+.field label{font-size:13px;font-weight:600;color:var(--ink)}
+.field .hint{font-size:12px;color:var(--faint);font-weight:400}
+.input,.select,.textarea{width:100%;padding:11px 13px;border:1px solid var(--border-strong);
+  border-radius:10px;background:var(--surface);color:var(--ink);transition:.15s;outline:none}
+.input:focus,.select:focus,.textarea:focus{border-color:var(--primary);
+  box-shadow:0 0 0 3px var(--primary-50)}
+.textarea{resize:vertical;min-height:90px}
+.row{display:flex;gap:12px;flex-wrap:wrap}
+.row>*{flex:1;min-width:120px}
+
+/* ---------- pills / badges ---------- */
+.pill{display:inline-flex;align-items:center;gap:5px;padding:4px 10px;border-radius:999px;
+  font-size:12px;font-weight:600;line-height:1}
+.pill-open{background:var(--primary-50);color:var(--primary-700)}
+.pill-progress{background:var(--accent-50);color:#b45309}
+.pill-done{background:var(--success-50);color:#15803d}
+.pill-muted{background:#f1f5f9;color:var(--muted)}
+.chip{display:inline-flex;align-items:center;gap:5px;padding:5px 11px;border-radius:8px;
+  background:#f1f5f9;color:var(--ink);font-size:12.5px;font-weight:500}
+.chip.on{background:var(--primary);color:#fff}
+.chip.on-accent{background:var(--accent);color:#3b2a06}
+
+/* ---------- stars ---------- */
+.stars{display:inline-flex;gap:1px;color:var(--accent);font-size:14px;letter-spacing:1px}
+.stars .off{color:#e2e8f0}
+
+/* =====================================================
+   AUTH SCREEN
+===================================================== */
+#auth{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px;
+  background:
+    radial-gradient(1100px 500px at 80% -10%, #dbe6ff 0%, transparent 60%),
+    radial-gradient(900px 500px at -10% 110%, #fff0d6 0%, transparent 55%),
+    var(--bg)}
+.auth-card{width:100%;max-width:420px;background:var(--surface);border:1px solid var(--border);
+  border-radius:20px;box-shadow:var(--shadow-lg);padding:32px;position:relative}
+.auth-brand{display:flex;align-items:center;gap:10px;margin-bottom:6px}
+.auth-tag{color:var(--muted);font-size:14px;margin-bottom:24px}
+.auth-tabs{display:flex;gap:6px;background:var(--surface-2);border:1px solid var(--border);
+  padding:4px;border-radius:12px;margin-bottom:22px}
+.auth-tabs button{flex:1;border:none;background:none;padding:9px;border-radius:8px;
+  font-weight:600;font-size:14px;color:var(--muted)}
+.auth-tabs button.active{background:var(--surface);color:var(--ink);box-shadow:var(--shadow)}
+.auth-err{background:var(--danger-50);color:var(--danger);padding:10px 12px;border-radius:10px;
+  font-size:13.5px;margin-bottom:14px}
+
+/* ---------- logo ---------- */
+.logo{display:inline-flex;align-items:center;gap:9px;font-family:var(--display);
+  font-weight:800;font-size:20px;letter-spacing:-.02em;color:var(--ink)}
+.logo .mark{width:30px;height:30px;border-radius:9px;background:var(--primary);color:#fff;
+  display:grid;place-items:center;font-size:17px;box-shadow:0 4px 10px -3px var(--primary)}
+.logo b{color:var(--primary)}
+
+/* =====================================================
+   APP SHELL
+===================================================== */
+#app{min-height:100vh;display:flex;flex-direction:column}
+.topbar{position:sticky;top:0;z-index:50;background:rgba(255,255,255,.86);
+  backdrop-filter:saturate(180%) blur(12px);border-bottom:1px solid var(--border)}
+.topbar-in{max-width:1080px;margin:0 auto;padding:0 20px;height:62px;
+  display:flex;align-items:center;gap:18px}
+.nav{display:flex;gap:2px;margin-left:8px}
+.nav button{border:none;background:none;padding:8px 13px;border-radius:9px;font-weight:600;
+  font-size:14px;color:var(--muted);transition:.15s}
+.nav button:hover{color:var(--ink);background:var(--surface-2)}
+.nav button.active{color:var(--primary-700);background:var(--primary-50)}
+.top-right{margin-left:auto;display:flex;align-items:center;gap:10px}
+.iconbtn{position:relative;width:40px;height:40px;border-radius:10px;border:1px solid var(--border);
+  background:var(--surface);display:grid;place-items:center;font-size:17px;color:var(--muted)}
+.iconbtn:hover{color:var(--ink);border-color:var(--border-strong)}
+.dot{position:absolute;top:7px;right:8px;width:8px;height:8px;border-radius:50%;
+  background:var(--danger);border:2px solid var(--surface)}
+.avatar{width:36px;height:36px;border-radius:50%;background:var(--primary);color:#fff;
+  display:grid;place-items:center;font-weight:700;font-size:14px;cursor:pointer;
+  font-family:var(--display)}
+.usermenu{position:relative}
+.dropdown{position:absolute;right:0;top:48px;min-width:210px;background:var(--surface);
+  border:1px solid var(--border);border-radius:12px;box-shadow:var(--shadow-lg);padding:8px;z-index:60}
+.dropdown .u-name{padding:8px 10px 10px;border-bottom:1px solid var(--border);margin-bottom:6px}
+.dropdown .u-name b{display:block;font-family:var(--display)}
+.dropdown .u-name span{font-size:12.5px;color:var(--muted)}
+.dropdown button{width:100%;text-align:left;border:none;background:none;padding:9px 10px;
+  border-radius:8px;font-size:14px;color:var(--ink)}
+.dropdown button:hover{background:var(--surface-2)}
+
+/* notifications panel */
+.notif-panel{position:absolute;right:0;top:48px;width:340px;max-width:88vw;background:var(--surface);
+  border:1px solid var(--border);border-radius:14px;box-shadow:var(--shadow-lg);z-index:60;overflow:hidden}
+.notif-head{display:flex;align-items:center;justify-content:space-between;padding:13px 15px;
+  border-bottom:1px solid var(--border)}
+.notif-head b{font-family:var(--display)}
+.notif-list{max-height:380px;overflow:auto}
+.notif-item{padding:12px 15px;border-bottom:1px solid var(--border);font-size:13.5px;display:flex;gap:10px}
+.notif-item:last-child{border-bottom:none}
+.notif-item .nd{width:7px;height:7px;border-radius:50%;background:var(--primary);margin-top:6px;flex:none}
+.notif-item.read .nd{background:#dbe2ee}
+.notif-item time{display:block;color:var(--faint);font-size:12px;margin-top:2px}
+
+/* ---------- main / layout ---------- */
+.main{flex:1;max-width:1080px;width:100%;margin:0 auto;padding:26px 20px 80px}
+.page-head{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;
+  margin-bottom:22px;flex-wrap:wrap}
+.page-head h1{font-size:26px}
+.page-head p{color:var(--muted);margin:5px 0 0}
+.eyebrow{font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;
+  color:var(--primary)}
+.eyebrow.accent{color:var(--accent)}
+
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px}
+
+/* ---------- cards ---------- */
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);
+  box-shadow:var(--shadow);overflow:hidden}
+.card-pad{padding:18px}
+.panel{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);
+  box-shadow:var(--shadow);padding:22px;margin-bottom:20px}
+.panel h3{font-size:17px;margin-bottom:4px}
+.panel .sub{color:var(--muted);font-size:13.5px;margin-bottom:18px}
+
+/* problem card */
+.pcard{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);
+  box-shadow:var(--shadow);padding:0;display:flex;flex-direction:column;transition:.15s}
+.pcard:hover{border-color:var(--border-strong);box-shadow:var(--shadow-lg);transform:translateY(-2px)}
+.pcard .body{padding:17px 18px;flex:1}
+.pcard .cat{font-size:12px;font-weight:700;color:var(--accent);text-transform:uppercase;
+  letter-spacing:.04em}
+.pcard h4{font-size:16px;margin:6px 0 8px}
+.pcard .desc{color:var(--muted);font-size:13.5px;display:-webkit-box;-webkit-line-clamp:2;
+  -webkit-box-orient:vertical;overflow:hidden;margin-bottom:12px}
+.pcard .meta{display:flex;flex-wrap:wrap;gap:12px;font-size:13px;color:var(--muted)}
+.pcard .meta span{display:inline-flex;align-items:center;gap:5px}
+.pcard .foot{display:flex;align-items:center;justify-content:space-between;gap:10px;
+  padding:13px 18px;border-top:1px solid var(--border);background:var(--surface-2)}
+.pcard .budget{font-family:var(--display);font-weight:700;color:var(--ink);font-size:15px}
+.pcard .budget small{color:var(--faint);font-weight:500;font-size:12px}
+
+/* worker card */
+.wcard{display:flex;gap:14px;align-items:flex-start;padding:18px}
+.wcard .wa{width:52px;height:52px;border-radius:12px;background:var(--accent-50);color:var(--accent);
+  display:grid;place-items:center;font-weight:800;font-size:19px;font-family:var(--display);flex:none}
+.wcard h4{font-size:16px}
+.wcard .head{color:var(--muted);font-size:13.5px;margin:2px 0 6px}
+
+/* offer row */
+.offer{display:flex;gap:14px;align-items:flex-start;padding:16px;border:1px solid var(--border);
+  border-radius:12px;margin-bottom:12px;background:var(--surface-2)}
+.offer .oa{width:44px;height:44px;border-radius:10px;background:#fff;border:1px solid var(--border);
+  display:grid;place-items:center;font-weight:700;font-family:var(--display);color:var(--muted);flex:none}
+.offer .price{font-family:var(--display);font-weight:800;font-size:18px;color:var(--ink)}
+.offer.accepted{border-color:var(--success);background:var(--success-50)}
+
+/* empty / loading */
+.empty{text-align:center;padding:56px 20px;color:var(--muted)}
+.empty .ico{font-size:38px;margin-bottom:10px;opacity:.6}
+.empty h3{color:var(--ink);margin-bottom:6px}
+.skel{background:linear-gradient(90deg,#eef2f8 25%,#e3e9f3 37%,#eef2f8 63%);
+  background-size:400% 100%;animation:sh 1.3s ease infinite;border-radius:8px}
+@keyframes sh{0%{background-position:100% 0}100%{background-position:-100% 0}}
+
+/* sub-tabs */
+.subtabs{display:flex;gap:6px;border-bottom:1px solid var(--border);margin-bottom:22px;flex-wrap:wrap}
+.subtabs button{border:none;background:none;padding:10px 4px;margin-right:16px;font-weight:600;
+  font-size:14.5px;color:var(--muted);border-bottom:2px solid transparent;margin-bottom:-1px}
+.subtabs button.active{color:var(--ink);border-color:var(--primary)}
+
+/* ---------- modal ---------- */
+.overlay{position:fixed;inset:0;background:rgba(15,23,42,.5);backdrop-filter:blur(2px);
+  z-index:200;display:flex;align-items:flex-start;justify-content:center;padding:40px 16px;overflow:auto}
+.modal{background:var(--surface);border-radius:18px;width:100%;max-width:560px;
+  box-shadow:var(--shadow-lg);animation:pop .18s ease}
+@keyframes pop{from{opacity:0;transform:translateY(12px) scale(.98)}to{opacity:1;transform:none}}
+.modal-head{display:flex;align-items:center;justify-content:space-between;padding:20px 22px;
+  border-bottom:1px solid var(--border)}
+.modal-head h3{font-size:19px}
+.modal-body{padding:22px}
+.modal-foot{padding:16px 22px;border-top:1px solid var(--border);display:flex;gap:10px;justify-content:flex-end}
+.xbtn{border:none;background:none;font-size:22px;color:var(--faint);width:34px;height:34px;
+  border-radius:8px;line-height:1}
+.xbtn:hover{background:var(--surface-2);color:var(--ink)}
+
+/* rating input */
+.rate-in{display:inline-flex;gap:4px;font-size:30px;color:#e2e8f0;cursor:pointer}
+.rate-in span:hover,.rate-in span.on{color:var(--accent)}
+
+/* ---------- toasts ---------- */
+#toasts{position:fixed;bottom:22px;left:22px;z-index:400;display:flex;flex-direction:column;gap:10px}
+.toast{background:var(--ink);color:#fff;padding:12px 16px;border-radius:11px;font-size:14px;
+  font-weight:500;box-shadow:var(--shadow-lg);display:flex;align-items:center;gap:9px;
+  animation:slide .25s ease;max-width:340px}
+.toast.ok{background:#0f3d24}.toast.err{background:#4a1414}
+@keyframes slide{from{opacity:0;transform:translateX(-16px)}to{opacity:1;transform:none}}
+
+@media(max-width:640px){
+  .nav{display:none}
+  .page-head h1{font-size:22px}
+  .topbar-in{gap:10px}
+}
+
+/* =====================================================
+   CHATBOT WIDGET
+===================================================== */
+#nj-chat-btn{position:fixed;bottom:22px;right:22px;width:58px;height:58px;border-radius:50%;
+  background:var(--primary);color:#fff;font-size:24px;border:none;cursor:pointer;
+  box-shadow:0 8px 24px -6px var(--primary);z-index:150;transition:.15s}
+#nj-chat-btn:hover{transform:scale(1.06)}
+#nj-chat{position:fixed;bottom:92px;right:22px;width:360px;max-width:92vw;height:500px;
+  background:var(--surface);border:1px solid var(--border);border-radius:18px;
+  box-shadow:var(--shadow-lg);display:none;flex-direction:column;overflow:hidden;z-index:151}
+#nj-chat.open{display:flex}
+#nj-head{background:var(--primary);color:#fff;padding:15px 17px;font-weight:700;
+  font-family:var(--display);display:flex;align-items:center;gap:9px}
+#nj-head small{font-weight:500;opacity:.85;font-family:var(--sans);font-size:12px;display:block}
+#nj-msgs{flex:1;overflow-y:auto;padding:15px;display:flex;flex-direction:column;gap:9px;background:var(--bg)}
+.nj-m{max-width:84%;padding:10px 13px;border-radius:14px;font-size:14px;line-height:1.4;white-space:pre-wrap}
+.nj-user{align-self:flex-end;background:var(--primary);color:#fff;border-bottom-right-radius:4px}
+.nj-bot{align-self:flex-start;background:var(--surface);border:1px solid var(--border);border-bottom-left-radius:4px}
+#nj-form{display:flex;border-top:1px solid var(--border);background:var(--surface)}
+#nj-in{flex:1;border:none;padding:14px;font-size:14px;outline:none;background:none}
+#nj-send{border:none;background:var(--primary);color:#fff;padding:0 18px;cursor:pointer;font-size:17px}
+#nj-login{padding:16px;display:flex;flex-direction:column;gap:9px;background:var(--surface)}
+#nj-login .lbl{font-size:13px;color:var(--muted)}
+#nj-login input{padding:10px;border:1px solid var(--border-strong);border-radius:9px;font-size:14px}
+#nj-login button{padding:10px;border:none;border-radius:9px;background:var(--primary);color:#fff;
+  font-size:14px;font-weight:600;cursor:pointer}
+#nj-login-err{color:var(--danger);font-size:12px}
+</style>
+</head>
+<body>
+
+<!-- ============ AUTH SCREEN ============ -->
+<div id="auth">
+  <div class="auth-card">
+    <div class="auth-brand">
+      <span class="logo"><span class="mark">N</span>Next<b>Job</b></span>
+    </div>
+    <p class="auth-tag">Gjej mjeshtrin e duhur për çdo punë në shtëpi.</p>
+
+    <div class="auth-tabs">
+      <button id="tab-login" class="active" onclick="switchAuth('login')">Kyçu</button>
+      <button id="tab-reg" onclick="switchAuth('reg')">Regjistrohu</button>
+    </div>
+
+    <div id="auth-err" class="auth-err hidden"></div>
+
+    <!-- login -->
+    <div id="form-login">
+      <div class="field">
+        <label>Email</label>
+        <input id="l_email" class="input" type="email" placeholder="ti@shembull.al" value="arben.hoxha@test.al">
+      </div>
+      <div class="field">
+        <label>Fjalëkalimi</label>
+        <input id="l_pass" class="input" type="password" placeholder="••••••••" value="test1234">
+      </div>
+      <button class="btn btn-primary btn-block" onclick="doLogin()">Kyçu</button>
+    </div>
+
+    <!-- register -->
+    <div id="form-reg" class="hidden">
+      <div class="row">
+        <div class="field"><label>Emri</label><input id="r_first" class="input" placeholder="Arben"></div>
+        <div class="field"><label>Mbiemri</label><input id="r_last" class="input" placeholder="Hoxha"></div>
+      </div>
+      <div class="field"><label>Email</label><input id="r_email" class="input" type="email" placeholder="ti@shembull.al"></div>
+      <div class="field"><label>Fjalëkalimi</label><input id="r_pass" class="input" type="password" placeholder="Të paktën 6 shkronja"></div>
+      <button class="btn btn-primary btn-block" onclick="doRegister()">Krijo llogari</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============ APP SHELL ============ -->
+<div id="app" class="hidden">
+  <header class="topbar">
+    <div class="topbar-in">
+      <span class="logo"><span class="mark">N</span>Next<b>Job</b></span>
+      <nav class="nav">
+        <button data-view="browse" class="active" onclick="go('browse')">Kërko punë</button>
+        <button data-view="mine" onclick="go('mine')">Kërkesat e mia</button>
+        <button data-view="worker" onclick="go('worker')">Profili im si mjeshtër</button>
+        <button data-view="pros" onclick="go('pros')">Mjeshtrit</button>
+      </nav>
+      <div class="top-right">
+        <button class="btn btn-primary btn-sm" onclick="openPostModal()">+ Posto kërkesë</button>
+        <div style="position:relative">
+          <button class="iconbtn" onclick="toggleNotif()">🔔<span id="notif-dot" class="dot hidden"></span></button>
+          <div id="notif-panel" class="notif-panel hidden"></div>
+        </div>
+        <div class="usermenu">
+          <div id="avatar" class="avatar" onclick="toggleUserMenu()">?</div>
+          <div id="usermenu" class="dropdown hidden"></div>
+        </div>
+      </div>
+    </div>
+  </header>
+  <main id="main" class="main"></main>
+</div>
+
+<!-- ============ MODAL MOUNT ============ -->
+<div id="modal-mount"></div>
+<div id="toasts"></div>
+
+<!-- ============ CHATBOT WIDGET ============ -->
+<button id="nj-chat-btn" title="Asistenti NextJob">💬</button>
+<div id="nj-chat">
+  <div id="nj-head">🤖 Asistenti NextJob<small>Të gjej mjeshtrin e duhur</small></div>
+  <div id="nj-msgs"></div>
+  <div id="nj-login" style="display:none">
+    <div class="lbl">Kyçu për të përdorur asistentin:</div>
+    <input id="nj-email" type="email" placeholder="Email">
+    <input id="nj-pass" type="password" placeholder="Fjalëkalimi">
+    <button id="nj-login-btn">Kyçu</button>
+    <div id="nj-login-err"></div>
+  </div>
+  <form id="nj-form">
+    <input id="nj-in" placeholder="Shkruaj pyetjen..." autocomplete="off">
+    <button id="nj-send" type="submit">➤</button>
+  </form>
+</div>
+
+<script>
+/* =========================================================
+   NextJob front-end  — talks to the same /api on this origin
+========================================================= */
+const BASE = "/api";
+let token = localStorage.getItem('nj_token') || '';
+let ME = null;              // current user
+let CATS = [];             // categories cache
+let VIEW = 'browse';
+let workerSub = 'feed';    // sub-tab in worker view
+let mineSub = 'open';      // sub-tab in "my requests"
+
+const $  = s => document.querySelector(s);
+const el = (t,c,h)=>{const e=document.createElement(t);if(c)e.className=c;if(h!=null)e.innerHTML=h;return e;};
+const esc = s => String(s==null?'':s).replace(/[&<>"]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m]));
+
+/* pick first present field from a list of candidate keys */
+const pick=(o,keys,def='')=>{for(const k of keys){if(o&&o[k]!=null&&o[k]!=='')return o[k];}return def;};
+/* pull an array out of whatever the API returns */
+const asList=(d)=>{
+  if(Array.isArray(d))return d;
+  if(d&&typeof d==='object'){
+    for(const k of ['problems','offers','workers','notifications','categories','items','data','results','jobs','feed'])
+      if(Array.isArray(d[k]))return d[k];
+  }
+  return [];
+};
+
+/* ---------------- API helper ---------------- */
+async function api(method, path, body){
+  const opts={method,headers:{}};
+  if(token) opts.headers['Authorization']='Bearer '+token;
+  if(body){opts.headers['Content-Type']='application/json';opts.body=JSON.stringify(body);}
+  let res, data;
+  try{
+    res=await fetch(BASE+path,opts);
+  }catch(e){ throw {status:0,message:'Nuk u lidh me serverin. Kontrollo lidhjen.'}; }
+  try{ data=await res.json(); }catch{ data={}; }
+  if(res.status===401 && ME){ logout(true); throw {status:401,message:'Sesioni skadoi.'}; }
+  if(!res.ok){ throw {status:res.status,message:pick(data,['error','message'],'Gabim ('+res.status+')'),data}; }
+  return data;
+}
+
+/* ---------------- toasts ---------------- */
+function toast(msg,type=''){
+  const t=el('div','toast '+type,(type==='ok'?'✓ ':type==='err'?'✕ ':'')+esc(msg));
+  $('#toasts').appendChild(t);
+  setTimeout(()=>{t.style.transition='.3s';t.style.opacity='0';t.style.transform='translateX(-16px)';
+    setTimeout(()=>t.remove(),300);},3200);
+}
+
+/* ---------------- helpers for rendering ---------------- */
+function initials(name){ return (name||'?').split(' ').filter(Boolean).slice(0,2).map(w=>w[0]).join('').toUpperCase()||'?'; }
+function stars(n){
+  n=Math.round(Number(n)||0);
+  let s='<span class="stars">';
+  for(let i=1;i<=5;i++)s+= i<=n?'★':'<span class="off">★</span>';
+  return s+'</span>';
+}
+function statusPill(st){
+  st=(st||'open').toLowerCase();
+  if(st.includes('progress')||st.includes('assign')||st.includes('accepted'))return '<span class="pill pill-progress">Në punë</span>';
+  if(st.includes('done')||st.includes('complet')||st.includes('closed'))return '<span class="pill pill-done">Përfunduar</span>';
+  return '<span class="pill pill-open">E hapur</span>';
+}
+function money(v){ if(v==null||v==='')return '<small>Buxheti i hapur</small>'; return esc(v)+' <small>LEK</small>'; }
+function catName(id,fallback){
+  if(fallback)return fallback;
+  const c=CATS.find(c=>String(pick(c,['id','category_id']))===String(id));
+  return c?pick(c,['name','title'],'Shërbim'):'Shërbim';
+}
+function ago(d){
+  if(!d)return '';
+  const t=new Date(d); if(isNaN(t))return esc(d);
+  const diff=(Date.now()-t)/1000;
+  if(diff<3600)return Math.max(1,Math.floor(diff/60))+' min më parë';
+  if(diff<86400)return Math.floor(diff/3600)+' orë më parë';
+  return Math.floor(diff/86400)+' ditë më parë';
+}
+
+/* =========================================================
+   AUTH
+========================================================= */
+function switchAuth(w){
+  $('#tab-login').classList.toggle('active',w==='login');
+  $('#tab-reg').classList.toggle('active',w==='reg');
+  $('#form-login').classList.toggle('hidden',w!=='login');
+  $('#form-reg').classList.toggle('hidden',w!=='reg');
+  $('#auth-err').classList.add('hidden');
+}
+function authErr(m){ const e=$('#auth-err'); e.textContent=m; e.classList.remove('hidden'); }
+
+async function doLogin(){
+  try{
+    const d=await api('POST','/auth/login',{email:$('#l_email').value.trim(),password:$('#l_pass').value});
+    token=pick(d,['token','access_token']); localStorage.setItem('nj_token',token);
+    await boot();
+  }catch(e){ authErr(e.message||'Kyçja dështoi.'); }
+}
+async function doRegister(){
+  const body={first_name:$('#r_first').value.trim(),last_name:$('#r_last').value.trim(),
+    email:$('#r_email').value.trim(),password:$('#r_pass').value};
+  if(!body.first_name||!body.email||!body.password) return authErr('Plotëso emrin, email-in dhe fjalëkalimin.');
+  try{
+    const d=await api('POST','/auth/register',body);
+    token=pick(d,['token','access_token']); localStorage.setItem('nj_token',token);
+    await boot();
+  }catch(e){ authErr(e.message||'Regjistrimi dështoi.'); }
+}
+function logout(expired){
+  token=''; ME=null; localStorage.removeItem('nj_token'); localStorage.removeItem('token');
+  $('#app').classList.add('hidden'); $('#auth').classList.remove('hidden');
+  closeMenus();
+  if(expired) authErr('Sesioni skadoi — kyçu përsëri.');
+}
+
+/* =========================================================
+   BOOT
+========================================================= */
+async function boot(){
+  try{ ME = await api('GET','/auth/me'); }
+  catch(e){ if(e.status===401){logout(true);return;} ME={}; }
+  $('#auth').classList.add('hidden'); $('#app').classList.remove('hidden');
+  const name = (pick(ME,['first_name','name'],'')+' '+pick(ME,['last_name'],'')).trim() || pick(ME,['email'],'Përdorues');
+  $('#avatar').textContent = initials(name);
+  try{ CATS = asList(await api('GET','/categories')); }catch{ CATS=[]; }
+  loadNotifCount();
+  go('browse');
+}
+
+/* =========================================================
+   NAV
+========================================================= */
+function go(v){
+  VIEW=v; closeMenus();
+  document.querySelectorAll('.nav button').forEach(b=>b.classList.toggle('active',b.dataset.view===v));
+  if(v==='browse')  renderBrowse();
+  if(v==='mine')    renderMine();
+  if(v==='worker')  renderWorker();
+  if(v==='pros')    renderPros();
+}
+function loading(){ $('#main').innerHTML='<div class="grid">'+
+  '<div class="card card-pad"><div class="skel" style="height:16px;width:40%;margin-bottom:10px"></div><div class="skel" style="height:22px;width:80%;margin-bottom:14px"></div><div class="skel" style="height:40px"></div></div>'.repeat(3)+
+  '</div>'; }
+
+function closeMenus(){ $('#usermenu').classList.add('hidden'); $('#notif-panel').classList.add('hidden'); }
+function toggleUserMenu(){
+  const m=$('#usermenu'); const open=m.classList.contains('hidden');
+  closeMenus();
+  if(open){
+    const name=(pick(ME,['first_name','name'],'')+' '+pick(ME,['last_name'],'')).trim()||'Përdorues';
+    m.innerHTML=`<div class="u-name"><b>${esc(name)}</b><span>${esc(pick(ME,['email'],''))}</span></div>
+      <button onclick="go('mine')">Kërkesat e mia</button>
+      <button onclick="go('worker')">Profili im si mjeshtër</button>
+      <button onclick="logout()" style="color:var(--danger)">Dil</button>`;
+    m.classList.remove('hidden');
+  }
+}
+document.addEventListener('click',e=>{
+  if(!e.target.closest('.usermenu')&&!e.target.closest('.iconbtn')&&!e.target.closest('.notif-panel')) closeMenus();
+});
+
+/* =========================================================
+   BROWSE  (open problems)
+========================================================= */
+async function renderBrowse(){
+  loading();
+  let list=[];
+  try{ list=asList(await api('GET','/problems')); }catch(e){ return errState(e); }
+  const head=`<div class="page-head"><div>
+      <div class="eyebrow">Tregu i punëve</div>
+      <h1>Kërkesa të hapura</h1>
+      <p>Shfleto punët që kërkojnë një mjeshtër dhe dërgo ofertën tënde.</p>
+    </div>
+    <button class="btn btn-ghost" onclick="renderBrowse()">↻ Rifresko</button></div>`;
+  if(!list.length){ $('#main').innerHTML=head+emptyHTML('🧰','Ende s’ka kërkesa','Bëhu i pari që poston një punë.','+ Posto kërkesë','openPostModal()'); return; }
+  $('#main').innerHTML=head+'<div class="grid">'+list.map(p=>problemCard(p,'browse')).join('')+'</div>';
+}
+
+function problemCard(p,ctx){
+  const id=pick(p,['id','problem_id']);
+  const cat=catName(pick(p,['category_id']),pick(p,['category_name','category']));
+  const title=esc(pick(p,['title'],'Kërkesë'));
+  const desc=esc(pick(p,['description','desc'],''));
+  const loc=esc(pick(p,['location','city'],''));
+  const budget=pick(p,['budget','price'],'');
+  const st=pick(p,['status'],'open');
+  const created=pick(p,['created_at','created','date']);
+  const offers=pick(p,['offer_count','offers_count','n_offers'],'');
+  const action = ctx==='mine'
+    ? `<button class="btn btn-soft btn-sm" onclick="openProblem(${id})">Menaxho ofertat${offers!==''?' ('+offers+')':''}</button>`
+    : `<button class="btn btn-accent btn-sm" onclick="openOfferModal(${id},'${title.replace(/'/g,"\\'")}')">Bëj ofertë</button>`;
+  return `<article class="pcard">
+    <div class="body">
+      <div style="display:flex;justify-content:space-between;align-items:start;gap:8px">
+        <span class="cat">${esc(cat)}</span>${statusPill(st)}
+      </div>
+      <h4>${title}</h4>
+      ${desc?`<p class="desc">${desc}</p>`:''}
+      <div class="meta">
+        ${loc?`<span>📍 ${loc}</span>`:''}
+        ${created?`<span>🕑 ${ago(created)}</span>`:''}
+      </div>
+    </div>
+    <div class="foot">
+      <span class="budget">${money(budget)}</span>
+      ${action}
+    </div>
+  </article>`;
+}
+
+function emptyHTML(ico,title,text,btnLabel,btnAction){
+  return `<div class="empty"><div class="ico">${ico}</div><h3>${esc(title)}</h3><p>${esc(text)}</p>
+    ${btnLabel?`<button class="btn btn-primary" style="margin-top:14px" onclick="${btnAction}">${esc(btnLabel)}</button>`:''}</div>`;
+}
+function errState(e){
+  $('#main').innerHTML=`<div class="empty"><div class="ico">⚠️</div><h3>Diçka shkoi keq</h3>
+    <p>${esc(e.message||'Gabim gjatë ngarkimit.')}</p>
+    <button class="btn btn-ghost" style="margin-top:14px" onclick="go(VIEW)">Provo përsëri</button></div>`;
+}
+
+/* =========================================================
+   MY REQUESTS (customer)
+========================================================= */
+async function renderMine(){
+  $('#main').innerHTML=`<div class="page-head"><div>
+      <div class="eyebrow">Paneli i klientit</div><h1>Kërkesat e mia</h1>
+      <p>Ndiq ofertat, prano mjeshtrin dhe vlerëso punën.</p></div>
+      <button class="btn btn-primary" onclick="openPostModal()">+ Posto kërkesë</button></div>
+    <div id="mine-body"></div>`;
+  const body=$('#mine-body'); body.innerHTML='<div class="grid">'+'<div class="card card-pad"><div class="skel" style="height:60px"></div></div>'.repeat(2)+'</div>';
+  let list=[];
+  try{ list=asList(await api('GET','/problems/mine')); }catch(e){ return body.innerHTML=errBox(e); }
+  if(!list.length){ body.innerHTML=emptyHTML('📋','S’ke poste ende','Posto kërkesën tënde të parë dhe merr oferta nga mjeshtrit.','+ Posto kërkesë','openPostModal()'); return; }
+  body.innerHTML='<div class="grid">'+list.map(p=>problemCard(p,'mine')).join('')+'</div>';
+}
+const errBox=e=>`<div class="empty"><div class="ico">⚠️</div><h3>Gabim</h3><p>${esc(e.message||'')}</p></div>`;
+
+/* problem detail modal (owner) */
+async function openProblem(id){
+  openModal('Ngarkim...', '<div class="skel" style="height:120px"></div>');
+  let p={}, offers=[];
+  try{ p=await api('GET','/problems/'+id); }catch(e){}
+  try{ offers=asList(await api('GET','/problems/'+id+'/offers')); }catch(e){}
+  const st=pick(p,['status'],'open');
+  const done=String(st).toLowerCase().match(/done|complet|closed/);
+  const inprog=String(st).toLowerCase().match(/progress|assign|accepted/);
+  const title=pick(p,['title'],'Kërkesë');
+
+  let offersHTML;
+  if(!offers.length){
+    offersHTML=`<div class="empty" style="padding:30px 10px"><div class="ico">⏳</div><p>Ende s’ka oferta. Do të njoftohesh kur të vijë e para.</p></div>`;
+  }else{
+    offersHTML=offers.map(o=>{
+      const oid=pick(o,['id','offer_id']);
+      const wname=pick(o,['worker_name','name'],'Mjeshtër');
+      const price=pick(o,['price','amount'],'—');
+      const msg=esc(pick(o,['message','note'],''));
+      const rating=pick(o,['avg_rating','rating'],0);
+      const acc=String(pick(o,['status'],'')).toLowerCase().includes('accept');
+      return `<div class="offer ${acc?'accepted':''}">
+        <div class="oa">${esc(initials(wname))}</div>
+        <div style="flex:1">
+          <div style="display:flex;justify-content:space-between;align-items:center;gap:8px">
+            <b>${esc(wname)}</b><span class="price">${esc(price)} <small style="font-size:12px;color:var(--faint)">LEK</small></span>
+          </div>
+          <div style="margin:3px 0">${rating?stars(rating):'<span style="color:var(--faint);font-size:12px">Pa vlerësime ende</span>'}</div>
+          ${msg?`<p style="color:var(--muted);font-size:13.5px;margin:6px 0 0">${msg}</p>`:''}
+          ${acc?'<div style="margin-top:8px"><span class="pill pill-done">✓ Pranuar</span></div>'
+              : (done?'':`<button class="btn btn-success btn-sm" style="margin-top:10px" onclick="acceptOffer(${oid},${id})">Prano këtë mjeshtër</button>`)}
+        </div></div>`;
+    }).join('');
+  }
+
+  let footer='';
+  if(inprog) footer=`<button class="btn btn-primary" onclick="completeProblem(${id})">Shëno si të përfunduar</button>`;
+  else if(done) footer=`<button class="btn btn-accent" onclick="openReviewModal(${id})">Lër vlerësim</button>`;
+
+  const cat=catName(pick(p,['category_id']),pick(p,['category_name','category']));
+  const bodyHTML=`
+    <div style="display:flex;gap:8px;align-items:center;margin-bottom:10px">
+      <span class="cat" style="color:var(--accent);font-weight:700;font-size:12px;text-transform:uppercase">${esc(cat)}</span>${statusPill(st)}
+    </div>
+    ${pick(p,['description','desc'])?`<p style="color:var(--muted);margin:0 0 12px">${esc(pick(p,['description','desc']))}</p>`:''}
+    <div class="meta" style="display:flex;gap:16px;font-size:13.5px;color:var(--muted);margin-bottom:20px">
+      ${pick(p,['location'])?`<span>📍 ${esc(pick(p,['location']))}</span>`:''}
+      ${pick(p,['budget'])?`<span>💰 ${esc(pick(p,['budget']))} LEK</span>`:''}
+      ${pick(p,['contact_phone','phone'])?`<span>📞 ${esc(pick(p,['contact_phone','phone']))}</span>`:''}
+    </div>
+    <h4 style="font-size:14px;margin-bottom:12px">Ofertat (${offers.length})</h4>
+    ${offersHTML}`;
+  openModal(esc(title), bodyHTML, footer);
+}
+
+async function acceptOffer(oid,pid){
+  try{ await api('PUT','/offers/'+oid+'/accept'); toast('Oferta u pranua. Mjeshtri u njoftua.','ok'); closeModal(); openProblem(pid); loadNotifCount(); }
+  catch(e){ toast(e.message,'err'); }
+}
+async function completeProblem(id){
+  try{ await api('PUT','/problems/'+id+'/complete'); toast('Puna u shënua si e përfunduar.','ok'); closeModal(); openReviewModal(id); }
+  catch(e){ toast(e.message,'err'); }
+}
+
+/* =========================================================
+   REVIEW modal
+========================================================= */
+let reviewRating=0;
+function openReviewModal(pid){
+  reviewRating=0;
+  const body=`<p style="color:var(--muted);margin:0 0 16px">Si ishte puna e mjeshtrit?</p>
+    <div class="rate-in" id="rate-in">${[1,2,3,4,5].map(i=>`<span data-v="${i}" onclick="setRating(${i})">★</span>`).join('')}</div>
+    <div class="field" style="margin-top:18px"><label>Koment (opsional)</label>
+      <textarea id="rev_text" class="textarea" placeholder="Shkruaj përvojën tënde..."></textarea></div>`;
+  openModal('Lër vlerësim', body,
+    `<button class="btn btn-ghost" onclick="closeModal()">Anulo</button>
+     <button class="btn btn-accent" onclick="submitReview(${pid})">Dërgo vlerësimin</button>`);
+}
+function setRating(v){ reviewRating=v; document.querySelectorAll('#rate-in span').forEach(s=>s.classList.toggle('on',+s.dataset.v<=v)); }
+async function submitReview(pid){
+  if(!reviewRating)return toast('Zgjidh një vlerësim me yje.','err');
+  try{ await api('POST','/problems/'+pid+'/review',{rating:reviewRating,text:$('#rev_text').value.trim()});
+    toast('Faleminderit për vlerësimin!','ok'); closeModal(); if(VIEW==='mine')renderMine(); }
+  catch(e){ toast(e.message,'err'); }
+}
+
+/* =========================================================
+   POST PROBLEM modal
+========================================================= */
+function openPostModal(){
+  const opts=CATS.length?CATS.map(c=>`<option value="${pick(c,['id','category_id'])}">${esc(pick(c,['name','title'],'Shërbim'))}</option>`).join('')
+    :'<option value="">— pa kategori —</option>';
+  const body=`
+    <div class="field"><label>Titulli i punës</label>
+      <input id="np_title" class="input" placeholder="P.sh. Rrjedhje uji në banjë"></div>
+    <div class="field"><label>Përshkrimi</label>
+      <textarea id="np_desc" class="textarea" placeholder="Përshkruaj problemin me detaje..."></textarea></div>
+    <div class="row">
+      <div class="field"><label>Kategoria</label><select id="np_cat" class="select">${opts}</select></div>
+      <div class="field"><label>Vendndodhja</label><input id="np_loc" class="input" value="Shkodër"></div>
+    </div>
+    <div class="row">
+      <div class="field"><label>Telefoni</label><input id="np_phone" class="input" placeholder="069 xxx xxxx"></div>
+      <div class="field"><label>Buxheti <span class="hint">(opsional)</span></label><input id="np_budget" class="input" type="number" placeholder="LEK"></div>
+    </div>`;
+  openModal('Posto një kërkesë', body,
+    `<button class="btn btn-ghost" onclick="closeModal()">Anulo</button>
+     <button class="btn btn-primary" onclick="submitProblem()">Posto kërkesën</button>`);
+}
+async function submitProblem(){
+  const title=$('#np_title').value.trim();
+  if(!title)return toast('Shkruaj një titull.','err');
+  const body={
+    category_id: +$('#np_cat').value || null,
+    title, description:$('#np_desc').value.trim()||title,
+    location:$('#np_loc').value.trim()||'Shkodër',
+    contact_phone:$('#np_phone').value.trim()||'069000000',
+    budget:$('#np_budget').value?+$('#np_budget').value:null
+  };
+  try{ await api('POST','/problems',body); toast('Kërkesa u postua!','ok'); closeModal(); go('mine'); }
+  catch(e){ toast(e.message,'err'); }
+}
+
+/* =========================================================
+   MAKE OFFER modal (worker)
+========================================================= */
+function openOfferModal(pid,title){
+  const body=`<p style="color:var(--muted);margin:0 0 16px">Ofertë për: <b style="color:var(--ink)">${esc(title)}</b></p>
+    <div class="field"><label>Çmimi (LEK)</label><input id="of_price" class="input" type="number" placeholder="P.sh. 3000"></div>
+    <div class="field"><label>Mesazh për klientin</label>
+      <textarea id="of_msg" class="textarea" placeholder="Prezanto veten dhe si do ta zgjidhësh problemin..."></textarea></div>`;
+  openModal('Bëj një ofertë', body,
+    `<button class="btn btn-ghost" onclick="closeModal()">Anulo</button>
+     <button class="btn btn-accent" onclick="submitOffer(${pid})">Dërgo ofertën</button>`);
+}
+async function submitOffer(pid){
+  const price=+$('#of_price').value;
+  if(!price)return toast('Vendos një çmim.','err');
+  try{ await api('POST','/problems/'+pid+'/offers',{price,message:$('#of_msg').value.trim()||'Interesuar për punën.'});
+    toast('Oferta u dërgua!','ok'); closeModal(); }
+  catch(e){ toast(e.message,'err'); }
+}
+
+/* =========================================================
+   WORKER dashboard
+========================================================= */
+async function renderWorker(){
+  $('#main').innerHTML=`<div class="page-head"><div>
+      <div class="eyebrow accent">Paneli i mjeshtrit</div><h1>Profili im si mjeshtër</h1>
+      <p>Gjej punë që të përshtaten, dërgo oferta dhe menaxho punët e tua.</p></div></div>
+    <div class="subtabs">
+      <button data-s="feed" onclick="setWorkerSub('feed')">Për ty</button>
+      <button data-s="offers" onclick="setWorkerSub('offers')">Ofertat e mia</button>
+      <button data-s="jobs" onclick="setWorkerSub('jobs')">Punët e mia</button>
+      <button data-s="profile" onclick="setWorkerSub('profile')">Profili &amp; zejet</button>
+    </div>
+    <div id="worker-body"></div>`;
+  setWorkerSub(workerSub);
+}
+function setWorkerSub(s){
+  workerSub=s;
+  document.querySelectorAll('.subtabs button').forEach(b=>b.classList.toggle('active',b.dataset.s===s));
+  const body=$('#worker-body');
+  body.innerHTML='<div class="grid"><div class="card card-pad"><div class="skel" style="height:80px"></div></div></div>';
+  if(s==='feed')    return wFeed(body);
+  if(s==='offers')  return wOffers(body);
+  if(s==='jobs')    return wJobs(body);
+  if(s==='profile') return wProfile(body);
+}
+async function wFeed(body){
+  let list=[];
+  try{ list=asList(await api('GET','/workers/me/feed')); }
+  catch(e){ if(e.status===404||e.status===400){ return body.innerHTML=needWorker(); } return body.innerHTML=errBox(e); }
+  if(!list.length)return body.innerHTML=emptyHTML('🔍','S’ka punë të reja','Sapo të postohet një punë në zejet e tua, do të shfaqet këtu.');
+  body.innerHTML='<div class="grid">'+list.map(p=>problemCard(p,'browse')).join('')+'</div>';
+}
+async function wOffers(body){
+  let list=[];
+  try{ list=asList(await api('GET','/workers/me/offers')); }catch(e){ return body.innerHTML=errBox(e); }
+  if(!list.length)return body.innerHTML=emptyHTML('📨','Ende s’ke bërë oferta','Shko te “Për ty” dhe dërgo ofertën e parë.');
+  body.innerHTML=list.map(o=>{
+    const st=pick(o,['status'],'pending');
+    const acc=String(st).toLowerCase().includes('accept');
+    const wd=String(st).toLowerCase().includes('withdraw');
+    const oid=pick(o,['id','offer_id']);
+    return `<div class="card card-pad" style="margin-bottom:12px;display:flex;justify-content:space-between;align-items:center;gap:14px">
+      <div>
+        <b>${esc(pick(o,['problem_title','title'],'Punë'))}</b>
+        <div style="color:var(--muted);font-size:13.5px;margin-top:3px">Oferta jote: <b style="color:var(--ink)">${esc(pick(o,['price','amount'],'—'))} LEK</b></div>
+      </div>
+      <div style="text-align:right">
+        ${acc?'<span class="pill pill-done">✓ Pranuar</span>':wd?'<span class="pill pill-muted">Tërhequr</span>':'<span class="pill pill-open">Në pritje</span>'}
+        ${(!acc&&!wd)?`<div><button class="btn btn-danger btn-sm" style="margin-top:8px" onclick="withdrawOffer(${oid})">Tërhiq</button></div>`:''}
+      </div></div>`;
+  }).join('');
+}
+async function withdrawOffer(oid){
+  try{ await api('PUT','/offers/'+oid+'/withdraw'); toast('Oferta u tërhoq.','ok'); setWorkerSub('offers'); }
+  catch(e){ toast(e.message,'err'); }
+}
+async function wJobs(body){
+  let list=[];
+  try{ list=asList(await api('GET','/workers/me/jobs')); }catch(e){ return body.innerHTML=errBox(e); }
+  if(!list.length)return body.innerHTML=emptyHTML('🛠️','Ende s’ke punë aktive','Kur një klient pranon ofertën tënde, puna shfaqet këtu.');
+  body.innerHTML='<div class="grid">'+list.map(p=>{
+    const st=pick(p,['status'],'accepted');
+    return `<div class="pcard"><div class="body">
+      <div style="display:flex;justify-content:space-between">${statusPill(st)}</div>
+      <h4 style="margin-top:8px">${esc(pick(p,['title','problem_title'],'Punë'))}</h4>
+      ${pick(p,['location'])?`<div class="meta"><span>📍 ${esc(pick(p,['location']))}</span></div>`:''}
+      ${pick(p,['contact_phone','phone'])?`<div class="meta" style="margin-top:8px"><span>📞 ${esc(pick(p,['contact_phone','phone']))}</span></div>`:''}
+    </div></div>`;
+  }).join('')+'</div>';
+}
+function needWorker(){
+  return `<div class="panel" style="text-align:center">
+    <div style="font-size:34px;margin-bottom:8px">🧰</div>
+    <h3>Bëhu mjeshtër në NextJob</h3>
+    <p class="sub" style="margin:6px auto 18px;max-width:380px">Krijo profilin tënd profesional dhe fillo të marrësh punë nga klientët në zonën tënde.</p>
+    <button class="btn btn-accent" onclick="setWorkerSub('profile')">Krijo profilin</button>
+  </div>`;
+}
+async function wProfile(body){
+  const opts=CATS.map(c=>{const id=pick(c,['id','category_id']);return `<span class="chip" data-cat="${id}" onclick="toggleCat(this)">${esc(pick(c,['name','title'],'Shërbim'))}</span>`;}).join('');
+  body.innerHTML=`
+    <div class="panel">
+      <h3>Profili profesional</h3>
+      <p class="sub">Këto shfaqen te klientët kur bën oferta.</p>
+      <div class="field"><label>Titulli / prezantimi</label>
+        <input id="w_head" class="input" placeholder="P.sh. Hidraulik me 10 vjet përvojë"></div>
+      <div class="field"><label>Zona e shërbimit</label>
+        <input id="w_area" class="input" value="Shkodër"></div>
+      <button class="btn btn-accent" onclick="saveWorker()">Ruaj profilin</button>
+    </div>
+    <div class="panel">
+      <h3>Zejet e mia</h3>
+      <p class="sub">Zgjidh kategoritë ku punon — feed-i “Për ty” bazohet te këto.</p>
+      <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px">${opts||'<span style="color:var(--muted)">S’ka kategori.</span>'}</div>
+      <button class="btn btn-soft" onclick="saveCats()">Ruaj zejet</button>
+    </div>`;
+}
+function toggleCat(elm){ elm.classList.toggle('on-accent'); }
+async function saveWorker(){
+  try{ await api('POST','/workers/me',{headline:$('#w_head').value.trim(),service_area:$('#w_area').value.trim()});
+    toast('Profili u ruajt.','ok'); }
+  catch(e){ toast(e.message,'err'); }
+}
+async function saveCats(){
+  const ids=[...document.querySelectorAll('.chip.on-accent')].map(c=>+c.dataset.cat);
+  try{ await api('PUT','/workers/me/categories',{category_ids:ids}); toast('Zejet u përditësuan.','ok'); }
+  catch(e){ toast(e.message,'err'); }
+}
+
+/* =========================================================
+   PROS directory
+========================================================= */
+async function renderPros(){
+  loading();
+  let list=[];
+  try{ list=asList(await api('GET','/workers?sort=avg_rating')); }catch(e){ return errState(e); }
+  const head=`<div class="page-head"><div>
+      <div class="eyebrow accent">Drejtoria</div><h1>Mjeshtrit më të vlerësuar</h1>
+      <p>Profesionistë të renditur sipas vlerësimeve nga klientët.</p></div></div>`;
+  if(!list.length)return $('#main').innerHTML=head+emptyHTML('👷','S’ka mjeshtër ende','Kthehu më vonë.');
+  $('#main').innerHTML=head+'<div class="grid">'+list.map(w=>{
+    const name=(pick(w,['first_name','name'],'')+' '+pick(w,['last_name'],'')).trim()||pick(w,['name'],'Mjeshtër');
+    const rating=pick(w,['avg_rating','rating'],0);
+    const rc=pick(w,['review_count','reviews','n_reviews'],'');
+    return `<div class="card wcard">
+      <div class="wa">${esc(initials(name))}</div>
+      <div style="flex:1">
+        <h4>${esc(name)}</h4>
+        <div class="head">${esc(pick(w,['headline','title'],'Profesionist'))}</div>
+        <div style="display:flex;align-items:center;gap:8px">${stars(rating)}
+          <span style="font-size:12.5px;color:var(--muted)">${rating?Number(rating).toFixed(1):'—'}${rc!==''?' ('+rc+')':''}</span></div>
+        ${pick(w,['service_area','area'])?`<div class="meta" style="margin-top:8px;font-size:13px;color:var(--muted)"><span>📍 ${esc(pick(w,['service_area','area']))}</span></div>`:''}
+      </div></div>`;
+  }).join('')+'</div>';
+}
+
+/* =========================================================
+   NOTIFICATIONS
+========================================================= */
+async function loadNotifCount(){
+  try{
+    const list=asList(await api('GET','/notifications'));
+    const unread=list.filter(n=>!pick(n,['is_read','read'],false)).length;
+    $('#notif-dot').classList.toggle('hidden',unread===0);
+  }catch(e){}
+}
+async function toggleNotif(){
+  const p=$('#notif-panel'); const open=p.classList.contains('hidden');
+  closeMenus();
+  if(!open)return;
+  p.classList.remove('hidden');
+  p.innerHTML=`<div class="notif-head"><b>Njoftimet</b></div><div class="notif-list"><div style="padding:16px"><div class="skel" style="height:14px;margin-bottom:8px"></div><div class="skel" style="height:14px;width:70%"></div></div></div>`;
+  let list=[];
+  try{ list=asList(await api('GET','/notifications')); }catch(e){}
+  const items = list.length? list.map(n=>{
+    const read=pick(n,['is_read','read'],false);
+    return `<div class="notif-item ${read?'read':''}"><span class="nd"></span><div>${esc(pick(n,['message','text','body'],'Njoftim'))}
+      <time>${ago(pick(n,['created_at','created','date']))}</time></div></div>`;
+  }).join('') : '<div class="empty" style="padding:34px 10px"><p>S’ke njoftime.</p></div>';
+  p.innerHTML=`<div class="notif-head"><b>Njoftimet</b>${list.length?'<button class="btn btn-soft btn-sm" onclick="markNotif()">Shëno të lexuara</button>':''}</div><div class="notif-list">${items}</div>`;
+}
+async function markNotif(){
+  try{ await api('PUT','/notifications/read'); toast('Njoftimet u shënuan si të lexuara.','ok'); $('#notif-dot').classList.add('hidden'); toggleNotif(); toggleNotif(); }
+  catch(e){ toast(e.message,'err'); }
+}
+
+/* =========================================================
+   MODAL primitives
+========================================================= */
+function openModal(title,bodyHTML,footerHTML){
+  $('#modal-mount').innerHTML=`<div class="overlay" onclick="if(event.target===this)closeModal()">
+    <div class="modal">
+      <div class="modal-head"><h3>${title}</h3><button class="xbtn" onclick="closeModal()">×</button></div>
+      <div class="modal-body">${bodyHTML}</div>
+      ${footerHTML?`<div class="modal-foot">${footerHTML}</div>`:''}
+    </div></div>`;
+}
+function closeModal(){ $('#modal-mount').innerHTML=''; }
+document.addEventListener('keydown',e=>{ if(e.key==='Escape')closeModal(); });
+
+/* =========================================================
+   CHATBOT WIDGET  (unchanged logic, shared token)
+========================================================= */
+(function(){
+  const g=id=>document.getElementById(id);
+  const msgs=g('nj-msgs'), form=g('nj-form'), input=g('nj-in');
+  function add(text,cls){const d=document.createElement('div');d.className='nj-m '+cls;d.textContent=text;
+    msgs.appendChild(d);msgs.scrollTop=msgs.scrollHeight;return d;}
+  function showLogin(s){g('nj-login').style.display=s?'flex':'none';form.style.display=s?'none':'flex';}
+  g('nj-chat-btn').onclick=()=>{
+    g('nj-chat').classList.toggle('open');
+    showLogin(!token);
+    if(token&&!msgs.childElementCount)
+      add('Përshëndetje! Unë jam asistenti i NextJob. Më pyet p.sh. "Më gjej një hidraulik të lirë" ose "Cili elektricist ka vlerësimet më të mira?"','nj-bot');
+  };
+  g('nj-login-btn').onclick=async()=>{
+    try{
+      const r=await fetch(BASE+'/auth/login',{method:'POST',headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({email:g('nj-email').value,password:g('nj-pass').value})});
+      const j=await r.json();
+      if(!r.ok||!(j.token||j.access_token))throw new Error(j.error||'Kyçja dështoi');
+      token=j.token||j.access_token; localStorage.setItem('nj_token',token);
+      showLogin(false); add('Përshëndetje! Si mund të të ndihmoj?','nj-bot');
+    }catch(e){ g('nj-login-err').textContent=e.message; }
+  };
+  form.onsubmit=async ev=>{
+    ev.preventDefault();
+    const q=input.value.trim(); if(!q)return;
+    input.value=''; add(q,'nj-user');
+    const w=add('Po mendoj…','nj-bot');
+    try{
+      const r=await fetch(BASE+'/chat',{method:'POST',
+        headers:{'Content-Type':'application/json','Authorization':'Bearer '+token},
+        body:JSON.stringify({message:q})});
+      const j=await r.json();
+      if(r.status===401){token='';localStorage.removeItem('nj_token');showLogin(true);
+        w.textContent='Sesioni skadoi — kyçu përsëri.';return;}
+      w.textContent=j.reply||j.error||'Gabim i panjohur.';
+    }catch(e){ w.textContent='Gabim rrjeti: '+e.message; }
+  };
+})();
+
+/* =========================================================
+   START
+========================================================= */
+(function start(){
+  // allow Enter key on auth
+  ['l_pass'].forEach(id=>{const e=$('#'+id);if(e)e.addEventListener('keydown',ev=>{if(ev.key==='Enter')doLogin();});});
+  ['r_pass'].forEach(id=>{const e=$('#'+id);if(e)e.addEventListener('keydown',ev=>{if(ev.key==='Enter')doRegister();});});
+  if(token) boot();
+})();
+</script>
+</body>
+</html>
