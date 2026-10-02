@@ -7,30 +7,30 @@ export default defineConfig({
 	plugins: [
 		tailwindcss(),
 		sveltekit(),
+
 		SvelteKitPWA({
 			registerType: 'autoUpdate',
+
 			manifest: {
 				name: 'NextJob',
 				short_name: 'NextJob',
 				description: 'Digitale Jobvermittlung für lokale Dienstleistungen in Shkodër',
-				theme_color: '#111827',
-				background_color: '#ffffff',
+
+				theme_color: '#8FB0C4',
+				background_color: '#F5F1EE',
+
 				display: 'standalone',
 				start_url: '/',
 				lang: 'de',
+
 				icons: [
 					{
-						src: 'icon-192.png',
-						sizes: '192x192',
-						type: 'image/png'
-					},
-					{
-						src: 'icon-512.png',
-						sizes: '512x512',
+						src: '/images/nextjob-logo.png',
 						type: 'image/png'
 					}
 				]
 			},
+
 			workbox: {
 				globPatterns: ['**/*.{js,css,html,png,svg,ico}']
 			}
