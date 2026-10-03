@@ -11,6 +11,10 @@ export default defineConfig({
 		SvelteKitPWA({
 			registerType: 'autoUpdate',
 
+			devOptions: {
+				enabled: true
+			},
+
 			manifest: {
 				name: 'NextJob',
 				short_name: 'NextJob',
