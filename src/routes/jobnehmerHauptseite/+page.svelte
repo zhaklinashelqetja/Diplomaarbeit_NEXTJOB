@@ -146,3 +146,58 @@
             words.some((word) => wordMatches(term, word))
         );
     }
+
+    // Suchergebnisse live berechnen
+    let filteredJobs = $derived(
+        (data.jobs ?? []).filter((job) => {
+            const matchesText = matchesSearch(job, search);
+
+            const category = normalizeText(getCategory(job));
+            const selected = normalizeText(selectedCategory);
+
+            const matchesCategory =
+                selectedCategory === 'Alle' ||
+                category === selected;
+
+            return matchesText && matchesCategory;
+        })
+    );
+
+    // Pagination
+    let totalPages = $derived(
+        Math.max(1, Math.ceil(filteredJobs.length / pageSize))
+    );
+
+    let paginatedJobs = $derived(
+        filteredJobs.slice(
+            (currentPage - 1) * pageSize,
+            currentPage * pageSize
+        )
+    );
+
+    let pageNumbers = $derived(
+        Array.from({ length: totalPages }, (_, index) => index + 1)
+    );
+
+    function updateSearch(value) {
+        search = value;
+        currentPage = 1;
+    }
+
+    function updateCategory(category) {
+        selectedCategory = category;
+        currentPage = 1;
+    }
+
+    function goToPage(page) {
+        if (page >= 1 && page <= totalPages) {
+            currentPage = page;
+        }
+    }
+
+    function resetFilters() {
+        search = '';
+        selectedCategory = 'Alle';
+        currentPage = 1;
+    }
+</script>
