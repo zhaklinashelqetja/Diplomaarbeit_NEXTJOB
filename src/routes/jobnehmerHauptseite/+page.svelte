@@ -510,3 +510,52 @@
                             </article>
                         {/each}
                     </div>
+                <!-- PAGINATION -->
+                    {#if totalPages > 1}
+                        <nav
+                            class="mt-8 flex flex-wrap items-center justify-center gap-2"
+                            aria-label="Seitennavigation für Aufträge"
+                        >
+                            <button
+                                type="button"
+                                onclick={() => goToPage(currentPage - 1)}
+                                disabled={currentPage === 1}
+                                class="rounded-xl border border-[#2A2E38]/10 bg-white px-3 py-2 text-sm font-semibold transition hover:border-[#62AA97] disabled:cursor-not-allowed disabled:opacity-40"
+                            >
+                                ← Zurück
+                            </button>
+
+                            {#each pageNumbers as page}
+                                <button
+                                    type="button"
+                                    onclick={() => goToPage(page)}
+                                    aria-label={`Seite ${page}`}
+                                    aria-current={currentPage === page
+                                        ? 'page'
+                                        : undefined}
+                                    class={`h-10 min-w-10 rounded-xl border px-3 text-sm font-semibold transition ${
+                                        currentPage === page
+                                            ? 'border-[#62AA97] bg-[#62AA97] text-white'
+                                            : 'border-[#2A2E38]/10 bg-white hover:border-[#62AA97]'
+                                    }`}
+                                >
+                                    {page}
+                                </button>
+                            {/each}
+
+                            <button
+                                type="button"
+                                onclick={() => goToPage(currentPage + 1)}
+                                disabled={currentPage === totalPages}
+                                class="rounded-xl border border-[#2A2E38]/10 bg-white px-3 py-2 text-sm font-semibold transition hover:border-[#62AA97] disabled:cursor-not-allowed disabled:opacity-40"
+                            >
+                                Weiter →
+                            </button>
+                        </nav>
+
+                        <p
+                            class="mt-3 text-center text-xs text-[#2A2E38]/50"
+                        >
+                            Seite {currentPage} von {totalPages}
+                        </p>
+                    {/if}    
