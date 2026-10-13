@@ -290,3 +290,81 @@
             </a>
         </nav>
     </header>
+
+        <!-- HAUPTBEREICH -->
+<main class="mx-auto max-w-7xl px-4 py-6 sm:px-6 sm:py-8">
+        <!-- WILLKOMMEN -->
+        <section class="mb-8">
+            <p
+                class="mb-2 text-sm font-semibold uppercase tracking-wider text-[#62AA97]"
+            >
+                Für dich
+            </p>
+
+            <h1 class="text-2xl font-bold tracking-tight sm:text-4xl">
+                Hallo {data.user?.first_name ?? ''} 👋
+            </h1>
+
+            <p
+                class="mt-2 max-w-2xl text-sm leading-6 text-[#2A2E38]/60 sm:text-base"
+            >
+                Entdecke passende Aufträge und finde Jobs, die zu deinen
+                Fähigkeiten und deinem Standort passen.
+            </p>
+        </section>
+
+        <!-- FEHLERMELDUNG -->
+        {#if data.error}
+            <div
+                class="mb-6 rounded-2xl border border-[#8FB0C4]/40 bg-[#8FB0C4]/20 px-5 py-4"
+                role="status"
+            >
+                <p class="font-medium">{data.error}</p>
+            </div>
+        {/if}
+
+        <!-- VERBESSERTE SUCHE -->
+        <section class="mb-8">
+            <label
+                for="job-search"
+                class="mb-2 block text-sm font-semibold"
+            >
+                Aufträge suchen
+            </label>
+
+            <div class="relative">
+                <span
+                    class="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-[#2A2E38]/40"
+                    aria-hidden="true"
+                >
+                    🔍
+                </span>
+
+                <input
+                    id="job-search"
+                    type="search"
+                    value={search}
+                    oninput={(event) =>
+                        updateSearch(event.currentTarget.value)}
+                    placeholder="z. B. painter, Shkodra ..."
+                    autocomplete="off"
+                    class="w-full rounded-2xl border border-[#2A2E38]/10 bg-white py-4 pl-11 pr-12 outline-none transition focus:border-[#62AA97] focus:ring-2 focus:ring-[#62AA97]/20"
+                />
+
+                {#if search}
+                    <button
+                        type="button"
+                        onclick={() => updateSearch('')}
+                        aria-label="Suchtext löschen"
+                        class="absolute right-3 top-1/2 -translate-y-1/2 rounded-lg px-3 py-2 text-sm text-[#2A2E38]/60 transition hover:bg-[#F5F1EE] hover:text-[#2A2E38]"
+                    >
+                        ✕
+                    </button>
+                {/if}
+            </div>
+
+            <p class="mt-2 text-xs leading-5 text-[#2A2E38]/50">
+                Suche nach Wörtern oder Wortteilen. Leichte Tippfehler
+                werden bei längeren Wörtern berücksichtigt.
+            </p>
+        </section>
