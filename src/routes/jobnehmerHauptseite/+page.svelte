@@ -558,4 +558,39 @@
                         >
                             Seite {currentPage} von {totalPages}
                         </p>
-                    {/if}    
+                    {/if} 
+                {:else}  
+                    <!-- LEERE SUCHERGEBNISSE -->
+                    <div
+                        class="rounded-2xl border border-dashed border-[#2A2E38]/15 bg-white px-5 py-12 text-center sm:px-6 sm:py-16"
+                    >
+                        <div class="mx-auto mb-4 text-5xl">
+                            🔎
+                        </div>
+
+                        <h3 class="text-lg font-bold">
+                            {search.trim() || selectedCategory !== 'Alle'
+                                ? 'Keine passenden Aufträge gefunden'
+                                : 'Aktuell keine Aufträge verfügbar'}
+                        </h3>
+
+                        <p
+                            class="mx-auto mt-2 max-w-md text-sm leading-6 text-[#2A2E38]/50"
+                        >
+                            {search.trim() || selectedCategory !== 'Alle'
+                                ? 'Versuche einen anderen Suchbegriff oder setze die Suche zurück.'
+                                : 'Schau später wieder vorbei. Neue Aufträge können jederzeit hinzukommen.'}
+                        </p>
+
+                        {#if search.trim() || selectedCategory !== 'Alle'}
+                            <button
+                                type="button"
+                                onclick={resetFilters}
+                                class="mt-5 rounded-xl bg-[#62AA97] px-5 py-3 text-sm font-bold text-white transition hover:bg-[#529b88]"
+                            >
+                                Suche zurücksetzen
+                            </button>
+                        {/if}
+                    </div>
+                {/if}
+            </section> 
