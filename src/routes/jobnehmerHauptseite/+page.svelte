@@ -201,3 +201,92 @@
         currentPage = 1;
     }
 </script>
+
+<svelte:head>
+    <title>Jobnehmer | NextJob</title>
+    <meta
+        name="description"
+        content="Entdecke passende Aufträge auf NextJob."
+    />
+</svelte:head>
+
+<div class="min-h-screen bg-[#F5F1EE] text-[#2A2E38]">
+    <!-- HEADER -->
+    <header
+        class="sticky top-0 z-20 border-b border-[#2A2E38]/10 bg-white/95 backdrop-blur"
+    >
+        <div
+            class="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-4 sm:px-6"
+        >
+            <a
+                href="/"
+                class="shrink-0 text-2xl font-extrabold tracking-tight text-[#2A2E38]"
+            >
+                NEXT<span class="text-[#62AA97]">J</span>OB
+            </a>
+
+            <!-- Desktop Navigation -->
+            <nav class="hidden items-center gap-6 md:flex">
+                <a
+                    href="/jobnehmer"
+                    class="font-semibold text-[#62AA97]"
+                >
+                    Jobs
+                </a>
+
+                <a
+                    href="/profile"
+                    class="text-[#2A2E38]/60 transition hover:text-[#62AA97]"
+                >
+                    Profil
+                </a>
+
+                <a
+                    href="/saved"
+                    class="text-[#2A2E38]/60 transition hover:text-[#62AA97]"
+                >
+                    Gespeichert
+                </a>
+            </nav>
+
+            <!-- Benutzer -->
+            <div class="flex items-center gap-3">
+                <div
+                    class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#A8B79E] font-bold text-[#2A2E38]"
+                >
+                    {data.user?.first_name?.charAt(0) ?? 'U'}
+                </div>
+
+                <div class="hidden sm:block">
+                    <p class="text-sm font-semibold">
+                        {data.user?.first_name ?? 'User'}
+                    </p>
+
+                    <p class="text-xs text-[#2A2E38]/50">
+                        Jobnehmer
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Navigation -->
+        <nav
+            class="flex gap-5 overflow-x-auto border-t border-[#2A2E38]/10 px-4 py-3 text-sm md:hidden"
+            aria-label="Mobile Navigation"
+        >
+            <a
+                href="/jobnehmer"
+                class="shrink-0 font-semibold text-[#62AA97]"
+            >
+                Jobs
+            </a>
+
+            <a href="/profile" class="shrink-0">
+                Profil
+            </a>
+
+            <a href="/saved" class="shrink-0">
+                Gespeichert
+            </a>
+        </nav>
+    </header>
