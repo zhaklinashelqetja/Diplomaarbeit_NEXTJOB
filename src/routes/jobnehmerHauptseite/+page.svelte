@@ -368,3 +368,145 @@
                 werden bei längeren Wörtern berücksichtigt.
             </p>
         </section>
+        
+                <!-- KATEGORIEN -->
+        <section class="mb-8">
+            <div class="flex gap-2 overflow-x-auto pb-2">
+                {#each categories as category}
+                    <button
+                        type="button"
+                        onclick={() => updateCategory(category)}
+                        aria-pressed={selectedCategory === category}
+                        class={`shrink-0 rounded-full border px-4 py-2 text-sm font-medium transition ${
+                            selectedCategory === category
+                                ? 'border-[#62AA97] bg-[#62AA97] text-white'
+                                : 'border-[#2A2E38]/10 bg-white hover:border-[#62AA97]'
+                        }`}
+                    >
+                        {category}
+                    </button>
+                {/each}
+            </div>
+        </section>
+
+               <!-- INHALT UND SIDEBAR -->
+        <div class="grid gap-8 lg:grid-cols-[minmax(0,1fr)_300px]">
+            <!-- AUFTRÄGE -->
+            <section class="min-w-0">
+                <div
+                    class="mb-5 flex flex-wrap items-end justify-between gap-3"
+                >
+                    <div>
+                        <h2 class="text-2xl font-bold">
+                            Passende Aufträge
+                        </h2>
+
+                        <p class="mt-1 text-sm text-[#2A2E38]/50">
+                            Empfehlungen für dich
+                        </p>
+                    </div>
+
+                    <span
+                        class="rounded-full bg-[#A8B79E]/40 px-3 py-1 text-xs font-semibold"
+                    >
+                        {filteredJobs.length}
+                        {filteredJobs.length === 1 ? 'Job' : 'Jobs'}
+                    </span>
+                </div>
+
+                {#if paginatedJobs.length > 0}
+                    <!-- AUFTRAGSKARTEN -->
+                    <div class="grid gap-5 sm:grid-cols-2">
+                        {#each paginatedJobs as job, index (`${job.problem_id ?? job.id ?? index}`)}
+                            <article
+                                class="group flex min-w-0 flex-col overflow-hidden rounded-2xl border border-[#2A2E38]/10 bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-lg"
+                            >
+                                <div class="flex-1 p-5">
+                                    <div
+                                        class="mb-4 flex items-start justify-between gap-3"
+                                    >
+                                        <div
+                                            class="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-[#A8B79E]/50"
+                                        >
+                                            💼
+                                        </div>
+
+                                        {#if job.urgency === 'high' || job.urgency === 'emergency'}
+                                            <span
+                                                class="rounded-full bg-[#62AA97]/15 px-3 py-1 text-xs font-bold text-[#398875]"
+                                            >
+                                                Dringend
+                                            </span>
+                                        {:else}
+                                            <span
+                                                class="rounded-full bg-[#8FB0C4]/20 px-3 py-1 text-xs font-medium"
+                                            >
+                                                Offen
+                                            </span>
+                                        {/if}
+                                    </div>
+
+                                    <h3
+                                        class="break-words text-lg font-bold"
+                                    >
+                                        {job.title ?? 'Ohne Titel'}
+                                    </h3>
+
+                                    <p
+                                        class="mt-2 break-words text-sm leading-6 text-[#2A2E38]/60"
+                                    >
+                                        {job.description ??
+                                            'Keine Beschreibung vorhanden.'}
+                                    </p>
+
+                                    <div class="mt-5 space-y-2">
+                                        {#if job.location}
+                                            <div
+                                                class="flex items-start gap-2 text-sm"
+                                            >
+                                                <span>📍</span>
+                                                <span
+                                                    class="break-words text-[#2A2E38]/70"
+                                                >
+                                                    {job.location}
+                                                </span>
+                                            </div>
+                                        {/if}
+
+                                        {#if job.budget != null && job.budget !== ''}
+                                            <div
+                                                class="flex items-start gap-2 text-sm"
+                                            >
+                                                <span>💰</span>
+                                                <span class="font-semibold">
+                                                    {job.budget}
+                                                </span>
+                                            </div>
+                                        {/if}
+
+                                        {#if getCategory(job)}
+                                            <div
+                                                class="flex items-start gap-2 text-sm"
+                                            >
+                                                <span>🏷️</span>
+                                                <span
+                                                    class="break-words text-[#2A2E38]/70"
+                                                >
+                                                    {getCategory(job)}
+                                                </span>
+                                            </div>
+                                        {/if}
+                                    </div>
+                                </div>
+
+                                <div class="p-5 pt-0">
+                                    <a
+                                        href={`/jobs/${job.problem_id ?? job.id}`}
+                                        class="flex w-full items-center justify-center rounded-xl bg-[#62AA97] px-4 py-3 text-sm font-bold text-white transition hover:bg-[#529b88]"
+                                    >
+                                        Auftrag ansehen
+                                    </a>
+                                </div>
+                            </article>
+                        {/each}
+                    </div>
