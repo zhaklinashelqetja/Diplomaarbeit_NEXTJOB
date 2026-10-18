@@ -215,80 +215,6 @@
     <header
         class="sticky top-0 z-20 border-b border-[#2A2E38]/10 bg-white/95 backdrop-blur"
     >
-        <div
-            class="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-4 sm:px-6"
-        >
-            <a
-                href="/"
-                class="shrink-0 text-2xl font-extrabold tracking-tight text-[#2A2E38]"
-            >
-                NEXT<span class="text-[#62AA97]">J</span>OB
-            </a>
-
-            <!-- Desktop Navigation -->
-            <nav class="hidden items-center gap-6 md:flex">
-                <a
-                    href="/jobnehmer"
-                    class="font-semibold text-[#62AA97]"
-                >
-                    Jobs
-                </a>
-
-                <a
-                    href="/profile"
-                    class="text-[#2A2E38]/60 transition hover:text-[#62AA97]"
-                >
-                    Profil
-                </a>
-
-                <a
-                    href="/saved"
-                    class="text-[#2A2E38]/60 transition hover:text-[#62AA97]"
-                >
-                    Gespeichert
-                </a>
-            </nav>
-
-            <!-- Benutzer -->
-            <div class="flex items-center gap-3">
-                <div
-                    class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#A8B79E] font-bold text-[#2A2E38]"
-                >
-                    {data.user?.first_name?.charAt(0) ?? 'U'}
-                </div>
-
-                <div class="hidden sm:block">
-                    <p class="text-sm font-semibold">
-                        {data.user?.first_name ?? 'User'}
-                    </p>
-
-                    <p class="text-xs text-[#2A2E38]/50">
-                        Jobnehmer
-                    </p>
-                </div>
-            </div>
-        </div>
-
-        <!-- Mobile Navigation -->
-        <nav
-            class="flex gap-5 overflow-x-auto border-t border-[#2A2E38]/10 px-4 py-3 text-sm md:hidden"
-            aria-label="Mobile Navigation"
-        >
-            <a
-                href="/jobnehmer"
-                class="shrink-0 font-semibold text-[#62AA97]"
-            >
-                Jobs
-            </a>
-
-            <a href="/profile" class="shrink-0">
-                Profil
-            </a>
-
-            <a href="/saved" class="shrink-0">
-                Gespeichert
-            </a>
-        </nav>
     </header>
 
         <!-- HAUPTBEREICH -->
@@ -302,7 +228,7 @@
             </p>
 
             <h1 class="text-2xl font-bold tracking-tight sm:text-4xl">
-                Hallo {data.user?.first_name ?? ''} 👋
+                Willkommen bei NextJob {data.user?.first_name ?? ''} 
             </h1>
 
             <p
@@ -594,3 +520,124 @@
                     </div>
                 {/if}
             </section> 
+            
+            <!-- SIDEBAR -->
+            <aside class="space-y-5">
+                <!-- PROFIL -->
+                <section
+                    class="rounded-2xl bg-[#2A2E38] p-5 text-white sm:p-6"
+                >
+                    <div class="flex items-center gap-4">
+                        <div
+                            class="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-[#A8B79E] text-xl font-bold text-[#2A2E38]"
+                        >
+                            {data.user?.first_name?.charAt(0) ?? 'U'}
+                        </div>
+
+                        <div class="min-w-0">
+                            <h3 class="break-words font-bold">
+                                {data.user?.first_name ?? ''}
+                                {data.user?.last_name ?? ''}
+                            </h3>
+
+                            <p class="text-sm text-white/60">
+                                Jobnehmer
+                            </p>
+                        </div>
+                    </div>
+
+                    <a
+                        href="/profile"
+                        class="mt-5 block rounded-xl bg-[#A8B79E] px-4 py-3 text-center text-sm font-bold text-[#2A2E38] transition hover:bg-[#8fa18a]"
+                    >
+                        Profil ansehen
+                    </a>
+                </section>
+
+                <!-- FOLLOW -->
+                <section
+                    class="rounded-2xl border border-[#2A2E38]/10 bg-white p-5 sm:p-6"
+                >
+                    <div class="mb-4 flex items-center gap-3">
+                        <div
+                            class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#8FB0C4]/30"
+                        >
+                            ⭐
+                        </div>
+
+                        <div>
+                            <h3 class="font-bold">Meine Folgen</h3>
+
+                            <p class="text-xs text-[#2A2E38]/50">
+                                Gefolgte Nutzer
+                            </p>
+                        </div>
+                    </div>
+
+                    <p class="text-sm leading-6 text-[#2A2E38]/60">
+                        Folge interessanten Jobnehmern oder Jobgebern
+                        und behalte ihre Aktivitäten im Blick.
+                    </p>
+
+                    <a
+                        href="/profile"
+                        class="mt-4 block w-full rounded-xl border border-[#62AA97] px-4 py-3 text-center text-sm font-semibold text-[#398875] transition hover:bg-[#62AA97] hover:text-white"
+                    >
+                        Folgen verwalten
+                    </a>
+                </section>
+
+                <!-- GESPEICHERTE JOBS -->
+                <section
+                    class="rounded-2xl border border-[#2A2E38]/10 bg-white p-5 sm:p-6"
+                >
+                    <div
+                        class="mb-3 flex items-center justify-between gap-3"
+                    >
+                        <h3 class="font-bold">
+                            Gespeicherte Jobs
+                        </h3>
+
+                        <span
+                            class="flex h-7 min-w-7 items-center justify-center rounded-full bg-[#A8B79E]/40 px-2 text-xs font-bold"
+                        >
+                            {data.savedJobs?.length ?? 0}
+                        </span>
+                    </div>
+
+                    <p class="text-sm leading-6 text-[#2A2E38]/50">
+                        Speichere interessante Aufträge, um sie später
+                        schnell wiederzufinden.
+                    </p>
+
+                    <a
+                        href="/saved"
+                        class="mt-4 block text-sm font-bold text-[#398875] hover:underline"
+                    >
+                        Gespeicherte Jobs →
+                    </a>
+                </section>
+
+                <!-- BEITRAG -->
+                <section
+                    class="rounded-2xl bg-[#A8B79E]/35 p-5 sm:p-6"
+                >
+
+                    <h3 class="font-bold">Dein Beitrag</h3>
+
+                    <p class="mt-2 text-sm leading-6 text-[#2A2E38]/60">
+                        Teile deine Erfahrungen und Aktivitäten auf
+                        NextJob.
+                    </p>
+
+                    <a
+                        href="/jobnehmerProfile"
+                        class="mt-4 inline-block rounded-xl bg-[#2A2E38] px-4 py-3 text-sm font-bold text-white transition hover:bg-[#1e222b]"
+                    >
+                        Profil öffnen
+                    </a>
+                </section>
+            </aside>
+        </div>
+    </main>
+</div>
