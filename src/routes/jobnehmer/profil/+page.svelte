@@ -152,3 +152,131 @@
                     </div>
                 </div>
             </section>
+            
+            <!-- PROFILINHALT -->
+            <div class="mt-6 grid gap-6 lg:grid-cols-[minmax(0,1fr)_320px]">
+                <div class="min-w-0 space-y-6">
+                    <!-- ÜBER MICH -->
+                    <section
+                        class="rounded-2xl border border-[#2A2E38]/10 bg-white p-5 sm:p-7"
+                    >
+                        <h2 class="text-lg font-bold">Über mich</h2>
+
+                        {#if bio}
+                            <p class="mt-4 whitespace-pre-line break-words text-sm leading-7 text-[#2A2E38]/70">
+                                {bio}
+                            </p>
+                        {:else}
+                            <p class="mt-3 text-sm leading-6 text-[#2A2E38]/55">
+                                Du hast noch keine Beschreibung hinzugefügt.
+                                Eine kurze Vorstellung hilft anderen Nutzern,
+                                dich und deine Arbeit besser kennenzulernen.
+                            </p>
+                        {/if}
+                    </section>
+
+                    <!-- FÄHIGKEITEN -->
+                    <section
+                        class="rounded-2xl border border-[#2A2E38]/10 bg-white p-5 sm:p-7"
+                    >
+                        <h2 class="text-lg font-bold">Meine Fähigkeiten</h2>
+
+                        {#if skills.length > 0}
+                            <div class="mt-4 flex flex-wrap gap-2">
+                                {#each skills as skill, index (`${skill}-${index}`)}
+                                    <span
+                                        class="rounded-full bg-[#A8B79E]/35 px-4 py-2 text-sm font-medium"
+                                    >
+                                        {skill}
+                                    </span>
+                                {/each}
+                            </div>
+                        {:else}
+                            <p class="mt-3 text-sm leading-6 text-[#2A2E38]/55">
+                                Es wurden noch keine Fähigkeiten hinterlegt.
+                                Hier können beispielsweise handwerkliche
+                                Kenntnisse, Design oder Marketing angezeigt
+                                werden, sobald sie in deinen Profildaten
+                                vorhanden sind.
+                            </p>
+                        {/if}
+                    </section>
+
+                    <!-- KONTAKT -->
+                    <section
+                        class="rounded-2xl border border-[#2A2E38]/10 bg-white p-5 sm:p-7"
+                    >
+                        <h2 class="text-lg font-bold">
+                            Kontaktinformationen
+                        </h2>
+
+                        <div class="mt-5 space-y-4">
+                            {#if user.email}
+                                <div class="flex items-start gap-3">
+                                    <div
+                                        class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#8FB0C4]/25"
+                                    >
+                                        <span aria-hidden="true">✉️</span>
+                                    </div>
+
+                                    <div class="min-w-0">
+                                        <p class="text-xs font-medium text-[#2A2E38]/50">
+                                            E-Mail
+                                        </p>
+
+                                        <p class="mt-1 break-all text-sm font-medium">
+                                            {user.email}
+                                        </p>
+                                    </div>
+                                </div>
+                            {/if}
+
+                            {#if user.phone}
+                                <div class="flex items-start gap-3">
+                                    <div
+                                        class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#8FB0C4]/25"
+                                    >
+                                        <span aria-hidden="true">📞</span>
+                                    </div>
+
+                                    <div class="min-w-0">
+                                        <p class="text-xs font-medium text-[#2A2E38]/50">
+                                            Telefonnummer
+                                        </p>
+
+                                        <p class="mt-1 break-words text-sm font-medium">
+                                            {user.phone}
+                                        </p>
+                                    </div>
+                                </div>
+                            {/if}
+
+                            {#if location}
+                                <div class="flex items-start gap-3">
+                                    <div
+                                        class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#8FB0C4]/25"
+                                    >
+                                        <span aria-hidden="true">📍</span>
+                                    </div>
+
+                                    <div class="min-w-0">
+                                        <p class="text-xs font-medium text-[#2A2E38]/50">
+                                            Standort
+                                        </p>
+
+                                        <p class="mt-1 break-words text-sm font-medium">
+                                            {location}
+                                        </p>
+                                    </div>
+                                </div>
+                            {/if}
+
+                            {#if !user.email && !user.phone && !location}
+                                <p class="text-sm leading-6 text-[#2A2E38]/55">
+                                    Es sind noch keine Kontaktinformationen
+                                    vorhanden.
+                                </p>
+                            {/if}
+                        </div>
+                    </section>
+                </div>
