@@ -280,3 +280,78 @@
                         </div>
                     </section>
                 </div>
+                
+                <!-- SIDEBAR -->
+                <aside class="space-y-6">
+                    <!-- PROFILFORTSCHRITT -->
+                    <section
+                        class="rounded-2xl border border-[#2A2E38]/10 bg-white p-5 sm:p-6"
+                    >
+                        <h2 class="font-bold">Profilübersicht</h2>
+
+                        <div class="mt-5 flex items-center justify-between gap-3">
+                            <span class="text-sm text-[#2A2E38]/60">
+                                Profildaten
+                            </span>
+
+                            <span class="text-lg font-bold text-[#398875]">
+                                {profileProgress} %
+                            </span>
+                        </div>
+
+                        <div
+                            class="mt-3 h-2 overflow-hidden rounded-full bg-[#F5F1EE]"
+                            role="progressbar"
+                            aria-label="Profilvollständigkeit"
+                            aria-valuemin="0"
+                            aria-valuemax="100"
+                            aria-valuenow={profileProgress}
+                        >
+                            <div
+                                class="h-full rounded-full bg-[#62AA97] transition-all"
+                                style={`width: ${profileProgress}%`}
+                            ></div>
+                        </div>
+
+                        <p class="mt-4 text-sm leading-6 text-[#2A2E38]/60">
+                            Ein vollständiges Profil hilft anderen Nutzern,
+                            deine Fähigkeiten und Angebote besser einzuschätzen.
+                        </p>
+                    </section>
+
+                    <!-- MEIN BEREICH -->
+                    <section
+                        class="rounded-2xl bg-[#2A2E38] p-5 text-white sm:p-6"
+                    >
+                        <h2 class="font-bold">Mein Bereich</h2>
+
+                        <nav class="mt-4 space-y-1">
+                            <a
+                                href="/jobnehmer"
+                                class="flex items-center justify-between rounded-xl px-3 py-3 text-sm transition hover:bg-white/10"
+                            >
+                                <span>Aufträge entdecken</span>
+                                <span aria-hidden="true">→</span>
+                            </a>
+
+                            <a
+                                href="/saved"
+                                class="flex items-center justify-between rounded-xl px-3 py-3 text-sm transition hover:bg-white/10"
+                            >
+                                <span>Gespeicherte Jobs</span>
+                                <span aria-hidden="true">→</span>
+                            </a>
+                        </nav>
+                    </section>
+                </aside>
+            </div>
+        {:else}
+            <section class="rounded-2xl bg-white p-6">
+                <h1 class="text-xl font-bold">Profil nicht verfügbar</h1>
+                <p class="mt-2 text-sm text-[#2A2E38]/60">
+                    Deine Profildaten konnten nicht geladen werden.
+                </p>
+            </section>
+        {/if}
+    </main>
+</div>
