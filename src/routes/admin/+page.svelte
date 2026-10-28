@@ -1,5 +1,4 @@
 <script>
-    import registrationGrowthChart from '$lib/components/registrationGrowthChart.svelte';
     let { data } = $props();
 
     const stats = [
