@@ -267,3 +267,59 @@
                                 </th>
                             </tr>
                         </thead>
+         <tbody>
+
+                            {#each data.registrationGrowth as month}
+                                <tr class="border-b border-[#2A2E38]/5 last:border-0">
+
+                                    <td class="px-4 py-3 font-medium">
+                                        {month.month}
+                                    </td>
+
+                                    <td class="px-4 py-3">
+                                        {month.new_users}
+                                    </td>
+
+                                    <td class="px-4 py-3">
+                                        {month.new_workers}
+                                    </td>
+
+                                </tr>
+                            {/each}
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            {:else}
+
+                <div class="rounded-xl bg-[#F5F1EE] px-4 py-8 text-center">
+                    <p class="text-sm text-[#2A2E38]/50">
+                        Noch keine Registrierungsdaten vorhanden.
+                    </p>
+                </div>
+
+            {/if}
+
+        </section>
+        <registrationGrowthChart />
+
+
+        <!-- Footer information -->
+        <div class="mt-8 flex flex-col gap-2 border-t border-[#2A2E38]/10 pt-5 text-xs text-[#2A2E38]/50 sm:flex-row sm:items-center sm:justify-between">
+
+            <span>
+                NextJob · Admin-Bereich
+            </span>
+
+            <span>
+                Plattformverwaltung
+            </span>
+
+        </div>
+
+    </main>
+
+</div>
