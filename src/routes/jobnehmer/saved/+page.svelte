@@ -234,4 +234,103 @@
                                 {/if}
                             </div>
                         </div>
-    
+
+                                                <!-- AUFTRAG ANSEHEN -->
+                        <div class="p-5 pt-0">
+                            {#if getJobId(job) != null}
+                                <a
+                                    href={`/jobs/${getJobId(job)}`}
+                                    class="block w-full rounded-xl bg-[#62AA97] px-4 py-3 text-center text-sm font-bold text-white transition hover:bg-[#529b88]"
+                                >
+                                    Auftrag ansehen →
+                                </a>
+                            {:else}
+                                <p class="text-sm text-[#2A2E38]/50">
+                                    Für diesen Auftrag ist keine ID vorhanden.
+                                </p>
+                            {/if}
+                        </div>
+                    </article>
+                {/each}
+            </section>
+
+            <!-- PAGINATION -->
+            {#if totalPages > 1}
+                <nav
+                    class="mt-8 flex flex-wrap items-center justify-center gap-2"
+                    aria-label="Seitennavigation"
+                >
+                    <button
+                        type="button"
+                        onclick={() => goToPage(currentPage - 1)}
+                        disabled={currentPage === 1}
+                        class="rounded-xl border border-[#2A2E38]/10 bg-white px-3 py-2 text-sm font-semibold hover:border-[#62AA97] disabled:cursor-not-allowed disabled:opacity-40"
+                    >
+                        ← Zurück
+                    </button>
+
+                    {#each pageNumbers as page}
+                        <button
+                            type="button"
+                            onclick={() => goToPage(page)}
+                            aria-label={`Seite ${page}`}
+                            aria-current={currentPage === page
+                                ? 'page'
+                                : undefined}
+                            class={`h-10 min-w-10 rounded-xl border px-3 text-sm font-semibold ${
+                                currentPage === page
+                                    ? 'border-[#62AA97] bg-[#62AA97] text-white'
+                                    : 'border-[#2A2E38]/10 bg-white hover:border-[#62AA97]'
+                            }`}
+                        >
+                            {page}
+                        </button>
+                    {/each}
+
+                    <button
+                        type="button"
+                        onclick={() => goToPage(currentPage + 1)}
+                        disabled={currentPage === totalPages}
+                        class="rounded-xl border border-[#2A2E38]/10 bg-white px-3 py-2 text-sm font-semibold hover:border-[#62AA97] disabled:cursor-not-allowed disabled:opacity-40"
+                    >
+                        Weiter →
+                    </button>
+                </nav>
+
+                <p class="mt-3 text-center text-xs text-[#2A2E38]/50">
+                    Seite {currentPage} von {totalPages}
+                </p>
+            {/if}
+        {:else}
+            <!-- LEERZUSTAND -->
+            <section
+                class="rounded-2xl border border-dashed border-[#2A2E38]/15 bg-white px-5 py-14 text-center sm:px-8 sm:py-16"
+            >
+                <div
+                    class="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-[#A8B79E]/35 text-3xl"
+                    aria-hidden="true"
+                >
+                    ♡
+                </div>
+
+                <h2 class="mt-5 text-xl font-bold">
+                    Noch keine Jobs gespeichert
+                </h2>
+
+                <p
+                    class="mx-auto mt-2 max-w-md text-sm leading-6 text-[#2A2E38]/60"
+                >
+                    Wenn du interessante Aufträge findest, kannst du sie
+                    speichern und später hier wiederfinden.
+                </p>
+
+                <a
+                    href="/jobnehmerHauptseite"
+                    class="mt-5 inline-block rounded-xl bg-[#62AA97] px-5 py-3 text-sm font-bold text-white transition hover:bg-[#529b88]"
+                >
+                    Aufträge entdecken
+                </a>
+            </section>
+        {/if}
+    </main>
+</div>
