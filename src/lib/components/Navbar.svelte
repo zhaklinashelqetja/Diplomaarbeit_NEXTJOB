@@ -1,7 +1,7 @@
 <script>
 	import { goto } from '$app/navigation';
 	import { resolve } from '$app/paths';
-	import { locale } from '$lib/i18n.js';
+	import { locale, t } from '$lib/i18n.js';
 	import { isLoggedIn, checkLogin, logout } from '$lib/auth.js';
 	import { onMount } from 'svelte';
 
@@ -43,11 +43,11 @@
 		<!-- Desktop Navigation -->
 		<div class="hidden items-center gap-6 md:flex">
 			<a href={resolve('/')} class="font-medium text-[#2A2E38] transition hover:text-[#8FB0C4]">
-				Start
+				{$t('nav_start')}
 			</a>
 
 			<a href={resolve('/jobs')} class="font-medium text-[#2A2E38] transition hover:text-[#8FB0C4]">
-				Jobs finden
+				{$t('nav_jobs')}
 			</a>
 
 			{#if $isLoggedIn}
@@ -55,21 +55,21 @@
 					href={resolve('/chat')}
 					class="font-medium text-[#2A2E38] transition hover:text-[#8FB0C4]"
 				>
-					Chat
+					{$t('nav_chat')}
 				</a>
 
 				<a
 					href={resolve('/benachrichtigungen')}
 					class="font-medium text-[#2A2E38] transition hover:text-[#8FB0C4]"
 				>
-					Benachrichtigungen
+					{$t('nav_notifications')}
 				</a>
 			{:else}
 				<a
 					href={resolve('/wer-wir-sind')}
 					class="font-medium text-[#2A2E38] transition hover:text-[#8FB0C4]"
 				>
-					Wer wir sind
+					{$t('nav_wer_wir_sind')}
 				</a>
 			{/if}
 
@@ -78,6 +78,7 @@
 				type="button"
 				onclick={toggleLanguage}
 				class="rounded-lg border border-[#8FB0C4] px-3 py-2 text-sm font-semibold text-[#2A2E38] transition hover:bg-[#8FB0C4]/20"
+				aria-label="Sprache wechseln"
 			>
 				{$locale === 'de' ? 'AL' : 'DE'}
 			</button>
@@ -88,21 +89,21 @@
 					onclick={handleLogout}
 					class="rounded-lg bg-[#8FB0C4] px-5 py-2.5 font-semibold text-[#2A2E38] transition hover:bg-[#62AA97]"
 				>
-					Abmelden
+					{$t('nav_logout')}
 				</button>
 			{:else}
 				<a
 					href={resolve('/auth/login')}
 					class="px-2 py-2 font-medium text-[#2A2E38] transition hover:text-[#8FB0C4]"
 				>
-					Login
+					{$t('nav_login')}
 				</a>
 
 				<a
 					href={resolve('/auth/register')}
 					class="rounded-lg bg-[#8FB0C4] px-5 py-2.5 font-semibold text-[#2A2E38] transition hover:bg-[#62AA97]"
 				>
-					Registrieren
+					{$t('nav_register')}
 				</a>
 			{/if}
 		</div>
@@ -113,6 +114,7 @@
 				type="button"
 				onclick={toggleLanguage}
 				class="rounded-lg border border-[#8FB0C4] px-3 py-1.5 text-sm font-semibold text-[#2A2E38]"
+				aria-label="Sprache wechseln"
 			>
 				{$locale === 'de' ? 'AL' : 'DE'}
 			</button>
@@ -138,7 +140,7 @@
 					onclick={closeMenu}
 					class="rounded-lg px-3 py-3 font-medium text-[#2A2E38] hover:bg-[#8FB0C4]/15"
 				>
-					Start
+					{$t('nav_start')}
 				</a>
 
 				<a
@@ -146,7 +148,7 @@
 					onclick={closeMenu}
 					class="rounded-lg px-3 py-3 font-medium text-[#2A2E38] hover:bg-[#8FB0C4]/15"
 				>
-					Jobs finden
+					{$t('nav_jobs')}
 				</a>
 
 				{#if $isLoggedIn}
@@ -155,7 +157,7 @@
 						onclick={closeMenu}
 						class="rounded-lg px-3 py-3 font-medium text-[#2A2E38] hover:bg-[#8FB0C4]/15"
 					>
-						Chat
+						{$t('nav_chat')}
 					</a>
 
 					<a
@@ -163,7 +165,7 @@
 						onclick={closeMenu}
 						class="rounded-lg px-3 py-3 font-medium text-[#2A2E38] hover:bg-[#8FB0C4]/15"
 					>
-						Benachrichtigungen
+						{$t('nav_notifications')}
 					</a>
 
 					<button
@@ -171,7 +173,7 @@
 						onclick={handleLogout}
 						class="mt-2 rounded-lg bg-[#8FB0C4] px-4 py-3 text-left font-semibold text-[#2A2E38] hover:bg-[#62AA97]"
 					>
-						Abmelden
+						{$t('nav_logout')}
 					</button>
 				{:else}
 					<a
@@ -179,7 +181,7 @@
 						onclick={closeMenu}
 						class="rounded-lg px-3 py-3 font-medium text-[#2A2E38] hover:bg-[#8FB0C4]/15"
 					>
-						Wer wir sind
+						{$t('nav_wer_wir_sind')}
 					</a>
 
 					<a
@@ -187,7 +189,7 @@
 						onclick={closeMenu}
 						class="rounded-lg px-3 py-3 font-medium text-[#2A2E38] hover:bg-[#8FB0C4]/15"
 					>
-						Login
+						{$t('nav_login')}
 					</a>
 
 					<a
@@ -195,7 +197,7 @@
 						onclick={closeMenu}
 						class="mt-2 rounded-lg bg-[#8FB0C4] px-4 py-3 text-center font-semibold text-[#2A2E38] hover:bg-[#62AA97]"
 					>
-						Registrieren
+						{$t('nav_register')}
 					</a>
 				{/if}
 			</div>
