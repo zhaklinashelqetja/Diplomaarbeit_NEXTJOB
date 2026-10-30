@@ -130,6 +130,63 @@ const translations = {
 		contact_location: 'Standort: Shkodër, Albanien',
 		contact_email: 'E-Mail',
 
+		// JOBNEHMER-HAUPTSEITE
+		worker_page_title: 'Jobnehmer',
+		worker_meta_description: 'Entdecke passende Aufträge auf NextJob.',
+		worker_for_you: 'Für dich',
+		worker_welcome: 'Willkommen bei NextJob',
+		worker_intro:
+			'Entdecke passende Aufträge und finde Jobs, die zu deinen Fähigkeiten und deinem Standort passen.',
+		worker_search: 'Aufträge suchen',
+		worker_search_placeholder: 'z. B. painter, Shkodra ...',
+		worker_clear_search: 'Suchtext löschen',
+		worker_search_hint:
+			'Suche nach Wörtern oder Wortteilen. Leichte Tippfehler werden bei längeren Wörtern berücksichtigt.',
+		worker_matching_jobs: 'Passende Aufträge',
+		worker_recommendations: 'Empfehlungen für dich',
+		worker_urgent: 'Dringend',
+		worker_open: 'Offen',
+		worker_no_title: 'Ohne Titel',
+		worker_no_description: 'Keine Beschreibung vorhanden.',
+		worker_view_job: 'Auftrag ansehen',
+		worker_pagination: 'Seitennavigation für Aufträge',
+		worker_page: 'Seite',
+		worker_of: 'von',
+		worker_previous: 'Zurück',
+		worker_next: 'Weiter',
+		worker_no_results: 'Keine passenden Aufträge gefunden',
+		worker_no_jobs: 'Aktuell keine Aufträge verfügbar',
+		worker_try_again:
+			'Versuche einen anderen Suchbegriff oder setze die Suche zurück.',
+		worker_check_later:
+			'Schau später wieder vorbei. Neue Aufträge können jederzeit hinzukommen.',
+		worker_reset: 'Suche zurücksetzen',
+		worker_role: 'Jobnehmer',
+		worker_view_profile: 'Profil ansehen',
+		worker_following: 'Meine Folgen',
+		worker_followed_users: 'Gefolgte Nutzer',
+		worker_follow_description:
+			'Folge interessanten Jobnehmern oder Jobgebern und behalte ihre Aktivitäten im Blick.',
+		worker_manage_following: 'Folgen verwalten',
+		worker_saved_jobs: 'Gespeicherte Jobs',
+		worker_saved_description:
+			'Speichere interessante Aufträge, um sie später schnell wiederzufinden.',
+		worker_contribution: 'Dein Beitrag',
+		worker_contribution_description:
+			'Teile deine Erfahrungen und Aktivitäten auf NextJob.',
+		worker_open_profile: 'Profil öffnen',
+
+		// KATEGORIEN
+		worker_category_all: 'Alle',
+		worker_category_Plumber: 'Installateur',
+		worker_category_Electrician: 'Elektriker',
+		worker_category_Painter: 'Maler',
+		worker_category_Carpenter: 'Tischler',
+		worker_category_Mason: 'Maurer',
+		worker_category_Roofer: 'Dachdecker',
+		worker_category_Gardener: 'Gärtner',
+		worker_category_Cleaner: 'Reinigungskraft',
+
 		// CHAT
 		chat_title: 'Nachrichten',
 		chat_description:
@@ -236,7 +293,8 @@ const translations = {
 		login_no_account: 'Nuk ke ende një llogari?',
 		login_error: 'Emaili ose fjalëkalimi është i pasaktë.',
 		login_email_error: 'Emaili ose fjalëkalimi është i pasaktë.',
-		login_verify_error: 'Ju lutem, konfirmoni fillimisht adresën tuaj të emailit.',
+		login_verify_error:
+			'Ju lutem, konfirmoni fillimisht adresën tuaj të emailit.',
 		login_failed: 'Hyrja dështoi.',
 		login_server_error: 'Nuk mund të lidhemi me serverin.',
 
@@ -262,9 +320,11 @@ const translations = {
 		register_button: 'Regjistrohu',
 		register_loading: 'Duke u regjistruar...',
 		register_have_account: 'Ke tashmë një llogari?',
-		register_role_error: 'Ju lutem, zgjidh si dëshiron ta përdorësh NextJob.',
+		register_role_error:
+			'Ju lutem, zgjidh si dëshiron ta përdorësh NextJob.',
 		register_role_note: 'Zgjedhja aktualisht nuk ruhet.',
-		register_email_exists: 'Kjo adresë emaili është tashmë e regjistruar.',
+		register_email_exists:
+			'Kjo adresë emaili është tashmë e regjistruar.',
 		register_failed: 'Regjistrimi dështoi.',
 
 		// FJALËKALIMI I HARRUAR
@@ -297,6 +357,63 @@ const translations = {
 			'Nëse ke pyetje rreth platformës NextJob, mund të na kontaktosh.',
 		contact_location: 'Vendndodhja: Shkodër, Shqipëri',
 		contact_email: 'Email',
+
+		// FAQJA KRYESORE E PUNËKËRKUESIT
+		worker_page_title: 'Punëkërkues',
+		worker_meta_description: 'Zbulo punët e përshtatshme në NextJob.',
+		worker_for_you: 'Për ty',
+		worker_welcome: 'Mirë se vjen në NextJob',
+		worker_intro:
+			'Zbulo punët e përshtatshme dhe gjej mundësi që përputhen me aftësitë dhe vendndodhjen tënde.',
+		worker_search: 'Kërko punë',
+		worker_search_placeholder: 'p.sh. painter, Shkodra ...',
+		worker_clear_search: 'Pastro kërkimin',
+		worker_search_hint:
+			'Kërko sipas fjalëve ose pjesëve të tyre. Gabimet e vogla të shkrimit tolerohen për fjalët më të gjata.',
+		worker_matching_jobs: 'Punë të përshtatshme',
+		worker_recommendations: 'Rekomandime për ty',
+		worker_urgent: 'Urgjente',
+		worker_open: 'E hapur',
+		worker_no_title: 'Pa titull',
+		worker_no_description: 'Nuk ka përshkrim.',
+		worker_view_job: 'Shiko punën',
+		worker_pagination: 'Navigimi i faqeve të punëve',
+		worker_page: 'Faqja',
+		worker_of: 'nga',
+		worker_previous: 'Mbrapa',
+		worker_next: 'Përpara',
+		worker_no_results: 'Nuk u gjetën punë të përshtatshme',
+		worker_no_jobs: 'Aktualisht nuk ka punë të disponueshme',
+		worker_try_again:
+			'Provo një fjalë tjetër kërkimi ose rivendos filtrat.',
+		worker_check_later:
+			'Kontrollo përsëri më vonë. Punë të reja mund të shtohen në çdo kohë.',
+		worker_reset: 'Rivendos filtrat',
+		worker_role: 'Punëkërkues',
+		worker_view_profile: 'Shiko profilin',
+		worker_following: 'Personat që ndjek',
+		worker_followed_users: 'Përdoruesit që ndjek',
+		worker_follow_description:
+			'Ndiq punëkërkues ose punëdhënës interesantë dhe qëndro i informuar për aktivitetet e tyre.',
+		worker_manage_following: 'Menaxho ndjekjet',
+		worker_saved_jobs: 'Punët e ruajtura',
+		worker_saved_description:
+			'Ruaj punët që të interesojnë për t’i gjetur lehtësisht më vonë.',
+		worker_contribution: 'Kontributi yt',
+		worker_contribution_description:
+			'Ndaj përvojat dhe aktivitetet e tua në NextJob.',
+		worker_open_profile: 'Hap profilin',
+
+		// KATEGORITË
+		worker_category_all: 'Të gjitha',
+		worker_category_Plumber: 'Hidraulik',
+		worker_category_Electrician: 'Elektricist',
+		worker_category_Painter: 'Bojaxhi',
+		worker_category_Carpenter: 'Marangoz',
+		worker_category_Mason: 'Murator',
+		worker_category_Roofer: 'Çatipunues',
+		worker_category_Gardener: 'Kopshtar',
+		worker_category_Cleaner: 'Pastrues',
 
 		// BISEDAT
 		chat_title: 'Mesazhet',

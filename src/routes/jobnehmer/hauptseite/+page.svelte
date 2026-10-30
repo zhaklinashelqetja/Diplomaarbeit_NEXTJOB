@@ -1,4 +1,6 @@
 <script>
+    import { t } from '$lib/i18n.js';
+
     let { data } = $props();
 
     let selectedCategory = $state('Alle');
@@ -203,10 +205,10 @@
 </script>
 
 <svelte:head>
-    <title>Jobnehmer | NextJob</title>
+    <title>{$t('worker_page_title')} | NextJob</title>
     <meta
         name="description"
-        content="Entdecke passende Aufträge auf NextJob."
+        content={$t('worker_meta_description')}
     />
 </svelte:head>
 
@@ -217,25 +219,24 @@
     >
     </header>
 
-        <!-- HAUPTBEREICH -->
-<main class="mx-auto max-w-7xl px-4 py-6 sm:px-6 sm:py-8">
+    <!-- HAUPTBEREICH -->
+    <main class="mx-auto max-w-7xl px-4 py-6 sm:px-6 sm:py-8">
         <!-- WILLKOMMEN -->
         <section class="mb-8">
             <p
                 class="mb-2 text-sm font-semibold uppercase tracking-wider text-[#62AA97]"
             >
-                Für dich
+                {$t('worker_for_you')}
             </p>
 
             <h1 class="text-2xl font-bold tracking-tight sm:text-4xl">
-                Willkommen bei NextJob {data.user?.first_name ?? ''} 
+                {$t('worker_welcome')} {data.user?.first_name ?? ''}
             </h1>
 
             <p
                 class="mt-2 max-w-2xl text-sm leading-6 text-[#2A2E38]/60 sm:text-base"
             >
-                Entdecke passende Aufträge und finde Jobs, die zu deinen
-                Fähigkeiten und deinem Standort passen.
+                {$t('worker_intro')}
             </p>
         </section>
 
@@ -255,7 +256,7 @@
                 for="job-search"
                 class="mb-2 block text-sm font-semibold"
             >
-                Aufträge suchen
+                {$t('worker_search')}
             </label>
 
             <div class="relative">
@@ -272,7 +273,7 @@
                     value={search}
                     oninput={(event) =>
                         updateSearch(event.currentTarget.value)}
-                    placeholder="z. B. painter, Shkodra ..."
+                    placeholder={$t('worker_search_placeholder')}
                     autocomplete="off"
                     class="w-full rounded-2xl border border-[#2A2E38]/10 bg-white py-4 pl-11 pr-12 outline-none transition focus:border-[#62AA97] focus:ring-2 focus:ring-[#62AA97]/20"
                 />
@@ -281,7 +282,7 @@
                     <button
                         type="button"
                         onclick={() => updateSearch('')}
-                        aria-label="Suchtext löschen"
+                        aria-label={$t('worker_clear_search')}
                         class="absolute right-3 top-1/2 -translate-y-1/2 rounded-lg px-3 py-2 text-sm text-[#2A2E38]/60 transition hover:bg-[#F5F1EE] hover:text-[#2A2E38]"
                     >
                         ✕
@@ -290,12 +291,11 @@
             </div>
 
             <p class="mt-2 text-xs leading-5 text-[#2A2E38]/50">
-                Suche nach Wörtern oder Wortteilen. Leichte Tippfehler
-                werden bei längeren Wörtern berücksichtigt.
+                {$t('worker_search_hint')}
             </p>
         </section>
-        
-                <!-- KATEGORIEN -->
+
+        <!-- KATEGORIEN -->
         <section class="mb-8">
             <div class="flex gap-2 overflow-x-auto pb-2">
                 {#each categories as category}
@@ -309,13 +309,13 @@
                                 : 'border-[#2A2E38]/10 bg-white hover:border-[#62AA97]'
                         }`}
                     >
-                        {category}
+                        {$t(`worker_category_${category === 'Alle' ? 'all' : category}`)}
                     </button>
                 {/each}
             </div>
         </section>
 
-               <!-- INHALT UND SIDEBAR -->
+        <!-- INHALT UND SIDEBAR -->
         <div class="grid gap-8 lg:grid-cols-[minmax(0,1fr)_300px]">
             <!-- AUFTRÄGE -->
             <section class="min-w-0">
@@ -324,11 +324,11 @@
                 >
                     <div>
                         <h2 class="text-2xl font-bold">
-                            Passende Aufträge
+                            {$t('worker_matching_jobs')}
                         </h2>
 
                         <p class="mt-1 text-sm text-[#2A2E38]/50">
-                            Empfehlungen für dich
+                            {$t('worker_recommendations')}
                         </p>
                     </div>
 
@@ -361,13 +361,13 @@
                                             <span
                                                 class="rounded-full bg-[#62AA97]/15 px-3 py-1 text-xs font-bold text-[#398875]"
                                             >
-                                                Dringend
+                                                {$t('worker_urgent')}
                                             </span>
                                         {:else}
                                             <span
                                                 class="rounded-full bg-[#8FB0C4]/20 px-3 py-1 text-xs font-medium"
                                             >
-                                                Offen
+                                                {$t('worker_open')}
                                             </span>
                                         {/if}
                                     </div>
@@ -375,14 +375,14 @@
                                     <h3
                                         class="break-words text-lg font-bold"
                                     >
-                                        {job.title ?? 'Ohne Titel'}
+                                        {job.title ?? $t('worker_no_title')}
                                     </h3>
 
                                     <p
                                         class="mt-2 break-words text-sm leading-6 text-[#2A2E38]/60"
                                     >
                                         {job.description ??
-                                            'Keine Beschreibung vorhanden.'}
+                                            $t('worker_no_description')}
                                     </p>
 
                                     <div class="mt-5 space-y-2">
@@ -430,17 +430,18 @@
                                         href={`/jobs/${job.problem_id ?? job.id}`}
                                         class="flex w-full items-center justify-center rounded-xl bg-[#62AA97] px-4 py-3 text-sm font-bold text-white transition hover:bg-[#529b88]"
                                     >
-                                        Auftrag ansehen
+                                        {$t('worker_view_job')}
                                     </a>
                                 </div>
                             </article>
                         {/each}
                     </div>
-                <!-- PAGINATION -->
+
+                    <!-- PAGINATION -->
                     {#if totalPages > 1}
                         <nav
                             class="mt-8 flex flex-wrap items-center justify-center gap-2"
-                            aria-label="Seitennavigation für Aufträge"
+                            aria-label={$t('worker_pagination')}
                         >
                             <button
                                 type="button"
@@ -448,14 +449,14 @@
                                 disabled={currentPage === 1}
                                 class="rounded-xl border border-[#2A2E38]/10 bg-white px-3 py-2 text-sm font-semibold transition hover:border-[#62AA97] disabled:cursor-not-allowed disabled:opacity-40"
                             >
-                                ← Zurück
+                                ← {$t('worker_previous')}
                             </button>
 
                             {#each pageNumbers as page}
                                 <button
                                     type="button"
                                     onclick={() => goToPage(page)}
-                                    aria-label={`Seite ${page}`}
+                                    aria-label={`${$t('worker_page')} ${page}`}
                                     aria-current={currentPage === page
                                         ? 'page'
                                         : undefined}
@@ -475,17 +476,17 @@
                                 disabled={currentPage === totalPages}
                                 class="rounded-xl border border-[#2A2E38]/10 bg-white px-3 py-2 text-sm font-semibold transition hover:border-[#62AA97] disabled:cursor-not-allowed disabled:opacity-40"
                             >
-                                Weiter →
+                                {$t('worker_next')} →
                             </button>
                         </nav>
 
                         <p
                             class="mt-3 text-center text-xs text-[#2A2E38]/50"
                         >
-                            Seite {currentPage} von {totalPages}
+                            {$t('worker_page')} {currentPage} {$t('worker_of')} {totalPages}
                         </p>
-                    {/if} 
-                {:else}  
+                    {/if}
+                {:else}
                     <!-- LEERE SUCHERGEBNISSE -->
                     <div
                         class="rounded-2xl border border-dashed border-[#2A2E38]/15 bg-white px-5 py-12 text-center sm:px-6 sm:py-16"
@@ -496,16 +497,16 @@
 
                         <h3 class="text-lg font-bold">
                             {search.trim() || selectedCategory !== 'Alle'
-                                ? 'Keine passenden Aufträge gefunden'
-                                : 'Aktuell keine Aufträge verfügbar'}
+                                ? $t('worker_no_results')
+                                : $t('worker_no_jobs')}
                         </h3>
 
                         <p
                             class="mx-auto mt-2 max-w-md text-sm leading-6 text-[#2A2E38]/50"
                         >
                             {search.trim() || selectedCategory !== 'Alle'
-                                ? 'Versuche einen anderen Suchbegriff oder setze die Suche zurück.'
-                                : 'Schau später wieder vorbei. Neue Aufträge können jederzeit hinzukommen.'}
+                                ? $t('worker_try_again')
+                                : $t('worker_check_later')}
                         </p>
 
                         {#if search.trim() || selectedCategory !== 'Alle'}
@@ -514,13 +515,13 @@
                                 onclick={resetFilters}
                                 class="mt-5 rounded-xl bg-[#62AA97] px-5 py-3 text-sm font-bold text-white transition hover:bg-[#529b88]"
                             >
-                                Suche zurücksetzen
+                                {$t('worker_reset')}
                             </button>
                         {/if}
                     </div>
                 {/if}
-            </section> 
-            
+            </section>
+
             <!-- SIDEBAR -->
             <aside class="space-y-5">
                 <!-- PROFIL -->
@@ -541,7 +542,7 @@
                             </h3>
 
                             <p class="text-sm text-white/60">
-                                Jobnehmer
+                                {$t('worker_role')}
                             </p>
                         </div>
                     </div>
@@ -550,7 +551,7 @@
                         href="/profile"
                         class="mt-5 block rounded-xl bg-[#A8B79E] px-4 py-3 text-center text-sm font-bold text-[#2A2E38] transition hover:bg-[#8fa18a]"
                     >
-                        Profil ansehen
+                        {$t('worker_view_profile')}
                     </a>
                 </section>
 
@@ -566,24 +567,25 @@
                         </div>
 
                         <div>
-                            <h3 class="font-bold">Meine Folgen</h3>
+                            <h3 class="font-bold">
+                                {$t('worker_following')}
+                            </h3>
 
                             <p class="text-xs text-[#2A2E38]/50">
-                                Gefolgte Nutzer
+                                {$t('worker_followed_users')}
                             </p>
                         </div>
                     </div>
 
                     <p class="text-sm leading-6 text-[#2A2E38]/60">
-                        Folge interessanten Jobnehmern oder Jobgebern
-                        und behalte ihre Aktivitäten im Blick.
+                        {$t('worker_follow_description')}
                     </p>
 
                     <a
                         href="/profile"
                         class="mt-4 block w-full rounded-xl border border-[#62AA97] px-4 py-3 text-center text-sm font-semibold text-[#398875] transition hover:bg-[#62AA97] hover:text-white"
                     >
-                        Folgen verwalten
+                        {$t('worker_manage_following')}
                     </a>
                 </section>
 
@@ -595,7 +597,7 @@
                         class="mb-3 flex items-center justify-between gap-3"
                     >
                         <h3 class="font-bold">
-                            Gespeicherte Jobs
+                            {$t('worker_saved_jobs')}
                         </h3>
 
                         <span
@@ -606,15 +608,14 @@
                     </div>
 
                     <p class="text-sm leading-6 text-[#2A2E38]/50">
-                        Speichere interessante Aufträge, um sie später
-                        schnell wiederzufinden.
+                        {$t('worker_saved_description')}
                     </p>
 
                     <a
                         href="/saved"
                         class="mt-4 block text-sm font-bold text-[#398875] hover:underline"
                     >
-                        Gespeicherte Jobs →
+                        {$t('worker_saved_jobs')} →
                     </a>
                 </section>
 
@@ -622,19 +623,19 @@
                 <section
                     class="rounded-2xl bg-[#A8B79E]/35 p-5 sm:p-6"
                 >
-
-                    <h3 class="font-bold">Dein Beitrag</h3>
+                    <h3 class="font-bold">
+                        {$t('worker_contribution')}
+                    </h3>
 
                     <p class="mt-2 text-sm leading-6 text-[#2A2E38]/60">
-                        Teile deine Erfahrungen und Aktivitäten auf
-                        NextJob.
+                        {$t('worker_contribution_description')}
                     </p>
 
                     <a
                         href="/jobnehmerProfile"
                         class="mt-4 inline-block rounded-xl bg-[#2A2E38] px-4 py-3 text-sm font-bold text-white transition hover:bg-[#1e222b]"
                     >
-                        Profil öffnen
+                        {$t('worker_open_profile')}
                     </a>
                 </section>
             </aside>
