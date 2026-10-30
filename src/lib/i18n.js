@@ -123,6 +123,13 @@ const translations = {
 		about_description:
 			'NextJob ist eine digitale Plattform, die lokale Dienstleistungen und Handwerker in Shkodra miteinander verbindet.',
 
+		// KONTAKT
+		contact_title: 'Kontakt',
+		contact_description:
+			'Bei Fragen zur NextJob-Plattform kannst du uns gerne kontaktieren.',
+		contact_location: 'Standort: Shkodër, Albanien',
+		contact_email: 'E-Mail',
+
 		// CHAT
 		chat_title: 'Nachrichten',
 		chat_description:
@@ -283,6 +290,13 @@ const translations = {
 		about_title: 'Kush jemi ne',
 		about_description:
 			'NextJob është një platformë digjitale që lidh ofruesit e shërbimeve lokale dhe zejtarët në Shkodër me njëri-tjetrin.',
+
+		// KONTAKTI
+		contact_title: 'Kontakt',
+		contact_description:
+			'Nëse ke pyetje rreth platformës NextJob, mund të na kontaktosh.',
+		contact_location: 'Vendndodhja: Shkodër, Shqipëri',
+		contact_email: 'Email',
 
 		// BISEDAT
 		chat_title: 'Mesazhet',
