@@ -32,11 +32,11 @@
 
 			if (!res.ok) {
 				if (data.error === 'Wrong email or password') {
-					error = 'E-Mail-Adresse oder Passwort ist falsch.';
+					error = 'login_email_error';
 				} else if (data.error === 'Email not verified') {
-					error = 'Bitte bestätige zuerst deine E-Mail-Adresse.';
+					error = 'login_verify_error';
 				} else {
-					error = data.error || 'Login fehlgeschlagen.';
+					error = data.error || 'login_failed';
 				}
 
 				return;
@@ -47,7 +47,7 @@
 
 			goto(resolve('/'));
 		} catch {
-			error = 'Verbindung zum Server nicht möglich.';
+			error = 'login_server_error';
 		} finally {
 			loading = false;
 		}
@@ -63,11 +63,15 @@
 		{$t('login_title')}
 	</h1>
 
-	<p class="mt-2 text-sm text-[#2A2E38]/60">Melde dich bei deinem NextJob-Konto an.</p>
+	<p class="mt-2 text-sm text-[#2A2E38]/60">
+		{$t('login_description')}
+	</p>
 
 	<form onsubmit={login} class="mt-6 flex flex-col gap-4">
 		<div>
-			<label for="email" class="mb-1 block text-sm font-medium text-[#2A2E38]"> E-Mail </label>
+			<label for="email" class="mb-1 block text-sm font-medium text-[#2A2E38]">
+				{$t('login_email')}
+			</label>
 
 			<input
 				id="email"
@@ -81,7 +85,9 @@
 		</div>
 
 		<div>
-			<label for="password" class="mb-1 block text-sm font-medium text-[#2A2E38]"> Passwort </label>
+			<label for="password" class="mb-1 block text-sm font-medium text-[#2A2E38]">
+				{$t('login_password')}
+			</label>
 
 			<input
 				id="password"
@@ -100,13 +106,13 @@
 				href={resolve('/auth/passwort-vergessen')}
 				class="text-sm font-medium text-[#8FB0C4] hover:text-[#62AA97]"
 			>
-				Passwort vergessen?
+				{$t('login_forgot')}
 			</a>
 		</div>
 
 		{#if error}
 			<p class="rounded-lg bg-red-50 px-3 py-2 text-sm text-red-600">
-				{error}
+				{$t(error)}
 			</p>
 		{/if}
 
@@ -115,15 +121,15 @@
 			disabled={loading}
 			class="rounded-lg bg-[#8FB0C4] px-4 py-2.5 font-semibold text-[#2A2E38] transition hover:bg-[#62AA97] disabled:cursor-not-allowed disabled:opacity-60"
 		>
-			{loading ? 'Anmelden...' : $t('login_button')}
+			{loading ? $t('login_loading') : $t('login_button')}
 		</button>
 	</form>
 
 	<p class="mt-6 text-center text-sm text-[#2A2E38]/60">
-		Noch kein Konto?
+		{$t('login_no_account')}
 
 		<a href={resolve('/auth/register')} class="font-semibold text-[#8FB0C4] hover:text-[#62AA97]">
-			Registrieren
+			{$t('nav_register')}
 		</a>
 	</p>
 </div>
