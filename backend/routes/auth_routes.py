@@ -9,6 +9,7 @@ from mailer import send_password_reset, send_verification
 bp = Blueprint("auth", __name__, url_prefix="/api/auth")
 
 MIN_PASSWORD = 8
+ACCOUNT_TYPES = ("jobgeber", "jobnehmer")
 
 
 def _norm_email(value):
