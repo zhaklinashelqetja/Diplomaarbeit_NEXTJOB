@@ -1,4 +1,6 @@
 <script>
+    import { t } from '$lib/i18n.js';
+
     let { data } = $props();
 
     let user = $derived(data.user);
@@ -6,7 +8,7 @@
     let firstName = $derived(user?.first_name ?? '');
     let lastName = $derived(user?.last_name ?? '');
     let fullName = $derived(
-        `${firstName} ${lastName}`.trim() || 'Jobnehmer'
+        `${firstName} ${lastName}`.trim() || $t('worker_role')
     );
 
     let initials = $derived(
@@ -62,20 +64,23 @@
 </script>
 
 <svelte:head>
-    <title>Mein Profil | NextJob</title>
+    <title>{$t('profile_title')} | NextJob</title>
     <meta
         name="description"
-        content="Dein persönliches Jobnehmer-Profil auf NextJob."
+        content={$t('profile_meta_description')}
     />
 </svelte:head>
 
+<div class="min-h-screen bg-[#F5F1EE] text-[#2A2E38]">
     <main class="mx-auto max-w-6xl px-4 py-6 sm:px-6 sm:py-10">
         {#if data.error}
             <section
                 class="rounded-2xl border border-[#8FB0C4]/40 bg-white p-6 sm:p-8"
                 role="alert"
             >
-                <h1 class="text-xl font-bold">Profil nicht verfügbar</h1>
+                <h1 class="text-xl font-bold">
+                    {$t('profile_unavailable')}
+                </h1>
 
                 <p class="mt-2 text-sm leading-6 text-[#2A2E38]/65">
                     {data.error}
@@ -85,7 +90,7 @@
                     href="/jobnehmer"
                     class="mt-5 inline-flex rounded-xl bg-[#62AA97] px-5 py-3 text-sm font-bold text-white transition hover:bg-[#529b88]"
                 >
-                    Zur Jobnehmer-Hauptseite
+                    {$t('profile_back_to_jobs')}
                 </a>
             </section>
         {:else if user}
@@ -94,16 +99,15 @@
                 <p
                     class="text-sm font-semibold uppercase tracking-wider text-[#398875]"
                 >
-                    Mein Bereich
+                    {$t('profile_my_area')}
                 </p>
 
                 <h1 class="mt-2 text-3xl font-bold tracking-tight sm:text-4xl">
-                    Mein Profil
+                    {$t('profile_title')}
                 </h1>
 
                 <p class="mt-2 text-sm leading-6 text-[#2A2E38]/60 sm:text-base">
-                    Präsentiere deine Fähigkeiten und zeige anderen,
-                    welche Dienstleistungen du anbietest.
+                    {$t('profile_intro')}
                 </p>
             </section>
 
@@ -120,7 +124,7 @@
                         <div class="flex min-w-0 items-end gap-4">
                             <div
                                 class="flex h-24 w-24 shrink-0 items-center justify-center rounded-2xl border-4 border-white bg-[#8FB0C4] text-3xl font-bold text-[#2A2E38] sm:h-28 sm:w-28 sm:text-4xl"
-                                aria-label={`Initialen von ${fullName}`}
+                                aria-label={`${$t('profile_initials_of')} ${fullName}`}
                             >
                                 {initials}
                             </div>
@@ -131,7 +135,7 @@
                                 </h2>
 
                                 <p class="mt-1 text-sm text-[#2A2E38]/60">
-                                    Jobnehmer
+                                    {$t('worker_role')}
                                 </p>
 
                                 {#if location}
@@ -147,12 +151,12 @@
                             href="/jobnehmer"
                             class="inline-flex items-center justify-center rounded-xl bg-[#62AA97] px-5 py-3 text-sm font-bold text-white transition hover:bg-[#529b88]"
                         >
-                            Aufträge entdecken
+                            {$t('profile_discover_jobs')}
                         </a>
                     </div>
                 </div>
             </section>
-            
+
             <!-- PROFILINHALT -->
             <div class="mt-6 grid gap-6 lg:grid-cols-[minmax(0,1fr)_320px]">
                 <div class="min-w-0 space-y-6">
@@ -160,7 +164,9 @@
                     <section
                         class="rounded-2xl border border-[#2A2E38]/10 bg-white p-5 sm:p-7"
                     >
-                        <h2 class="text-lg font-bold">Über mich</h2>
+                        <h2 class="text-lg font-bold">
+                            {$t('profile_about_me')}
+                        </h2>
 
                         {#if bio}
                             <p class="mt-4 whitespace-pre-line break-words text-sm leading-7 text-[#2A2E38]/70">
@@ -168,9 +174,7 @@
                             </p>
                         {:else}
                             <p class="mt-3 text-sm leading-6 text-[#2A2E38]/55">
-                                Du hast noch keine Beschreibung hinzugefügt.
-                                Eine kurze Vorstellung hilft anderen Nutzern,
-                                dich und deine Arbeit besser kennenzulernen.
+                                {$t('profile_no_bio')}
                             </p>
                         {/if}
                     </section>
@@ -179,7 +183,9 @@
                     <section
                         class="rounded-2xl border border-[#2A2E38]/10 bg-white p-5 sm:p-7"
                     >
-                        <h2 class="text-lg font-bold">Meine Fähigkeiten</h2>
+                        <h2 class="text-lg font-bold">
+                            {$t('profile_my_skills')}
+                        </h2>
 
                         {#if skills.length > 0}
                             <div class="mt-4 flex flex-wrap gap-2">
@@ -193,11 +199,7 @@
                             </div>
                         {:else}
                             <p class="mt-3 text-sm leading-6 text-[#2A2E38]/55">
-                                Es wurden noch keine Fähigkeiten hinterlegt.
-                                Hier können beispielsweise handwerkliche
-                                Kenntnisse, Design oder Marketing angezeigt
-                                werden, sobald sie in deinen Profildaten
-                                vorhanden sind.
+                                {$t('profile_no_skills')}
                             </p>
                         {/if}
                     </section>
@@ -207,7 +209,7 @@
                         class="rounded-2xl border border-[#2A2E38]/10 bg-white p-5 sm:p-7"
                     >
                         <h2 class="text-lg font-bold">
-                            Kontaktinformationen
+                            {$t('profile_contact_info')}
                         </h2>
 
                         <div class="mt-5 space-y-4">
@@ -221,7 +223,7 @@
 
                                     <div class="min-w-0">
                                         <p class="text-xs font-medium text-[#2A2E38]/50">
-                                            E-Mail
+                                            {$t('profile_email')}
                                         </p>
 
                                         <p class="mt-1 break-all text-sm font-medium">
@@ -241,7 +243,7 @@
 
                                     <div class="min-w-0">
                                         <p class="text-xs font-medium text-[#2A2E38]/50">
-                                            Telefonnummer
+                                            {$t('profile_phone')}
                                         </p>
 
                                         <p class="mt-1 break-words text-sm font-medium">
@@ -261,7 +263,7 @@
 
                                     <div class="min-w-0">
                                         <p class="text-xs font-medium text-[#2A2E38]/50">
-                                            Standort
+                                            {$t('profile_location')}
                                         </p>
 
                                         <p class="mt-1 break-words text-sm font-medium">
@@ -273,25 +275,26 @@
 
                             {#if !user.email && !user.phone && !location}
                                 <p class="text-sm leading-6 text-[#2A2E38]/55">
-                                    Es sind noch keine Kontaktinformationen
-                                    vorhanden.
+                                    {$t('profile_no_contact')}
                                 </p>
                             {/if}
                         </div>
                     </section>
                 </div>
-                
+
                 <!-- SIDEBAR -->
                 <aside class="space-y-6">
                     <!-- PROFILFORTSCHRITT -->
                     <section
                         class="rounded-2xl border border-[#2A2E38]/10 bg-white p-5 sm:p-6"
                     >
-                        <h2 class="font-bold">Profilübersicht</h2>
+                        <h2 class="font-bold">
+                            {$t('profile_overview')}
+                        </h2>
 
                         <div class="mt-5 flex items-center justify-between gap-3">
                             <span class="text-sm text-[#2A2E38]/60">
-                                Profildaten
+                                {$t('profile_data')}
                             </span>
 
                             <span class="text-lg font-bold text-[#398875]">
@@ -302,7 +305,7 @@
                         <div
                             class="mt-3 h-2 overflow-hidden rounded-full bg-[#F5F1EE]"
                             role="progressbar"
-                            aria-label="Profilvollständigkeit"
+                            aria-label={$t('profile_completeness')}
                             aria-valuemin="0"
                             aria-valuemax="100"
                             aria-valuenow={profileProgress}
@@ -314,8 +317,7 @@
                         </div>
 
                         <p class="mt-4 text-sm leading-6 text-[#2A2E38]/60">
-                            Ein vollständiges Profil hilft anderen Nutzern,
-                            deine Fähigkeiten und Angebote besser einzuschätzen.
+                            {$t('profile_progress_description')}
                         </p>
                     </section>
 
@@ -323,14 +325,16 @@
                     <section
                         class="rounded-2xl bg-[#2A2E38] p-5 text-white sm:p-6"
                     >
-                        <h2 class="font-bold">Mein Bereich</h2>
+                        <h2 class="font-bold">
+                            {$t('profile_my_area')}
+                        </h2>
 
                         <nav class="mt-4 space-y-1">
                             <a
                                 href="/jobnehmer"
                                 class="flex items-center justify-between rounded-xl px-3 py-3 text-sm transition hover:bg-white/10"
                             >
-                                <span>Aufträge entdecken</span>
+                                <span>{$t('profile_discover_jobs')}</span>
                                 <span aria-hidden="true">→</span>
                             </a>
 
@@ -338,7 +342,7 @@
                                 href="/saved"
                                 class="flex items-center justify-between rounded-xl px-3 py-3 text-sm transition hover:bg-white/10"
                             >
-                                <span>Gespeicherte Jobs</span>
+                                <span>{$t('worker_saved_jobs')}</span>
                                 <span aria-hidden="true">→</span>
                             </a>
                         </nav>
@@ -347,9 +351,12 @@
             </div>
         {:else}
             <section class="rounded-2xl bg-white p-6">
-                <h1 class="text-xl font-bold">Profil nicht verfügbar</h1>
+                <h1 class="text-xl font-bold">
+                    {$t('profile_unavailable')}
+                </h1>
+
                 <p class="mt-2 text-sm text-[#2A2E38]/60">
-                    Deine Profildaten konnten nicht geladen werden.
+                    {$t('profile_load_failed')}
                 </p>
             </section>
         {/if}
