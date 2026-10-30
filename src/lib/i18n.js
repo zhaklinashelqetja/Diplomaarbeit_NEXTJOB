@@ -67,6 +67,10 @@ const translations = {
 		login_loading: 'Anmelden...',
 		login_no_account: 'Noch kein Konto?',
 		login_error: 'E-Mail-Adresse oder Passwort ist falsch.',
+		login_email_error: 'E-Mail-Adresse oder Passwort ist falsch.',
+		login_verify_error: 'Bitte bestätige zuerst deine E-Mail-Adresse.',
+		login_failed: 'Login fehlgeschlagen.',
+		login_server_error: 'Verbindung zum Server nicht möglich.',
 
 		// REGISTRIERUNG
 		register_title: 'Konto erstellen',
@@ -154,19 +158,9 @@ const translations = {
 		error_description:
 			'Diese Seite existiert nicht oder ist nicht verfügbar.',
 		error_back: 'Zurück zur Startseite'
-//login
-		login_email_error: 'E-Mail-Adresse oder Passwort ist falsch.',
-login_verify_error: 'Bitte bestätige zuerst deine E-Mail-Adresse.',
-login_failed: 'Login fehlgeschlagen.',
-login_server_error: 'Verbindung zum Server nicht möglich.',
 	},
 
 	al: {
-		//login
-		login_email_error: 'Emaili ose fjalëkalimi është i pasaktë.',
-login_verify_error: 'Ju lutem, konfirmoni fillimisht adresën tuaj të emailit.',
-login_failed: 'Hyrja dështoi.',
-login_server_error: 'Nuk mund të lidhemi me serverin.',
 		// NAVIGIMI
 		nav_start: 'Kreu',
 		nav_jobs: 'Gjej punë',
@@ -224,6 +218,10 @@ login_server_error: 'Nuk mund të lidhemi me serverin.',
 		login_loading: 'Duke hyrë...',
 		login_no_account: 'Nuk ke ende një llogari?',
 		login_error: 'Emaili ose fjalëkalimi është i pasaktë.',
+		login_email_error: 'Emaili ose fjalëkalimi është i pasaktë.',
+		login_verify_error: 'Ju lutem, konfirmoni fillimisht adresën tuaj të emailit.',
+		login_failed: 'Hyrja dështoi.',
+		login_server_error: 'Nuk mund të lidhemi me serverin.',
 
 		// REGJISTRIMI
 		register_title: 'Krijo llogari',
