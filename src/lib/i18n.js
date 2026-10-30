@@ -118,6 +118,11 @@ const translations = {
 			'Überprüfe auch deinen Spam-Ordner, falls du keine E-Mail findest.',
 		verify_login: 'Zum Login',
 
+		// WER WIR SIND
+		about_title: 'Wer wir sind',
+		about_description:
+			'NextJob ist eine digitale Plattform, die lokale Dienstleistungen und Handwerker in Shkodra miteinander verbindet.',
+
 		// CHAT
 		chat_title: 'Nachrichten',
 		chat_description:
@@ -273,6 +278,11 @@ const translations = {
 		verify_spam:
 			'Kontrollo edhe dosjen Spam nëse nuk e gjen emailin.',
 		verify_login: 'Shko te hyrja',
+
+		// KUSH JEMI NE
+		about_title: 'Kush jemi ne',
+		about_description:
+			'NextJob është një platformë digjitale që lidh ofruesit e shërbimeve lokale dhe zejtarët në Shkodër me njëri-tjetrin.',
 
 		// BISEDAT
 		chat_title: 'Mesazhet',
