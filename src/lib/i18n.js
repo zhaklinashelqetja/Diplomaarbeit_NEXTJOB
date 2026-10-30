@@ -94,6 +94,10 @@ const translations = {
 		register_button: 'Registrieren',
 		register_loading: 'Wird registriert...',
 		register_have_account: 'Du hast bereits ein Konto?',
+		register_role_error: 'Bitte wähle aus, wie du NextJob nutzen möchtest.',
+		register_role_note: 'Die Auswahl wird derzeit noch nicht gespeichert.',
+		register_email_exists: 'Diese E-Mail-Adresse ist bereits registriert.',
+		register_failed: 'Registrierung fehlgeschlagen.',
 
 		// PASSWORT VERGESSEN
 		forgot_title: 'Passwort vergessen',
@@ -245,6 +249,10 @@ const translations = {
 		register_button: 'Regjistrohu',
 		register_loading: 'Duke u regjistruar...',
 		register_have_account: 'Ke tashmë një llogari?',
+		register_role_error: 'Ju lutem, zgjidh si dëshiron ta përdorësh NextJob.',
+		register_role_note: 'Zgjedhja aktualisht nuk ruhet.',
+		register_email_exists: 'Kjo adresë emaili është tashmë e regjistruar.',
+		register_failed: 'Regjistrimi dështoi.',
 
 		// FJALËKALIMI I HARRUAR
 		forgot_title: 'Ke harruar fjalëkalimin?',
