@@ -103,6 +103,7 @@ const translations = {
 		forgot_title: 'Passwort vergessen',
 		forgot_description:
 			'Gib deine E-Mail-Adresse ein. Du erhältst einen Link, mit dem du dein Passwort zurücksetzen kannst.',
+		forgot_email_placeholder: 'E-Mail-Adresse',
 		forgot_send: 'Link senden',
 		forgot_loading: 'Wird gesendet...',
 		forgot_success:
@@ -258,6 +259,7 @@ const translations = {
 		forgot_title: 'Ke harruar fjalëkalimin?',
 		forgot_description:
 			'Shkruaj adresën tënde të emailit. Do të marrësh një lidhje për të rivendosur fjalëkalimin.',
+		forgot_email_placeholder: 'Adresa e emailit',
 		forgot_send: 'Dërgo lidhjen',
 		forgot_loading: 'Duke dërguar...',
 		forgot_success:
