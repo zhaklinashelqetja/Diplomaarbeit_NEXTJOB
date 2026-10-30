@@ -4,6 +4,7 @@
 	import { page } from '$app/state';
 	import { resolve } from '$app/paths';
 	import { API_URL } from '$lib/api.js';
+	import { t } from '$lib/i18n.js';
 
 	let messages = $state([]);
 	let partner = $state(null);
@@ -39,7 +40,7 @@
 			]);
 
 			if (!userResponse.ok || !partnerResponse.ok || !messagesResponse.ok) {
-				error = 'Chat konnte nicht geladen werden.';
+				error = 'chat_load_failed';
 				return;
 			}
 
@@ -49,7 +50,7 @@
 
 			currentUserId = user.user_id;
 		} catch {
-			error = 'Verbindung zum Server nicht möglich.';
+			error = 'chat_server_error';
 		} finally {
 			loading = false;
 		}
@@ -87,7 +88,7 @@
 			const data = await response.json();
 
 			if (!response.ok) {
-				error = data.error || 'Nachricht konnte nicht gesendet werden.';
+				error = data.error || 'chat_send_failed';
 				return;
 			}
 
@@ -101,7 +102,7 @@
 
 			newMessage = '';
 		} catch {
-			error = 'Verbindung zum Server nicht möglich.';
+			error = 'chat_server_error';
 		} finally {
 			sending = false;
 		}
@@ -115,6 +116,19 @@
 			minute: '2-digit'
 		});
 	}
+
+	function displayError(value) {
+		if (
+			value === 'chat_load_failed' ||
+			value === 'chat_send_failed' ||
+			value === 'chat_server_error'
+		) {
+			return $t(value);
+		}
+
+		// Fehlermeldungen des Backends unverändert anzeigen
+		return value;
+	}
 </script>
 
 <svelte:head>
@@ -126,14 +140,16 @@
 		href={resolve('/chat')}
 		class="mb-5 inline-flex items-center gap-2 text-sm font-medium text-gray-600 hover:text-gray-900"
 	>
-		← Zurück zu Nachrichten
+		← {$t('chat_back')}
 	</a>
 
 	{#if loading}
-		<p class="text-gray-500">Chat wird geladen...</p>
+		<p class="text-gray-500">
+			{$t('chat_loading_conversation')}
+		</p>
 	{:else if error && !partner}
 		<p class="rounded-lg bg-red-50 p-4 text-red-700">
-			{error}
+			{displayError(error)}
 		</p>
 	{:else}
 		<div class="overflow-hidden rounded-xl border border-gray-200 bg-white">
@@ -161,11 +177,14 @@
 			<div class="flex min-h-125 flex-col gap-4 bg-gray-50 p-4 sm:p-6">
 				{#if messages.length === 0}
 					<p class="my-auto text-center text-sm text-gray-500">
-						Noch keine Nachrichten. Schreibe die erste Nachricht.
+						{$t('chat_empty_conversation')}
 					</p>
 				{:else}
 					{#each messages as message (message.message_id)}
-						<div class:flex-row-reverse={message.sender_id === currentUserId} class="flex">
+						<div
+							class:flex-row-reverse={message.sender_id === currentUserId}
+							class="flex"
+						>
 							<div
 								class:bg-gray-900={message.sender_id === currentUserId}
 								class:text-white={message.sender_id === currentUserId}
@@ -173,6 +192,7 @@
 								class:text-gray-900={message.sender_id !== currentUserId}
 								class="max-w-[80%] rounded-2xl border border-gray-200 px-4 py-3 sm:max-w-[65%]"
 							>
+								<!-- BENUTZERNACHRICHT BLEIBT UNVERÄNDERT -->
 								<p>{message.content}</p>
 
 								<p
@@ -190,7 +210,7 @@
 
 			{#if error}
 				<p class="border-t border-gray-200 bg-red-50 px-4 py-2 text-sm text-red-700">
-					{error}
+					{displayError(error)}
 				</p>
 			{/if}
 
@@ -201,7 +221,7 @@
 				<input
 					type="text"
 					bind:value={newMessage}
-					placeholder="Nachricht schreiben..."
+					placeholder={$t('chat_message_placeholder')}
 					autocomplete="off"
 					class="min-w-0 flex-1 rounded-lg border border-gray-300 px-4 py-3"
 				/>
@@ -211,7 +231,7 @@
 					disabled={sending || !newMessage.trim()}
 					class="rounded-lg bg-gray-900 px-5 py-3 font-medium text-white hover:bg-gray-700 disabled:cursor-not-allowed disabled:opacity-50"
 				>
-					{sending ? 'Wird gesendet...' : 'Senden'}
+					{sending ? $t('chat_sending') : $t('chat_send')}
 				</button>
 			</form>
 		</div>

@@ -3,6 +3,7 @@
 	import { goto } from '$app/navigation';
 	import { resolve } from '$app/paths';
 	import { API_URL } from '$lib/api.js';
+	import { t, locale } from '$lib/i18n.js';
 
 	let conversations = $state([]);
 	let loading = $state(true);
@@ -30,13 +31,13 @@
 			const data = await response.json();
 
 			if (!response.ok) {
-				error = data.error || 'Nachrichten konnten nicht geladen werden.';
+				error = data.error || 'chat_load_error';
 				return;
 			}
 
 			conversations = data;
 		} catch {
-			error = 'Verbindung zum Server nicht möglich.';
+			error = 'chat_server_error';
 		} finally {
 			loading = false;
 		}
@@ -45,33 +46,50 @@
 	function formatTime(date) {
 		if (!date) return '';
 
-		return new Date(date).toLocaleString('de-DE', {
+		return new Date(date).toLocaleString($locale === 'al' ? 'sq-AL' : 'de-DE', {
 			day: '2-digit',
 			month: '2-digit',
 			hour: '2-digit',
 			minute: '2-digit'
 		});
 	}
+
+	function displayError(value) {
+		if (value === 'chat_load_error' || value === 'chat_server_error') {
+			return $t(value);
+		}
+
+		// Fehlermeldungen vom Backend unverändert anzeigen
+		return value;
+	}
 </script>
 
 <svelte:head>
-	<title>Nachrichten | NextJob</title>
+	<title>{$t('chat_title')} | NextJob</title>
 </svelte:head>
 
 <section class="mx-auto max-w-4xl px-4 py-12">
-	<h1 class="text-3xl font-bold text-gray-900">Nachrichten</h1>
+	<h1 class="text-3xl font-bold text-gray-900">
+		{$t('chat_title')}
+	</h1>
 
-	<p class="mt-2 text-gray-600">Deine Gespräche mit Auftraggebern und Dienstleistern.</p>
+	<p class="mt-2 text-gray-600">
+		{$t('chat_description')}
+	</p>
 
 	{#if loading}
-		<p class="mt-8 text-gray-500">Nachrichten werden geladen...</p>
+		<p class="mt-8 text-gray-500">
+			{$t('chat_loading')}
+		</p>
 	{:else if error}
 		<p class="mt-8 rounded-lg bg-red-50 p-4 text-red-700">
-			{error}
+			{displayError(error)}
 		</p>
 	{:else if conversations.length === 0}
 		<div class="mt-8 rounded-xl border border-gray-200 bg-white p-8 text-center">
-			<p class="text-gray-600">Du hast noch keine Nachrichten.</p>
+			<p class="text-gray-600">
+				{$t('chat_empty')}
+			</p>
 		</div>
 	{:else}
 		<div class="mt-8 overflow-hidden rounded-xl border border-gray-200 bg-white">
@@ -97,6 +115,7 @@
 							</span>
 						</div>
 
+						<!-- ORIGINALNACHRICHT BLEIBT UNVERÄNDERT -->
 						<p class="mt-1 truncate text-sm text-gray-500">
 							{conversation.last_message}
 						</p>
