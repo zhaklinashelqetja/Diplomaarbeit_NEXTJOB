@@ -218,6 +218,21 @@ const translations = {
         profile_load_failed:
             'Deine Profildaten konnten nicht geladen werden.',
 
+        // GESPEICHERTE JOBS
+        saved_title: 'Gespeicherte Jobs',
+        saved_meta_description:
+            'Finde deine gespeicherten Aufträge auf NextJob wieder.',
+        saved_description:
+            'Behalte interessante Aufträge im Blick und finde sie später schnell wieder.',
+        saved_discover_jobs: 'Aufträge entdecken',
+        saved_my_jobs: 'Meine gespeicherten Aufträge',
+        saved_status: 'Gespeichert',
+        saved_no_id: 'Für diesen Auftrag ist keine ID vorhanden.',
+        saved_pagination: 'Seitennavigation',
+        saved_empty_title: 'Noch keine Jobs gespeichert',
+        saved_empty_description:
+            'Wenn du interessante Aufträge findest, kannst du sie speichern und später hier wiederfinden.',
+
         // CHAT
         chat_title: 'Nachrichten',
         chat_description:
@@ -476,6 +491,21 @@ const translations = {
             'Një profil i plotë i ndihmon përdoruesit e tjerë të vlerësojnë më mirë aftësitë dhe shërbimet e tua.',
         profile_load_failed:
             'Të dhënat e profilit tënd nuk mund të ngarkoheshin.',
+
+        // PUNËT E RUAJTURA
+        saved_title: 'Punët e ruajtura',
+        saved_meta_description:
+            'Gjej përsëri punët që ke ruajtur në NextJob.',
+        saved_description:
+            'Mbaji në vëmendje punët që të interesojnë dhe gjeji lehtësisht më vonë.',
+        saved_discover_jobs: 'Zbulo punë',
+        saved_my_jobs: 'Punët e mia të ruajtura',
+        saved_status: 'E ruajtur',
+        saved_no_id: 'Kjo punë nuk ka një ID.',
+        saved_pagination: 'Navigimi i faqeve',
+        saved_empty_title: 'Nuk ke ruajtur ende asnjë punë',
+        saved_empty_description:
+            'Kur të gjesh punë interesante, mund t’i ruash dhe t’i gjesh përsëri këtu më vonë.',
 
         // BISEDAT
         chat_title: 'Mesazhet',
