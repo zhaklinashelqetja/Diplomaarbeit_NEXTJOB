@@ -1,8 +1,10 @@
+
 <script>
 	import { goto } from '$app/navigation';
 	import { resolve } from '$app/paths';
 	import { t } from '$lib/i18n.js';
 	import { API_URL } from '$lib/api.js';
+	import { isLoggedIn, loadCurrentUser } from '$lib/auth.js';
 
 	let first_name = $state('');
 	let last_name = $state('');
@@ -43,9 +45,8 @@
 					first_name: first_name.trim(),
 					last_name: last_name.trim(),
 					email: email.trim().toLowerCase(),
-					password
-					// role erst hinzufügen, wenn Leon
-					// das API-Feld bestätigt hat.
+					password,
+					account_type: role
 				})
 			});
 
@@ -60,7 +61,20 @@
 				return;
 			}
 
-			goto(resolve('/auth/verifizierung'));
+			if (!data.token) {
+				error = 'register_failed';
+				return;
+			}
+
+			// Token nach erfolgreicher Registrierung speichern
+			localStorage.setItem('token', data.token);
+			isLoggedIn.set(true);
+
+			// Benutzerdaten und Verifizierungsstatus laden
+			await loadCurrentUser();
+
+			// Zur E-Mail-Verifizierungsseite weiterleiten
+			await goto(resolve('/auth/verifizierung'));
 		} catch {
 			error = 'common_server_error';
 		} finally {
@@ -135,10 +149,6 @@
 					</span>
 				</label>
 			</div>
-
-			<p class="mt-2 text-xs text-[#2A2E38]/60">
-				{$t('register_role_note')}
-			</p>
 		</div>
 
 		<div>
