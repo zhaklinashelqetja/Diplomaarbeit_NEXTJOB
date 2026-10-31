@@ -1,15 +1,16 @@
+
 <script>
 	import { goto } from '$app/navigation';
 	import { resolve } from '$app/paths';
 	import { locale, t } from '$lib/i18n.js';
-	import { isLoggedIn, checkLogin, logout } from '$lib/auth.js';
-	import { onMount } from 'svelte';
+	import { isLoggedIn, currentUser, logout } from '$lib/auth.js';
 
 	let menuOpen = $state(false);
 
-	onMount(() => {
-		checkLogin();
-	});
+	let accountType = $derived($currentUser?.account_type);
+	let emailUnverified = $derived(
+		$isLoggedIn && $currentUser && !$currentUser.is_verified
+	);
 
 	function toggleLanguage() {
 		locale.update((current) => (current === 'de' ? 'al' : 'de'));
@@ -51,6 +52,15 @@
 			</a>
 
 			{#if $isLoggedIn}
+				{#if accountType === 'jobnehmer'}
+					<a
+						href={resolve('/jobnehmer/hauptseite')}
+						class="font-medium text-[#2A2E38] transition hover:text-[#8FB0C4]"
+					>
+						{$t('worker_page_title')}
+					</a>
+				{/if}
+
 				<a
 					href={resolve('/chat')}
 					class="font-medium text-[#2A2E38] transition hover:text-[#8FB0C4]"
@@ -152,6 +162,16 @@
 				</a>
 
 				{#if $isLoggedIn}
+					{#if accountType === 'jobnehmer'}
+						<a
+							href={resolve('/jobnehmer/hauptseite')}
+							onclick={closeMenu}
+							class="rounded-lg px-3 py-3 font-medium text-[#2A2E38] hover:bg-[#8FB0C4]/15"
+						>
+							{$t('worker_page_title')}
+						</a>
+					{/if}
+
 					<a
 						href={resolve('/chat')}
 						onclick={closeMenu}
@@ -201,6 +221,28 @@
 					</a>
 				{/if}
 			</div>
+		</div>
+	{/if}
+
+	<!-- Hinweis bei unbestätigter E-Mail -->
+	{#if emailUnverified}
+		<div class="border-t border-[#8FB0C4]/30 bg-[#62AA97]/10 px-4 py-2 text-center text-sm text-[#2A2E38]">
+			{#if $locale === 'al'}
+				Konfirmo adresën tënde të emailit për të përdorur të gjitha funksionet.
+			{:else}
+				Bitte bestätige deine E-Mail-Adresse, um alle Funktionen nutzen zu können.
+			{/if}
+
+			<a
+				href={resolve('/auth/verifizierung')}
+				class="ml-1 font-semibold underline hover:text-[#62AA97]"
+			>
+				{#if $locale === 'al'}
+					Konfirmo emailin
+				{:else}
+					E-Mail bestätigen
+				{/if}
+			</a>
 		</div>
 	{/if}
 </nav>
