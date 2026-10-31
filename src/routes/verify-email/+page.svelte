@@ -1,3 +1,4 @@
+
 <script>
 	import { onMount } from 'svelte';
 	import { page } from '$app/state';
@@ -8,38 +9,54 @@
 	let success = $state(false);
 	let message = $state('');
 
-	onMount(async () => {
-		const token = page.url.searchParams.get('token');
+	onMount(() => {
+		let cancelled = false;
 
-		if (!token) {
-			message = 'Der Verifizierungslink ist ungültig.';
-			loading = false;
-			return;
-		}
+		async function verifyEmail() {
+			const token = page.url.searchParams.get('token');
 
-		try {
-			const res = await fetch(`${API_URL}/api/auth/verify`, {
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json'
-				},
-				body: JSON.stringify({ token })
-			});
-
-			const data = await res.json();
-
-			if (!res.ok) {
-				message = data.error || 'Die Verifizierung ist fehlgeschlagen.';
+			if (!token) {
+				message = 'Der Verifizierungslink ist ungültig.';
+				loading = false;
 				return;
 			}
 
-			success = true;
-			message = 'Dein Konto wurde erfolgreich verifiziert.';
-		} catch {
-			message = 'Verbindung zum Server nicht möglich.';
-		} finally {
-			loading = false;
+			try {
+				const res = await fetch(`${API_URL}/api/auth/verify`, {
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/json'
+					},
+					body: JSON.stringify({ token })
+				});
+
+				const data = await res.json();
+
+				if (cancelled) return;
+
+				if (!res.ok) {
+					message = data.error || 'Die Verifizierung ist fehlgeschlagen.';
+					return;
+				}
+
+				success = true;
+				message = 'Dein Konto wurde erfolgreich verifiziert.';
+			} catch {
+				if (!cancelled) {
+					message = 'Verbindung zum Server nicht möglich.';
+				}
+			} finally {
+				if (!cancelled) {
+					loading = false;
+				}
+			}
 		}
+
+		verifyEmail();
+
+		return () => {
+			cancelled = true;
+		};
 	});
 </script>
 
@@ -49,17 +66,21 @@
 
 <section class="mx-auto max-w-md px-4 py-16 text-center">
 	<div class="rounded-xl border border-[#8FB0C4]/30 bg-white p-8">
-		<h1 class="text-3xl font-bold text-[#2A2E38]">E-Mail-Verifizierung</h1>
+		<h1 class="text-3xl font-bold text-[#2A2E38]">
+			E-Mail-Verifizierung
+		</h1>
 
 		{#if loading}
 			<div class="mt-6">
-				<p class="text-[#2A2E38]/70">Deine E-Mail-Adresse wird überprüft...</p>
+				<p role="status" class="text-[#2A2E38]/70">
+					Deine E-Mail-Adresse wird überprüft...
+				</p>
 			</div>
 		{:else if success}
 			<div class="mt-6">
-				<div class="text-4xl">✓</div>
+				<div class="text-4xl text-[#62AA97]">✓</div>
 
-				<p class="mt-3 text-[#2A2E38]">
+				<p role="status" class="mt-3 text-[#2A2E38]">
 					{message}
 				</p>
 
@@ -72,7 +93,7 @@
 			</div>
 		{:else}
 			<div class="mt-6">
-				<p class="rounded-lg bg-red-50 px-3 py-2 text-sm text-red-600">
+				<p role="alert" class="rounded-lg bg-red-50 px-3 py-2 text-sm text-red-600">
 					{message}
 				</p>
 
