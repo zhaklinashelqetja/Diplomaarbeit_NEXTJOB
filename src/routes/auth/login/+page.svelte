@@ -4,7 +4,7 @@
 	import { resolve } from '$app/paths';
 	import { t } from '$lib/i18n.js';
 	import { API_URL } from '$lib/api.js';
-	import { isLoggedIn } from '$lib/auth.js';
+	import { isLoggedIn, loadCurrentUser } from '$lib/auth.js';
 
 	let email = $state('');
 	let password = $state('');
@@ -24,7 +24,7 @@
 					'Content-Type': 'application/json'
 				},
 				body: JSON.stringify({
-					email,
+					email: email.trim().toLowerCase(),
 					password
 				})
 			});
@@ -45,10 +45,20 @@
 				return;
 			}
 
+			if (!data.token) {
+				error = 'login_failed';
+				return;
+			}
+
+			// Token speichern
 			localStorage.setItem('token', data.token);
 			isLoggedIn.set(true);
 
-			goto(resolve('/'));
+			// Rolle und Verifizierungsstatus sofort laden
+			await loadCurrentUser();
+
+			// Bestehende Weiterleitung beibehalten
+			await goto(resolve('/'));
 		} catch {
 			error = 'login_server_error';
 		} finally {
@@ -114,8 +124,8 @@
 		</div>
 
 		{#if error}
-			<p class="rounded-lg bg-red-50 px-3 py-2 text-sm text-red-600">
-				{$t(error)}
+			<p role="alert" class="rounded-lg bg-red-50 px-3 py-2 text-sm text-red-600">
+				{['login_email_error', 'login_verify_error', 'login_deactivated', 'login_failed', 'login_server_error'].includes(error) ? $t(error) : error}
 			</p>
 		{/if}
 
