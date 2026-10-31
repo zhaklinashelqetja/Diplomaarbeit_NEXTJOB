@@ -4,6 +4,7 @@
 	import { page } from '$app/state';
 	import { resolve } from '$app/paths';
 	import { API_URL } from '$lib/api.js';
+	import { loadCurrentUser } from '$lib/auth.js';
 
 	let loading = $state(true);
 	let success = $state(false);
@@ -38,6 +39,13 @@
 					message = data.error || 'Die Verifizierung ist fehlgeschlagen.';
 					return;
 				}
+
+				// Benutzerstatus nach erfolgreicher Verifizierung aktualisieren
+				if (localStorage.getItem('token')) {
+					await loadCurrentUser();
+				}
+
+				if (cancelled) return;
 
 				success = true;
 				message = 'Dein Konto wurde erfolgreich verifiziert.';
