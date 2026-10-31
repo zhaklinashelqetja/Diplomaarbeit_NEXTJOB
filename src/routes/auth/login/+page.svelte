@@ -1,3 +1,4 @@
+
 <script>
 	import { goto } from '$app/navigation';
 	import { resolve } from '$app/paths';
@@ -35,6 +36,8 @@
 					error = 'login_email_error';
 				} else if (data.error === 'Email not verified') {
 					error = 'login_verify_error';
+				} else if (data.error === 'Account is deactivated') {
+					error = 'login_deactivated';
 				} else {
 					error = data.error || 'login_failed';
 				}
