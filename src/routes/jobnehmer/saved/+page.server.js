@@ -1,9 +1,8 @@
-const API_URL = 'http://localhost:5000/api';
+import { API_URL } from '$lib/api.js';
 
 export async function load({ fetch, cookies }) {
     const token = cookies.get('token');
 
-    // Prüfen, ob der Benutzer angemeldet ist
     if (!token) {
         return {
             user: null,
@@ -18,7 +17,7 @@ export async function load({ fetch, cookies }) {
 
     try {
         // Benutzerprofil laden
-        const userResponse = await fetch(`${API_URL}/auth/me`, {
+        const userResponse = await fetch(`${API_URL}/api/auth/me`, {
             headers
         });
 
@@ -33,43 +32,45 @@ export async function load({ fetch, cookies }) {
             };
         }
 
-        const user = await userResponse.json();
+        const userData = await userResponse.json();
+        const user = userData.user ?? userData;
 
         // Gespeicherte Jobs laden
-        const savedResponse = await fetch(`${API_URL}/saved`, {
-            headers
-        });
+        const savedResponse = await fetch(
+            `${API_URL}/api/workers/me/saved-problems`,
+            { headers }
+        );
 
         if (!savedResponse.ok) {
             console.error(
                 'Fehler beim Laden gespeicherter Jobs:',
-                savedResponse.status
+                savedResponse.status,
+                savedResponse.statusText
             );
 
             return {
                 user,
                 savedJobs: [],
                 error:
-                    savedResponse.status === 404
-                        ? 'Der API-Endpunkt für gespeicherte Jobs wurde nicht gefunden.'
+                    savedResponse.status === 401
+                        ? 'Deine Anmeldung ist abgelaufen. Bitte melde dich erneut an.'
                         : 'Deine gespeicherten Jobs konnten nicht geladen werden.'
             };
         }
 
         const responseData = await savedResponse.json();
 
-        // Verschiedene mögliche Antwortformate der API unterstützen
-        let savedJobs = [];
+        // Verschiedene mögliche Antwortformate unterstützen
+        const result = Array.isArray(responseData)
+            ? responseData
+            : responseData.savedJobs ??
+              responseData.saved_jobs ??
+              responseData.jobs ??
+              responseData.items ??
+              responseData.problems ??
+              [];
 
-        if (Array.isArray(responseData)) {
-            savedJobs = responseData;
-        } else if (Array.isArray(responseData.savedJobs)) {
-            savedJobs = responseData.savedJobs;
-        } else if (Array.isArray(responseData.jobs)) {
-            savedJobs = responseData.jobs;
-        } else if (Array.isArray(responseData.items)) {
-            savedJobs = responseData.items;
-        }
+        const savedJobs = Array.isArray(result) ? result : [];
 
         return {
             user,
@@ -77,7 +78,10 @@ export async function load({ fetch, cookies }) {
             error: null
         };
     } catch (error) {
-        console.error('Fehler beim Laden der gespeicherten Jobs:', error);
+        console.error(
+            'Fehler beim Laden der gespeicherten Jobs:',
+            error
+        );
 
         return {
             user: null,
