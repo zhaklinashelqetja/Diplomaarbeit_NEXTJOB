@@ -1,4 +1,4 @@
-const API_URL = 'http://localhost:5000/api';
+import { API_URL } from '$lib/api.js';
 
 export async function load({ fetch, cookies }) {
     const token = cookies.get('token');
@@ -11,7 +11,7 @@ export async function load({ fetch, cookies }) {
     }
 
     try {
-        const response = await fetch(`${API_URL}/auth/me`, {
+        const response = await fetch(`${API_URL}/api/auth/me`, {
             headers: {
                 Authorization: `Bearer ${token}`
             }
@@ -22,12 +22,13 @@ export async function load({ fetch, cookies }) {
                 user: null,
                 error:
                     response.status === 401
-                        ? 'Deine Anmeldung ist nicht mehr gültig.'
+                        ? 'Deine Anmeldung ist nicht mehr gültig. Bitte melde dich erneut an.'
                         : 'Dein Profil konnte nicht geladen werden.'
             };
         }
 
-        const user = await response.json();
+        const userData = await response.json();
+        const user = userData.user ?? userData;
 
         return {
             user,
