@@ -548,7 +548,7 @@
                     </div>
 
                     <a
-                        href="/profile"
+                        href="/jobnehmer/profil"
                         class="mt-5 block rounded-xl bg-[#A8B79E] px-4 py-3 text-center text-sm font-bold text-[#2A2E38] transition hover:bg-[#8fa18a]"
                     >
                         {$t('worker_view_profile')}
@@ -582,7 +582,7 @@
                     </p>
 
                     <a
-                        href="/profile"
+                        href="/jobnehmer/profil"
                         class="mt-4 block w-full rounded-xl border border-[#62AA97] px-4 py-3 text-center text-sm font-semibold text-[#398875] transition hover:bg-[#62AA97] hover:text-white"
                     >
                         {$t('worker_manage_following')}
@@ -612,7 +612,7 @@
                     </p>
 
                     <a
-                        href="/saved"
+                        href="/jobnehmer/saved"
                         class="mt-4 block text-sm font-bold text-[#398875] hover:underline"
                     >
                         {$t('worker_saved_jobs')} →
@@ -632,7 +632,7 @@
                     </p>
 
                     <a
-                        href="/jobnehmerProfile"
+                        href="/jobnehmer/profil"
                         class="mt-4 inline-block rounded-xl bg-[#2A2E38] px-4 py-3 text-sm font-bold text-white transition hover:bg-[#1e222b]"
                     >
                         {$t('worker_open_profile')}
