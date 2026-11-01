@@ -1,9 +1,8 @@
-const API_URL = 'http://localhost:5000/api';
+import { API_URL } from '$lib/api.js';
 
 export async function load({ fetch, cookies }) {
     const token = cookies.get('token');
 
-    // Noch nicht eingeloggt
     if (!token) {
         return {
             user: null,
@@ -20,60 +19,85 @@ export async function load({ fetch, cookies }) {
 
     try {
         // Aktuellen Benutzer laden
-        const userResponse = await fetch(`${API_URL}/auth/me`, {
+        const userResponse = await fetch(`${API_URL}/api/auth/me`, {
             headers
         });
 
-        if (!userResponse.ok) {
+        if (userResponse.status === 401) {
             return {
                 user: null,
                 jobs: [],
                 savedJobs: [],
                 pageSize: 6,
-                error: 'Die Anmeldung ist nicht mehr gültig.'
+                error: 'Die Anmeldung ist nicht mehr gültig. Bitte erneut einloggen.'
             };
         }
 
-        const user = await userResponse.json();
-
-        // For-You-Feed laden
-        const feedResponse = await fetch(`${API_URL}/feed`, {
-            headers
-        });
-
-        let jobs = [];
-        let error = null;
-
-        if (feedResponse.ok) {
-            const feedData = await feedResponse.json();
-
-            // API kann direkt ein Array oder ein Objekt liefern
-            if (Array.isArray(feedData)) {
-                jobs = feedData;
-            } else {
-                const result =
-                    feedData.jobs ??
-                    feedData.items ??
-                    feedData.problems ??
-                    [];
-
-                jobs = Array.isArray(result) ? result : [];
-            }
-        } else {
+        if (!userResponse.ok) {
             console.error(
-                'Feed konnte nicht geladen werden:',
-                feedResponse.status
+                'Benutzer konnte nicht geladen werden:',
+                userResponse.status
             );
 
-            error = 'Die Aufträge konnten nicht geladen werden.';
+            return {
+                user: null,
+                jobs: [],
+                savedJobs: [],
+                pageSize: 6,
+                error: 'Deine Benutzerdaten konnten nicht geladen werden.'
+            };
         }
+
+        const userData = await userResponse.json();
+        const user = userData.user ?? userData;
+
+        // Personalisierte Jobliste laden
+        const feedResponse = await fetch(
+            `${API_URL}/api/workers/me/feed`,
+            { headers }
+        );
+
+        if (feedResponse.status === 401) {
+            return {
+                user,
+                jobs: [],
+                savedJobs: [],
+                pageSize: 6,
+                error: 'Die Anmeldung ist nicht mehr gültig. Bitte erneut einloggen.'
+            };
+        }
+
+        if (!feedResponse.ok) {
+            console.error(
+                'Feed konnte nicht geladen werden:',
+                feedResponse.status,
+                feedResponse.statusText
+            );
+
+            return {
+                user,
+                jobs: [],
+                savedJobs: [],
+                pageSize: 6,
+                error: 'Die Aufträge konnten nicht geladen werden.'
+            };
+        }
+
+        const feedData = await feedResponse.json();
+
+        // API kann direkt ein Array oder ein Objekt liefern
+        const result = Array.isArray(feedData)
+            ? feedData
+            : feedData.jobs ?? feedData.items ?? feedData.problems ?? feedData.feed ?? [];
+
+        const jobs = Array.isArray(result) ? result : [];
 
         return {
             user,
             jobs,
             savedJobs: [],
             pageSize: 6,
-            error
+            error: null
         };
     } catch (error) {
         console.error('Jobnehmer-Hauptseite:', error);
