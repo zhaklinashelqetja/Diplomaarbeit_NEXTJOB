@@ -1,6 +1,6 @@
 from flask import Blueprint, g, jsonify, request
 
-from auth import admin_required, login_required, worker_required
+from auth import admin_required, login_required, verified_required, worker_required
 from db import call_proc, execute, fetch_all, fetch_one
 
 bp = Blueprint("misc", __name__, url_prefix="/api")
@@ -96,7 +96,7 @@ def thread(partner_id):
 
 
 @bp.post("/messages/<int:partner_id>")
-@login_required
+@verified_required
 def send_message(partner_id):
     d = request.get_json(silent=True) or {}
     content = (d.get("content") or "").strip()

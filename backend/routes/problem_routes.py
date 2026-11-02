@@ -1,6 +1,6 @@
 from flask import Blueprint, g, jsonify, request
 
-from auth import login_required, optional_auth, worker_required
+from auth import login_required, optional_auth, verified_required, worker_required
 from db import call_proc, execute, fetch_all, fetch_one
 from routes.user_routes import save_image
 
@@ -99,7 +99,7 @@ def problem_detail(problem_id):
 
 
 @bp.post("")
-@login_required
+@verified_required
 def create_problem():
     d = request.get_json(silent=True) or {}
     required = ("category_id", "neighborhood_id", "title", "description",
@@ -119,7 +119,7 @@ def create_problem():
 
 
 @bp.post("/<int:problem_id>/photos")
-@login_required
+@verified_required
 def upload_photos(problem_id):
     _, err = owned_problem_or_404(problem_id)
     if err:
@@ -203,6 +203,7 @@ def list_offers(problem_id):
 
 @bp.post("/<int:problem_id>/offers")
 @worker_required
+@verified_required
 def make_offer(problem_id):
     d = request.get_json(silent=True) or {}
     try:

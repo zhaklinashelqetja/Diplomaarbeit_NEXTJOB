@@ -7,7 +7,7 @@ Base URL: `/api` · all responses are JSON · errors: `{"error": "..."}`
 
 **Authentication:** register/login return a token. Send it on every protected
 request as `Authorization: Bearer <token>`.
-🔒 = login · 👷 = worker profile · 🛡 = admin
+🔒 = login · 👷 = worker profile · 🛡 = admin · ✉ = email must be confirmed, otherwise 403 `{code: "email_unverified"}`
 
 **Conventions**
 - The database is English. Category names (`Plumber`, …) are translation keys;
@@ -66,12 +66,12 @@ A **problem card** (lists, feed, saved) = `problem_id, title, budget, urgency, s
 | GET | `/problems` | ?status (default open), ?q, ?category, ?neighborhood, ?urgency, ?page, ?per_page | problem cards (search is logged) |
 | GET | `/problems/<id>` | – | full detail + photos; `contact_phone` and `address` only for the owner and the assigned worker (view is logged) |
 | GET 🔒 | `/problems/mine` | – | my problem cards |
-| POST 🔒 | `/problems` | **category_id, neighborhood_id, title, description, contact_phone**, address?, budget?, urgency?, preferred_date? | 201 `{problem_id}` |
-| POST 🔒 | `/problems/<id>/photos` | multipart `photos` (several) | 201 saved paths |
+| POST 🔒✉ | `/problems` | **category_id, neighborhood_id, title, description, contact_phone**, address?, budget?, urgency?, preferred_date? | 201 `{problem_id}` |
+| POST 🔒✉ | `/problems/<id>/photos` | multipart `photos` (several) | 201 saved paths |
 | PUT 🔒 | `/problems/<id>` | any of the fields above (owner, only while open) | updated fields |
 | DELETE 🔒 | `/problems/<id>` | – | cancels (never deletes) |
 | GET 🔒 | `/problems/<id>/offers` | – | offers with worker rating, jobs, response time (owner) |
-| POST 👷 | `/problems/<id>/offers` | price, message? | 201 `{offer_id}` — `sp_make_offer` |
+| POST 👷✉ | `/problems/<id>/offers` | price, message? | 201 `{offer_id}` — `sp_make_offer` |
 | PUT 🔒 | `/problems/<id>/start` | – | assigned → in_progress |
 | PUT 🔒 | `/problems/<id>/complete` | – | → completed — `sp_complete_problem` |
 | POST 🔒 | `/problems/<id>/review` | rating 1–5, text? | 201 — `sp_leave_review` |
@@ -87,7 +87,7 @@ A **problem card** (lists, feed, saved) = `problem_id, title, budget, urgency, s
 |---|---|---|---|
 | GET 🔒 | `/messages/conversations` | – | one row per partner, last message, unread |
 | GET 🔒 | `/messages/<user_id>` | – | thread (marks incoming as read) |
-| POST 🔒 | `/messages/<user_id>` | content, problem_id? | 201 `{message_id}` |
+| POST 🔒✉ | `/messages/<user_id>` | content, problem_id? | 201 `{message_id}` |
 | GET 🔒 | `/notifications` | ?unread=1 | last 50 |
 | PUT 🔒 | `/notifications/read` | ids? (none = all) | – |
 

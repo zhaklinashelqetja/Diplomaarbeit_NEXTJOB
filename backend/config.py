@@ -17,7 +17,12 @@ class Config:
     TOKEN_HOURS    = 24 * 7                 # JWT valid for 7 days
 
     # --- frontend ---------------------------------------------------
-    FRONTEND_URL   = os.environ.get("FRONTEND_URL", "http://localhost:5173")
+    # Where users open the website -> used for the links in mails
+    # (verify email, reset password).
+    FRONTEND_URL   = os.environ.get("FRONTEND_URL", "https://nextjob.htl-cloud.com")
+    # Other websites allowed to call the API from the browser (CORS),
+    # comma-separated. Default: the SvelteKit dev server of the team.
+    CORS_ORIGINS   = os.environ.get("CORS_ORIGINS", "http://localhost:5173").split(",")
 
     # --- outgoing mail (Gmail: use an App Password, not the real one) -
     SMTP_HOST      = os.environ.get("SMTP_HOST", "smtp.gmail.com")

@@ -38,14 +38,14 @@ def create_app():
 
     app.teardown_appcontext(db.close_db)
 
-    # The SvelteKit dev server (FRONTEND_URL, e.g. http://localhost:5173)
-    # runs on another port, so the browser needs CORS headers to call the
-    # API. Only that one origin is allowed. On the server, frontend and API
+    # The SvelteKit dev server (http://localhost:5173) runs on another
+    # port, so the browser needs CORS headers to call the API. Only the
+    # origins in CORS_ORIGINS are allowed. On the server, frontend and API
     # share one domain through nginx, so this is not needed there.
     @app.after_request
     def cors(resp):
         origin = request.headers.get("Origin")
-        if origin and origin == app.config["FRONTEND_URL"]:
+        if origin and origin in app.config["CORS_ORIGINS"]:
             resp.headers["Access-Control-Allow-Origin"] = origin
             resp.headers["Access-Control-Allow-Headers"] = "Authorization, Content-Type"
             resp.headers["Access-Control-Allow-Methods"] = "GET, POST, PUT, DELETE, OPTIONS"
