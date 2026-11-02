@@ -26,9 +26,11 @@ def save_image(file, subfolder):
 @bp.get("/<int:user_id>")
 def public_profile(user_id):
     user = fetch_one(
-        "SELECT user_id, first_name, last_name, location, avatar_path, "
-        "created_at FROM users WHERE user_id=%s AND is_active=TRUE",
-        (user_id,))
+        "SELECT u.user_id, u.first_name, u.last_name, u.account_type, "
+        "       n.name AS neighborhood, u.avatar_path, u.created_at "
+        "FROM users u "
+        "LEFT JOIN neighborhoods n ON n.neighborhood_id = u.neighborhood_id "
+        "WHERE u.user_id=%s AND u.is_active=TRUE", (user_id,))
     if user is None:
         return jsonify({"error": "User not found"}), 404
     return jsonify(user)
@@ -38,7 +40,7 @@ def public_profile(user_id):
 @login_required
 def update_me():
     d = request.get_json(silent=True) or {}
-    allowed = ("first_name", "last_name", "phone", "location")
+    allowed = ("first_name", "last_name", "phone", "neighborhood_id")
     updates = {k: d[k] for k in allowed if k in d}
     if not updates:
         return jsonify({"error": "Nothing to update"}), 400
@@ -67,13 +69,10 @@ def upload_avatar():
 @bp.get("/me/saved-workers")
 @login_required
 def list_saved_workers():
+    # v_worker_search already has name, neighborhood, rating, price, speed
     return jsonify(fetch_all(
-        "SELECT sw.worker_id, sw.saved_at, "
-        "       CONCAT(u.first_name,' ',u.last_name) AS full_name, "
-        "       wp.headline, wp.service_area "
-        "FROM saved_workers sw "
-        "JOIN users u ON u.user_id = sw.worker_id "
-        "JOIN worker_profiles wp ON wp.user_id = sw.worker_id "
+        "SELECT sw.saved_at, ws.* FROM saved_workers sw "
+        "JOIN v_worker_search ws ON ws.worker_id = sw.worker_id "
         "WHERE sw.customer_id=%s ORDER BY sw.saved_at DESC",
         (g.user["user_id"],)))
 

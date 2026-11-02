@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>NextJob API</title>
+<style>
+  :root {
+    --bg: #f6f7f9; --panel: #ffffff; --ink: #1b1f24; --muted: #667085;
+    --line: #e4e7ec; --accent: #0f6e5c; --accent-soft: #e3f2ee;
+    --get: #1d6fd8; --post: #12805c; --put: #b25e09; --delete: #c0322b;
+    --code-bg: #0f172a; --code-ink: #e2e8f0;
+    --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; font: 15px/1.5 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+         background: var(--bg); color: var(--ink); }
+  header { position: sticky; top: 0; z-index: 5; background: var(--panel);
+           border-bottom: 1px solid var(--line); padding: 12px 24px;
+           display: flex; gap: 20px; align-items: center; flex-wrap: wrap; }
+  header h1 { font-size: 18px; margin: 0; letter-spacing: -.01em; }
+  header h1 span { color: var(--accent); }
+  .pill { font: 12px var(--mono); padding: 3px 8px; border-radius: 999px;
+          background: var(--bg); border: 1px solid var(--line); color: var(--muted); }
+  .pill.ok { color: var(--post); border-color: #b7e0cf; background: #eefaf4; }
+  .pill.bad { color: var(--delete); border-color: #f2c4c1; background: #fdf1f0; }
+  .auth { margin-left: auto; display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+  .auth input { width: 190px; }
+  input, select, textarea { font: inherit; padding: 6px 9px; border: 1px solid var(--line);
+                            border-radius: 7px; background: #fff; color: var(--ink); }
+  textarea { font: 13px/1.45 var(--mono); width: 100%; min-height: 90px; resize: vertical; }
+  button { font: inherit; cursor: pointer; border-radius: 7px; border: 1px solid var(--line);
+           background: #fff; padding: 6px 12px; }
+  button.primary { background: var(--accent); border-color: var(--accent); color: #fff; font-weight: 600; }
+  button.ghost { border-color: transparent; background: transparent; color: var(--muted); }
+  button:disabled { opacity: .5; cursor: wait; }
+  .quick button { font-size: 13px; padding: 4px 9px; }
+  .who { font-size: 13px; color: var(--muted); }
+  .who b { color: var(--ink); }
+
+  .layout { display: grid; grid-template-columns: 270px 1fr; min-height: calc(100vh - 60px); }
+  nav { border-right: 1px solid var(--line); background: var(--panel); padding: 16px 12px;
+        position: sticky; top: 60px; height: calc(100vh - 60px); overflow: auto; }
+  nav input { width: 100%; margin-bottom: 12px; }
+  nav h3 { font-size: 11px; text-transform: uppercase; letter-spacing: .08em; color: var(--muted);
+           margin: 16px 8px 6px; }
+  nav a { display: flex; gap: 8px; align-items: baseline; padding: 4px 8px; border-radius: 6px;
+          color: var(--ink); text-decoration: none; font: 12.5px var(--mono); }
+  nav a:hover { background: var(--bg); }
+  main { padding: 24px 32px 80px; max-width: 1050px; }
+  .intro { background: var(--panel); border: 1px solid var(--line); border-radius: 12px;
+           padding: 18px 22px; margin-bottom: 24px; }
+  .intro p { margin: 6px 0; color: #344054; }
+  .legend { display: flex; gap: 16px; flex-wrap: wrap; font-size: 13px; color: var(--muted); margin-top: 10px; }
+  h2.group { font-size: 15px; margin: 32px 0 10px; color: var(--muted); text-transform: uppercase;
+             letter-spacing: .06em; }
+
+  .ep { background: var(--panel); border: 1px solid var(--line); border-radius: 12px;
+        margin-bottom: 10px; overflow: hidden; scroll-margin-top: 80px; }
+  .ep > summary { list-style: none; cursor: pointer; display: flex; gap: 12px; align-items: center;
+                  padding: 11px 16px; }
+  .ep > summary::-webkit-details-marker { display: none; }
+  .ep[open] > summary { border-bottom: 1px solid var(--line); }
+  .m { font: 700 11.5px var(--mono); width: 58px; text-align: center; padding: 3px 0;
+       border-radius: 5px; color: #fff; flex: none; }
+  .m.GET { background: var(--get); } .m.POST { background: var(--post); }
+  .m.PUT { background: var(--put); } .m.DELETE { background: var(--delete); }
+  nav .m { width: 46px; font-size: 10px; padding: 1px 0; }
+  .path { font: 600 14px var(--mono); }
+  .sum { color: var(--muted); font-size: 14px; flex: 1; }
+  .badge { font-size: 11.5px; padding: 2px 8px; border-radius: 999px; background: var(--bg);
+           border: 1px solid var(--line); color: var(--muted); white-space: nowrap; }
+  .badge.login { background: #eef4ff; border-color: #c9dafc; color: #2753b8; }
+  .badge.worker { background: #fff5e6; border-color: #f6d9a8; color: #8a4b05; }
+  .badge.admin { background: #fdf1f0; border-color: #f2c4c1; color: #9b2a24; }
+  .body { padding: 14px 16px 16px; display: grid; gap: 14px; }
+  .desc { color: #344054; margin: 0; }
+  table { border-collapse: collapse; width: 100%; font-size: 13.5px; }
+  th, td { text-align: left; padding: 6px 8px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  th { font-size: 11.5px; color: var(--muted); text-transform: uppercase; letter-spacing: .05em; }
+  td code, .desc code { font: 12.5px var(--mono); background: var(--bg); padding: 1px 5px; border-radius: 4px; }
+  td input { width: 100%; }
+  .try { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+  .lbl { font-size: 12px; font-weight: 600; color: var(--muted); margin-bottom: 4px; }
+  .resp { border-radius: 10px; overflow: hidden; border: 1px solid #1e293b; }
+  .resp .bar { display: flex; gap: 12px; align-items: center; background: #1e293b; color: #cbd5e1;
+               font: 12.5px var(--mono); padding: 6px 12px; }
+  .resp .bar .st { font-weight: 700; }
+  .st.s2 { color: #4ade80; } .st.s4 { color: #fbbf24; } .st.s5 { color: #f87171; }
+  pre { margin: 0; background: var(--code-bg); color: var(--code-ink); padding: 12px 14px;
+        font: 12.5px/1.5 var(--mono); overflow: auto; max-height: 420px; white-space: pre-wrap;
+        word-break: break-word; }
+  .k { color: #93c5fd; } .s { color: #86efac; } .n { color: #fda4af; } .b { color: #c4b5fd; }
+  .curl { font: 12px var(--mono); color: var(--muted); word-break: break-all; }
+  .warn { font-size: 12.5px; color: var(--delete); }
+  @media (max-width: 860px) { .layout { grid-template-columns: 1fr; } nav { display: none; }
+                              main { padding: 16px; } .auth { margin-left: 0; }
+                              header { position: static; }
+                              .ep > summary { flex-wrap: wrap; row-gap: 6px; }
+                              .path { word-break: break-all; }
+                              .sum { flex-basis: 100%; order: 3; } }
+</style>
+</head>
+<body>
+<header>
+  <h1>Next<span>Job</span> API</h1>
+  <span id="health" class="pill">checking…</span>
+  <div class="auth">
+    <span class="who" id="who">Not logged in</span>
+    <input id="email" placeholder="email" autocomplete="username">
+    <input id="pw" type="password" placeholder="password" autocomplete="current-password">
+    <button class="primary" id="loginBtn">Log in</button>
+    <button class="ghost" id="logoutBtn" hidden>Log out</button>
+    <span class="quick">
+      <button data-q="admin@nextjob.al">Admin</button>
+      <button data-q="gjergj.prendi@example.com">Worker</button>
+      <button data-q="zamir_coba@example.com">Customer</button>
+    </span>
+  </div>
+</header>
+
+<div class="layout">
+  <nav>
+    <input id="filter" placeholder="Filter endpoints…">
+    <div id="toc"></div>
+  </nav>
+  <main>
+    <section class="intro">
+      <p><b>Base URL:</b> <code id="base"></code> · every response is JSON · errors look like <code>{"error": "…"}</code></p>
+      <p>Click an endpoint, change the values, press <b>Send</b> and see what it returns. Requests go to the real API with
+         the token of whoever is logged in above. The quick buttons log in as seed accounts (password <code>test1234</code>).</p>
+      <p>Names of categories are English keys (the frontend translates them); neighborhoods are fixed IDs from
+         <code>GET /api/neighborhoods</code>. Prices are in Lek.</p>
+      <div class="legend">
+        <span><span class="badge">public</span> no login</span>
+        <span><span class="badge login">login</span> Bearer token</span>
+        <span><span class="badge worker">worker</span> needs a worker profile</span>
+        <span><span class="badge admin">admin</span> admin only</span>
+      </div>
+    </section>
+    <div id="list"></div>
+  </main>
+</div>
+
+<script>
+// ------------------------------------------------------------------ endpoint list
+// auth: public | login | worker | admin
+// path params are written as {name}; query: [name, example, description]
+// body: example JSON object; file: multipart field name (+ multiple)
+const ENDPOINTS = [
+  // ---- System & lists
+  { g: "System & lists", m: "GET", p: "/api/health", a: "public", s: "Is the API alive?", d: "Returns <code>{\"status\": \"ok\"}</code> when the API runs." },
+  { g: "System & lists", m: "GET", p: "/api/categories", a: "public", s: "The 15 trades", d: "Fixed list. <code>name</code> is the English key the frontend translates (e.g. Plumber → Hidraulik / Installateur)." },
+  { g: "System & lists", m: "GET", p: "/api/neighborhoods", a: "public", s: "Neighborhoods of Shkodër", d: "Fixed list for every location dropdown. <code>is_city_quarter</code> = 1 for quarters of the city, 0 for the units around it (Velipojë, Guri i Zi …)." },
+
+  // ---- Auth
+  { g: "Auth", m: "POST", p: "/api/auth/register", a: "public", s: "Create an account",
+    d: "<code>account_type</code> is required: <code>jobgeber</code> (needs help) or <code>jobnehmer</code> (worker). A jobnehmer gets an empty worker profile right away. Sends a confirmation mail. Returns a token, so the user is logged in at once.",
+    body: { first_name: "Arta", last_name: "Doda", email: "arta.doda@example.com", password: "geheim123", account_type: "jobgeber", phone: "0691112233", neighborhood_id: 2 } },
+  { g: "Auth", m: "POST", p: "/api/auth/login", a: "public", s: "Log in → token", d: "Unverified users may log in; they are only told to confirm their email.",
+    body: { email: "zamir_coba@example.com", password: "test1234" } },
+  { g: "Auth", m: "GET", p: "/api/auth/me", a: "login", s: "Who am I?", d: "The logged-in user incl. <code>account_type</code>, <code>neighborhood</code>, <code>is_worker</code>, <code>is_verified</code>." },
+  { g: "Auth", m: "POST", p: "/api/auth/verify/request", a: "login", s: "Resend confirmation mail", d: "429 if asked again within 60 seconds." },
+  { g: "Auth", m: "POST", p: "/api/auth/verify", a: "public", s: "Confirm email with the link token", body: { token: "token-from-the-mail-link" } },
+  { g: "Auth", m: "POST", p: "/api/auth/forgot-password", a: "public", s: "Send reset link", d: "Always answers <code>{sent: true}</code>, so nobody can test which emails exist.", body: { email: "zamir_coba@example.com" } },
+  { g: "Auth", m: "POST", p: "/api/auth/reset-password", a: "public", s: "Set a new password", d: "All older tokens of this user stop working.", body: { token: "token-from-the-mail-link", password: "neuesPasswort1" } },
+
+  // ---- Users
+  { g: "Users", m: "GET", p: "/api/users/{user_id}", a: "public", s: "Public profile", d: "No email or phone.", path: { user_id: 59 } },
+  { g: "Users", m: "PUT", p: "/api/users/me", a: "login", s: "Edit my account", d: "Any of: first_name, last_name, phone, neighborhood_id.", body: { phone: "0691234567", neighborhood_id: 5 } },
+  { g: "Users", m: "POST", p: "/api/users/me/avatar", a: "login", s: "Upload profile picture", d: "multipart field <code>avatar</code> (png/jpg/jpeg/webp, max 8 MB).", file: "avatar" },
+  { g: "Users", m: "GET", p: "/api/users/me/saved-workers", a: "login", s: "My bookmarked workers", d: "With rating, price and response time." },
+  { g: "Users", m: "POST", p: "/api/users/me/saved-workers/{worker_id}", a: "login", s: "Bookmark a worker", path: { worker_id: 2 } },
+  { g: "Users", m: "DELETE", p: "/api/users/me/saved-workers/{worker_id}", a: "login", s: "Remove bookmark", path: { worker_id: 2 } },
+
+  // ---- Workers
+  { g: "Workers", m: "GET", p: "/api/workers", a: "public", s: "Find workers by price / time / quality",
+    d: "<code>neighborhood</code> keeps only workers who take jobs there. sort: avg_rating | avg_job_price | avg_response_hours | completed_jobs | years_experience.",
+    query: [["category", "1", "category_id"], ["neighborhood", "3", "neighborhood_id"], ["sort", "avg_rating", ""], ["order", "desc", "asc / desc"], ["page", "1", ""], ["per_page", "20", "max 50"]] },
+  { g: "Workers", m: "GET", p: "/api/workers/{worker_id}", a: "public", s: "Worker profile", d: "Stats + trades + service areas + the last 20 reviews (flagged ones hidden).", path: { worker_id: 2 } },
+  { g: "Workers", m: "POST", p: "/api/workers/me", a: "login", s: "Become a worker", d: "For a jobgeber who also wants to work (409 if a profile exists).", body: { headline: "Elektricist", bio: "10 vite përvojë.", years_experience: 10 } },
+  { g: "Workers", m: "PUT", p: "/api/workers/me", a: "worker", s: "Edit my worker profile", d: "Any of: headline, bio, years_experience, is_available.", body: { headline: "Hidraulik 24/7", is_available: true } },
+  { g: "Workers", m: "PUT", p: "/api/workers/me/categories", a: "worker", s: "Set my trades", d: "Replaces the whole list. One wrong id → nothing changes.", body: { category_ids: [1, 15] } },
+  { g: "Workers", m: "PUT", p: "/api/workers/me/areas", a: "worker", s: "Set where I take jobs", d: "Replaces the whole list of neighborhood ids. Used by the For You feed (+30 points).", body: { neighborhood_ids: [1, 2, 3, 5] } },
+  { g: "Workers", m: "GET", p: "/api/workers/me/feed", a: "worker", s: "For You feed", d: "Recalculates and returns open problems with <code>score</code>: trade 60 + serves the neighborhood 30 + available 10." },
+  { g: "Workers", m: "GET", p: "/api/workers/me/offers", a: "worker", s: "Offers I sent" },
+  { g: "Workers", m: "GET", p: "/api/workers/me/jobs", a: "worker", s: "Jobs assigned to me", d: "Includes the customer's phone and address." },
+  { g: "Workers", m: "GET", p: "/api/workers/me/saved-problems", a: "worker", s: "My bookmarked problems" },
+  { g: "Workers", m: "POST", p: "/api/workers/me/saved-problems/{problem_id}", a: "worker", s: "Bookmark a problem", path: { problem_id: 140 } },
+  { g: "Workers", m: "DELETE", p: "/api/workers/me/saved-problems/{problem_id}", a: "worker", s: "Remove bookmark", path: { problem_id: 140 } },
+
+  // ---- Problems
+  { g: "Problems", m: "GET", p: "/api/problems", a: "public", s: "Browse problems", d: "Problem cards with category, neighborhood, offer_count, cover_photo. Searches are logged for statistics.",
+    query: [["status", "open", "open | assigned | in_progress | completed | cancelled"], ["q", "", "text in title/description"], ["category", "", "category_id"], ["neighborhood", "", "neighborhood_id"], ["urgency", "", "low | normal | high | emergency"], ["page", "1", ""], ["per_page", "20", "max 50"]] },
+  { g: "Problems", m: "GET", p: "/api/problems/{problem_id}", a: "public", s: "Problem detail", d: "Phone and address only for the customer and the assigned worker. Each call counts as a view.", path: { problem_id: 140 } },
+  { g: "Problems", m: "GET", p: "/api/problems/mine", a: "login", s: "My posted problems" },
+  { g: "Problems", m: "POST", p: "/api/problems", a: "login", s: "Post a problem", d: "Required: category_id, neighborhood_id, title, description, contact_phone. A wrong id, a budget ≤ 0 or an unknown urgency → 400.",
+    body: { category_id: 1, neighborhood_id: 5, title: "Rrjedh rubineti në kuzhinë", description: "Pikon gjithë kohën, duhet ndërruar.", contact_phone: "0691234567", address: "Rruga Studenti, pallati 4", budget: 2500, urgency: "high", preferred_date: "2026-11-10" } },
+  { g: "Problems", m: "POST", p: "/api/problems/{problem_id}/photos", a: "login", s: "Upload photos (owner)", d: "multipart field <code>photos</code>, several files allowed.", path: { problem_id: 140 }, file: "photos", multiple: true },
+  { g: "Problems", m: "PUT", p: "/api/problems/{problem_id}", a: "login", s: "Edit my problem (only while open)", path: { problem_id: 140 }, body: { budget: 3000, urgency: "normal" } },
+  { g: "Problems", m: "DELETE", p: "/api/problems/{problem_id}", a: "login", s: "Cancel my problem", d: "Sets status to cancelled, nothing is deleted.", path: { problem_id: 140 }, danger: true },
+  { g: "Problems", m: "GET", p: "/api/problems/{problem_id}/offers", a: "login", s: "Offers on my problem (owner)", d: "Each with the worker's rating, jobs and response time.", path: { problem_id: 140 } },
+  { g: "Problems", m: "POST", p: "/api/problems/{problem_id}/offers", a: "worker", s: "Send an offer", d: "Checked in <code>sp_make_offer</code>: problem open, not your own, only one offer per worker.", path: { problem_id: 140 }, body: { price: 3500, message: "Mund të vij sot pas orës 17." } },
+  { g: "Problems", m: "PUT", p: "/api/problems/{problem_id}/start", a: "login", s: "assigned → in_progress", d: "Customer or assigned worker.", path: { problem_id: 140 } },
+  { g: "Problems", m: "PUT", p: "/api/problems/{problem_id}/complete", a: "login", s: "Mark as completed (owner)", path: { problem_id: 140 } },
+  { g: "Problems", m: "POST", p: "/api/problems/{problem_id}/review", a: "login", s: "Review the worker (owner)", d: "Only after completion, once per job. rating 1–5.", path: { problem_id: 140 }, body: { rating: 5, text: "Erdhi në kohë dhe punoi pastër." } },
+
+  // ---- Offers
+  { g: "Offers", m: "PUT", p: "/api/offers/{offer_id}/accept", a: "login", s: "Accept an offer (problem owner)", d: "Assigns the worker and rejects all other offers (<code>sp_accept_offer</code>).", path: { offer_id: 1 } },
+  { g: "Offers", m: "PUT", p: "/api/offers/{offer_id}/withdraw", a: "worker", s: "Withdraw my pending offer", path: { offer_id: 1 } },
+
+  // ---- Messages & notifications
+  { g: "Messages & notifications", m: "GET", p: "/api/messages/conversations", a: "login", s: "My chats", d: "One row per partner with the last message and unread count." },
+  { g: "Messages & notifications", m: "GET", p: "/api/messages/{partner_id}", a: "login", s: "Chat with one user", d: "Marks their messages to me as read.", path: { partner_id: 2 } },
+  { g: "Messages & notifications", m: "POST", p: "/api/messages/{partner_id}", a: "login", s: "Send a message", path: { partner_id: 2 }, body: { content: "Përshëndetje, a jeni i lirë nesër?", problem_id: null } },
+  { g: "Messages & notifications", m: "GET", p: "/api/notifications", a: "login", s: "My notifications (last 50)", query: [["unread", "", "1 = only unread"]] },
+  { g: "Messages & notifications", m: "PUT", p: "/api/notifications/read", a: "login", s: "Mark as read", d: "Without ids → all.", body: { ids: [] } },
+
+  // ---- Chatbot
+  { g: "Chatbot", m: "POST", p: "/api/chat", a: "login", s: "Ask the Albanian assistant",
+    d: "Answers only from NextJob data. Every question and answer is saved; send the returned <code>conversation_id</code> to continue the same conversation.",
+    body: { message: "Kam nevojë për një hidraulik në Rus, kush është më i miri?", conversation_id: null } },
+
+  // ---- Review analysis
+  { g: "Review analysis", m: "POST", p: "/api/analysis/preview", a: "login", s: "Analyze any text (nothing saved)", body: { text: "Erdhi shpejt, çmim i drejtë, shumë i sjellshëm." } },
+  { g: "Review analysis", m: "GET", p: "/api/analysis/workers/{worker_id}", a: "public", s: "Worker strengths & weaknesses", path: { worker_id: 2 } },
+  { g: "Review analysis", m: "GET", p: "/api/analysis/reviews/{review_id}", a: "login", s: "Stored analysis of one review", path: { review_id: 1 } },
+  { g: "Review analysis", m: "POST", p: "/api/analysis/reviews/{review_id}", a: "admin", s: "Analyze one review + save", path: { review_id: 1 } },
+  { g: "Review analysis", m: "POST", p: "/api/analysis/run", a: "admin", s: "Analyze all reviews without a result" },
+
+  // ---- Admin
+  { g: "Admin", m: "GET", p: "/api/admin/stats", a: "admin", s: "Dashboard numbers", d: "total_users, active_jobs, total_offers, reported_content + demand per category / neighborhood, searches, growth, jobs per month, top problems & workers." },
+  { g: "Admin", m: "GET", p: "/api/admin/stats/jobs-per-month", a: "admin", s: "Posted / completed / cancelled per month" },
+  { g: "Admin", m: "POST", p: "/api/admin/reviews/detect-fakes", a: "admin", s: "Run fake-review detection", d: "Flags duplicates, 3+ reviews from one customer for one worker, and review bursts. Returns all flagged reviews." },
+  { g: "Admin", m: "PUT", p: "/api/admin/users/{user_id}/deactivate", a: "admin", s: "Block a user", path: { user_id: 99 }, danger: true },
+  { g: "Admin", m: "PUT", p: "/api/admin/users/{user_id}/activate", a: "admin", s: "Unblock a user", path: { user_id: 99 } },
+];
+
+// ------------------------------------------------------------------ state
+const BASE = location.origin;
+let token = null, me = null;
+const store = {   // browser storage can be blocked -> never crash because of it
+  get(k) { try { return localStorage.getItem(k); } catch { return null; } },
+  set(k, v) { try { v == null ? localStorage.removeItem(k) : localStorage.setItem(k, v); } catch {} },
+};
+const $ = (s, el = document) => el.querySelector(s);
+const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+const slug = e => (e.m + e.p).replace(/[^a-z0-9]+/gi, "-").replace(/-+$/, "").toLowerCase();
+const AUTH_LABEL = { public: "public", login: "🔒 login", worker: "👷 worker", admin: "🛡 admin" };
+
+function highlight(json) {   // color the raw JSON, escape every piece on the way
+  const re = /("(?:\\.|[^"\\])*")(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d+)?(?:e[+-]?\d+)?/g;
+  let out = "", last = 0, m;
+  while ((m = re.exec(json))) {
+    out += esc(json.slice(last, m.index));
+    const [all, str, colon, kw] = m;
+    out += str ? (colon ? `<span class="k">${esc(str)}</span>${colon}` : `<span class="s">${esc(str)}</span>`)
+               : `<span class="${kw ? "b" : "n"}">${all}</span>`;
+    last = re.lastIndex;
+  }
+  return out + esc(json.slice(last));
+}
+
+// ------------------------------------------------------------------ render
+function render() {
+  $("#base").textContent = BASE;
+  const groups = [...new Set(ENDPOINTS.map(e => e.g))];
+  $("#toc").innerHTML = groups.map(g => `<h3>${g}</h3>` + ENDPOINTS.filter(e => e.g === g).map(e =>
+    `<a href="#${slug(e)}" data-f="${esc((e.m + " " + e.p + " " + e.s).toLowerCase())}"><span class="m ${e.m}">${e.m}</span>${esc(e.p.replace("/api", ""))}</a>`).join("")).join("");
+
+  $("#list").innerHTML = groups.map(g => `<h2 class="group">${g}</h2>` + ENDPOINTS.filter(e => e.g === g).map((e, i) => {
+    const id = slug(e);
+    const pathRows = Object.entries(e.path || {}).map(([k, v]) =>
+      `<tr><td><code>{${k}}</code></td><td><input data-path="${k}" value="${esc(v)}"></td><td>path</td></tr>`).join("");
+    const queryRows = (e.query || []).map(([k, v, h]) =>
+      `<tr><td><code>${k}</code></td><td><input data-query="${k}" value="${esc(v)}" placeholder="—"></td><td>${esc(h || "query")}</td></tr>`).join("");
+    const params = pathRows || queryRows ? `<table><tr><th>Parameter</th><th>Value</th><th>Info</th></tr>${pathRows}${queryRows}</table>` : "";
+    const body = e.body ? `<div><div class="lbl">JSON body</div><textarea data-body>${esc(JSON.stringify(e.body, null, 2))}</textarea></div>` : "";
+    const file = e.file ? `<div><div class="lbl">File field “${e.file}”</div><input type="file" data-file="${e.file}" accept="image/*" ${e.multiple ? "multiple" : ""}></div>` : "";
+    return `<details class="ep" id="${id}" data-i="${ENDPOINTS.indexOf(e)}">
+      <summary><span class="m ${e.m}">${e.m}</span><span class="path">${esc(e.p)}</span>
+        <span class="sum">${esc(e.s)}</span><span class="badge ${e.a}">${AUTH_LABEL[e.a]}</span></summary>
+      <div class="body">
+        ${e.d ? `<p class="desc">${e.d}</p>` : ""}
+        ${params}${body}${file}
+        <div class="try"><button class="primary" data-send>Send</button>
+          ${e.danger ? `<span class="warn">Changes real data on this server.</span>` : ""}
+          <span class="curl" data-curl></span></div>
+        <div data-out></div>
+      </div></details>`;
+  }).join("")).join("");
+}
+
+// ------------------------------------------------------------------ requests
+async function send(card) {
+  const e = ENDPOINTS[card.dataset.i];
+  const btn = $("[data-send]", card), out = $("[data-out]", card);
+  let path = e.p;
+  card.querySelectorAll("[data-path]").forEach(inp => path = path.replace(`{${inp.dataset.path}}`, encodeURIComponent(inp.value.trim())));
+  const qs = new URLSearchParams();
+  card.querySelectorAll("[data-query]").forEach(inp => inp.value.trim() && qs.set(inp.dataset.query, inp.value.trim()));
+  const url = path + (qs.toString() ? "?" + qs : "");
+  const opts = { method: e.m, headers: {} };
+  if (token) opts.headers.Authorization = "Bearer " + token;
+  const bodyEl = $("[data-body]", card), fileEl = $("[data-file]", card);
+  if (bodyEl) {
+    try { opts.body = JSON.stringify(JSON.parse(bodyEl.value || "{}")); }
+    catch { out.innerHTML = `<p class="warn">The JSON body is not valid JSON.</p>`; return; }
+    opts.headers["Content-Type"] = "application/json";
+  }
+  if (fileEl) {
+    if (!fileEl.files.length) { out.innerHTML = `<p class="warn">Choose a file first.</p>`; return; }
+    const fd = new FormData(); [...fileEl.files].forEach(f => fd.append(fileEl.dataset.file, f)); opts.body = fd;
+  }
+  $("[data-curl]", card).textContent = `curl -X ${e.m} ${BASE}${url}` + (token ? ` -H "Authorization: Bearer …"` : "") +
+    (bodyEl ? ` -H "Content-Type: application/json" -d '${opts.body}'` : "");
+  btn.disabled = true;
+  const t0 = performance.now();
+  try {
+    const r = await fetch(BASE + url, opts);
+    const ms = Math.round(performance.now() - t0);
+    const text = await r.text();
+    let pretty = text;
+    try { pretty = JSON.stringify(JSON.parse(text), null, 2); } catch {}
+    const count = (() => { try { const j = JSON.parse(text); return Array.isArray(j) ? ` · ${j.length} rows` : ""; } catch { return ""; } })();
+    out.innerHTML = `<div class="resp"><div class="bar"><span class="st s${String(r.status)[0]}">${r.status} ${esc(r.statusText)}</span>
+      <span>${ms} ms${count}</span><span>${esc(url)}</span></div><pre>${highlight(pretty)}</pre></div>`;
+    if (e.p === "/api/auth/login" && r.ok) setToken(JSON.parse(text).token);
+  } catch (err) {
+    out.innerHTML = `<p class="warn">Request failed: ${esc(err.message)}</p>`;
+  } finally { btn.disabled = false; }
+}
+
+// ------------------------------------------------------------------ login
+async function setToken(t) {
+  token = t; store.set("nextjob_docs_token", t); me = null;
+  if (t) {
+    const r = await fetch(BASE + "/api/auth/me", { headers: { Authorization: "Bearer " + t } });
+    if (r.ok) me = await r.json(); else { token = null; store.set("nextjob_docs_token", null); }
+  }
+  $("#who").innerHTML = me ? `Logged in as <b>${esc(me.first_name + " " + me.last_name)}</b> · ${me.is_admin ? "admin" : me.is_worker ? "worker" : me.account_type}` : "Not logged in";
+  $("#logoutBtn").hidden = !me;
+}
+async function login(email, pw) {
+  const r = await fetch(BASE + "/api/auth/login", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ email, password: pw }) });
+  const j = await r.json().catch(() => ({}));
+  if (r.ok) setToken(j.token); else $("#who").innerHTML = `<span class="warn">${esc(j.error || "Login failed")}</span>`;
+}
+
+// ------------------------------------------------------------------ wire up
+render();
+document.addEventListener("click", ev => {
+  const b = ev.target.closest("[data-send]"); if (b) send(b.closest(".ep"));
+  const q = ev.target.closest("[data-q]"); if (q) { $("#email").value = q.dataset.q; $("#pw").value = "test1234"; login(q.dataset.q, "test1234"); }
+  const a = ev.target.closest("nav a"); if (a) { const d = document.getElementById(a.getAttribute("href").slice(1)); if (d) d.open = true; }
+});
+$("#loginBtn").onclick = () => login($("#email").value.trim(), $("#pw").value);
+$("#pw").addEventListener("keydown", e => e.key === "Enter" && $("#loginBtn").click());
+$("#logoutBtn").onclick = () => setToken(null);
+$("#filter").addEventListener("input", e => {
+  const f = e.target.value.toLowerCase();
+  document.querySelectorAll("nav a").forEach(a => a.style.display = a.dataset.f.includes(f) ? "" : "none");
+});
+fetch(BASE + "/api/health").then(r => r.json()).then(j => { const h = $("#health"); h.textContent = j.status === "ok" ? "API online" : "API ?"; h.className = "pill " + (j.status === "ok" ? "ok" : "bad"); })
+  .catch(() => { const h = $("#health"); h.textContent = "API offline"; h.className = "pill bad"; });
+const saved = store.get("nextjob_docs_token"); if (saved) setToken(saved);
+</script>
+</body>
+</html>

@@ -47,15 +47,24 @@ def _load_user_from_token():
     except jwt.InvalidTokenError:
         return None, "Invalid token"
 
+    # One query loads everything the routes need about the current user,
+    # including the neighborhood name and whether a worker profile exists.
     user = fetch_one(
-        "SELECT user_id, first_name, last_name, email, phone, location, "
-        "       account_type, is_admin, is_active, is_verified, token_version "
-        "FROM users WHERE user_id = %s",
+        "SELECT u.user_id, u.first_name, u.last_name, u.email, u.phone, "
+        "       u.neighborhood_id, n.name AS neighborhood, u.account_type, "
+        "       u.is_admin, u.is_active, u.is_verified, u.token_version, "
+        "       EXISTS (SELECT 1 FROM worker_profiles w "
+        "               WHERE w.user_id = u.user_id) AS is_worker "
+        "FROM users u "
+        "LEFT JOIN neighborhoods n ON n.neighborhood_id = u.neighborhood_id "
+        "WHERE u.user_id = %s",
         (payload["user_id"],))
     if user is None or not user["is_active"]:
         return None, "User not found or deactivated"
     if payload.get("tv", 0) != user["token_version"]:
         return None, "Token no longer valid, please log in again"
+    for flag in ("is_admin", "is_active", "is_verified", "is_worker"):
+        user[flag] = bool(user[flag])        # MySQL gives 0/1 -> true/false
     return user, None
 
 
@@ -106,13 +115,11 @@ def verified_required(f):
 
 
 def worker_required(f):
-    """Login + must have a worker profile."""
+    """Login + must have a worker profile (is_worker comes from the login query)."""
     @wraps(f)
     @login_required
     def wrapper(*args, **kwargs):
-        wp = fetch_one("SELECT user_id FROM worker_profiles WHERE user_id=%s",
-                       (g.user["user_id"],))
-        if wp is None:
+        if not g.user["is_worker"]:
             return jsonify({"error": "Worker profile required"}), 403
         return f(*args, **kwargs)
     return wrapper

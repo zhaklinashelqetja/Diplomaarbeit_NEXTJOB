@@ -6,12 +6,22 @@ from db import call_proc, execute, fetch_all, fetch_one
 bp = Blueprint("misc", __name__, url_prefix="/api")
 
 
-# ---------- categories ----------
+# ---------- fixed lists (dropdowns) ----------
 
 @bp.get("/categories")
 def categories():
+    """English names = translation keys, the frontend shows sq/de."""
     return jsonify(fetch_all(
-        "SELECT category_id, name, icon FROM categories ORDER BY name"))
+        "SELECT category_id, name FROM categories ORDER BY name"))
+
+
+@bp.get("/neighborhoods")
+def neighborhoods():
+    """City quarters first, then the villages/units around the city."""
+    return jsonify(fetch_all(
+        "SELECT n.neighborhood_id, n.name, n.is_city_quarter, c.name AS city "
+        "FROM neighborhoods n JOIN cities c ON c.city_id = n.city_id "
+        "ORDER BY c.name, n.is_city_quarter DESC, n.name"))
 
 
 # ---------- offers (accept / withdraw) ----------
@@ -141,7 +151,16 @@ def mark_read():
 @bp.get("/admin/stats")
 @admin_required
 def admin_stats():
+    totals = fetch_one(
+        "SELECT (SELECT COUNT(*) FROM users) AS total_users, "
+        "       (SELECT COUNT(*) FROM problems "
+        "        WHERE status IN ('open','assigned','in_progress')) AS active_jobs, "
+        "       (SELECT COUNT(*) FROM offers) AS total_offers, "
+        "       (SELECT COUNT(*) FROM reviews WHERE is_flagged) AS reported_content")
     return jsonify({
+        **totals,
+        "jobs_per_month":      fetch_all("SELECT * FROM v_jobs_per_month"),
+        "neighborhood_demand": fetch_all("SELECT * FROM v_neighborhood_demand"),
         "category_demand":     fetch_all("SELECT * FROM v_category_demand"),
         "top_searches":        fetch_all("SELECT * FROM v_top_searches LIMIT 20"),
         "registration_growth": fetch_all("SELECT * FROM v_registration_growth"),
@@ -150,6 +169,13 @@ def admin_stats():
         "top_workers":         fetch_all("SELECT * FROM v_worker_search "
                                          "ORDER BY avg_rating DESC LIMIT 20"),
     })
+
+
+@bp.get("/admin/stats/jobs-per-month")
+@admin_required
+def jobs_per_month():
+    """Posted / completed / cancelled problems per month (dashboard chart)."""
+    return jsonify(fetch_all("SELECT * FROM v_jobs_per_month"))
 
 
 @bp.post("/admin/reviews/detect-fakes")

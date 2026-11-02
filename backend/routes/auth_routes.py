@@ -9,7 +9,7 @@ from mailer import send_password_reset, send_verification
 bp = Blueprint("auth", __name__, url_prefix="/api/auth")
 
 MIN_PASSWORD = 8
-ACCOUNT_TYPES = ("jobgeber", "jobnehmer")
+ACCOUNT_TYPES = ("jobgeber", "jobnehmer")   # chosen at registration
 
 
 def _norm_email(value):
@@ -21,16 +21,13 @@ def _norm_email(value):
 @bp.post("/register")
 def register():
     d = request.get_json(silent=True) or {}
-    required = ("first_name", "last_name", "email", "password")
+    required = ("first_name", "last_name", "email", "password", "account_type")
     if not all(d.get(k) for k in required):
         return jsonify({"error": f"Required: {', '.join(required)}"}), 400
     if len(d["password"]) < MIN_PASSWORD:
         return jsonify({"error": f"Password must be at least "
                                  f"{MIN_PASSWORD} characters"}), 400
-
-    # optional: what the user chose at sign-up (a user can still do both)
-    account_type = d.get("account_type") or None
-    if account_type is not None and account_type not in ACCOUNT_TYPES:
+    if d["account_type"] not in ACCOUNT_TYPES:
         return jsonify({"error": "account_type must be 'jobgeber' or "
                                  "'jobnehmer'"}), 400
 
@@ -38,12 +35,18 @@ def register():
     if fetch_one("SELECT user_id FROM users WHERE email=%s", (email,)):
         return jsonify({"error": "Email already registered"}), 409
 
+    # neighborhood_id is optional; a wrong id is rejected by the foreign key
     user_id = execute(
         "INSERT INTO users (first_name, last_name, email, password_hash, "
-        "phone, location, account_type) VALUES (%s,%s,%s,%s,%s,%s,%s)",
+        "phone, neighborhood_id, account_type) VALUES (%s,%s,%s,%s,%s,%s,%s)",
         (d["first_name"], d["last_name"], email,
          generate_password_hash(d["password"]),
-         d.get("phone"), d.get("location"), account_type))
+         d.get("phone"), d.get("neighborhood_id"), d["account_type"]))
+
+    # a jobnehmer IS a worker: give him an empty profile right away,
+    # trades and neighborhoods are filled in on the profile page
+    if d["account_type"] == "jobnehmer":
+        execute("INSERT INTO worker_profiles (user_id) VALUES (%s)", (user_id,))
 
     token = issue_link_token(user_id, "verify_email",
                              current_app.config["VERIFY_TOKEN_HOURS"])
@@ -52,7 +55,8 @@ def register():
     return jsonify({"user_id": user_id,
                     "token": create_token(user_id, 0),
                     "is_verified": False,
-                    "account_type": account_type}), 201
+                    "account_type": d["account_type"],
+                    "is_worker": d["account_type"] == "jobnehmer"}), 201
 
 
 @bp.post("/login")
@@ -60,7 +64,7 @@ def login():
     d = request.get_json(silent=True) or {}
     user = fetch_one(
         "SELECT user_id, password_hash, is_active, is_verified, "
-        "       token_version FROM users WHERE email=%s",
+        "       account_type, token_version FROM users WHERE email=%s",
         (_norm_email(d.get("email")),))
     if user is None or not check_password_hash(user["password_hash"],
                                                d.get("password", "")):
@@ -70,6 +74,7 @@ def login():
     # Unverified users may log in - they are only blocked from posting.
     return jsonify({"user_id": user["user_id"],
                     "is_verified": bool(user["is_verified"]),
+                    "account_type": user["account_type"],
                     "token": create_token(user["user_id"],
                                           user["token_version"])})
 
@@ -77,11 +82,8 @@ def login():
 @bp.get("/me")
 @login_required
 def me():
-    is_worker = fetch_one(
-        "SELECT user_id FROM worker_profiles WHERE user_id=%s",
-        (g.user["user_id"],)) is not None
-    user = {k: v for k, v in g.user.items() if k != "token_version"}
-    return jsonify({**user, "is_worker": is_worker})
+    # g.user already has everything (incl. neighborhood + is_worker)
+    return jsonify({k: v for k, v in g.user.items() if k != "token_version"})
 
 
 # ------------------------------------------------- email verification
