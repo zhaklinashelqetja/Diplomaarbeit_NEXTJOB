@@ -1,0 +1,383 @@
+# -*- coding: utf-8 -*-
+"""Albanian content for the NextJob seed (Shkodër).
+
+Prices are in Lek and calibrated to 2026 levels:
+  * average gross wage Q1 2026: ~90,100 ALL/month (INSTAT)
+  * a tradesman's day in the region: ~40 EUR (~3,700 ALL), the Ulcinj rate
+    that pulls Shkodër workers to Montenegro
+  * public-tender rate for interior paint incl. material: ~431 ALL/m2
+  * 1 EUR ~ 92 ALL (Oct 2026)
+"""
+
+# category_id -> list of job templates
+# (title, description, price_lo, price_hi, urgency_weights, season)
+# season: None = all year, 'summer' = May-Sep, 'winter' = Nov-Mar
+U_NORMAL = {"low": 2, "normal": 6, "high": 2, "emergency": 0}
+U_HIGH = {"low": 0, "normal": 2, "high": 6, "emergency": 2}
+U_EMERG = {"low": 0, "normal": 0, "high": 3, "emergency": 7}
+U_LOW = {"low": 6, "normal": 4, "high": 0, "emergency": 0}
+
+JOBS = {
+    1: [  # Plumber
+        ("Rrjedh uji poshtë lavamanit të kuzhinës",
+         "Prej dy ditësh pikon uji nga tubi poshtë lavamanit dhe dollapi u lag krejt. Mendoj se duhet ndërruar sifoni.",
+         2000, 4500, U_HIGH, None),
+        ("Ndërrim rubineti në banjo",
+         "Rubineti i lavamanit në banjo pikon gjithë kohën. Rubinetin e ri e kam blerë vetë, duhet vetëm montimi.",
+         1500, 3000, U_NORMAL, None),
+        ("Montim bojleri të ri 80 litra",
+         "Kam blerë bojler të ri 80 litra. Duhet hequr i vjetri dhe montuar i riu në banjo, lidhjet janë aty.",
+         3000, 5500, U_NORMAL, None),
+        ("WC-ja rrjedh vazhdimisht",
+         "Rezervuari i WC-së nuk ndalon së mbushuri dhe uji rrjedh gjithë natën. Ndoshta mekanizmi brenda.",
+         1500, 3500, U_NORMAL, None),
+        ("Bllokim i kanalit në banjo",
+         "Uji nuk ikën nga dushi dhe lavamani dhe vjen erë e keqe. Duhet zhbllokuar tubacioni.",
+         2500, 5000, U_HIGH, None),
+        ("Pikon uji nga tavani i banjës",
+         "Na pikon uji nga tavani i banjës. Fqinji sipër thotë që nuk e ka nga ai, duhet gjetur ku rrjedh tubi.",
+         4000, 9000, U_EMERG, None),
+        ("Instalim hidraulik për banjo të re",
+         "Po rikonstruktojmë banjon nga e para. Duhet bërë i gjithë instalimi i ujit të ftohtë e të ngrohtë dhe shkarkimet.",
+         35000, 80000, U_LOW, None),
+        ("Presion shumë i ulët i ujit",
+         "Në kuzhinë e në banjo uji vjen shumë dobët, sidomos uji i ngrohtë. Fqinjët nuk e kanë këtë problem.",
+         2000, 4000, U_NORMAL, None),
+        ("Plasi tubi i ujit në oborr",
+         "Me të ftohtin e natës plasi tubi i ujit në oborr dhe rrjedh pa ndalim. E kam mbyllur ujin te sahati.",
+         4000, 8000, U_EMERG, "winter"),
+    ],
+    2: [  # Electrician
+        ("Priza bën shkëndija",
+         "Priza në dhomën e ndenjes bën shkëndija kur fus spinën e stufës. Kam frikë ta përdor.",
+         1500, 3000, U_HIGH, None),
+        ("Bie siguresa sa ndez stufën",
+         "Sa herë që ndez stufën elektrike bashkë me bojlerin bie siguresa. Duhet parë instalimi.",
+         2500, 5000, U_HIGH, "winter"),
+        ("Ndërrim kuadri elektrik",
+         "Kuadri elektrik është i vjetër, me siguresa me tel. Dua kuadër të ri me automatë dhe salvavitë.",
+         9000, 20000, U_NORMAL, None),
+        ("Montim llambash në tavan",
+         "Duhen montuar pesë llamba tavani në apartament. Kabllot janë, llambat i kam blerë.",
+         2000, 5000, U_LOW, None),
+        ("Instalim elektrik për apartament të rikonstruktuar",
+         "Apartament 2+1 në rikonstruksion të plotë. Duhet instalim i ri elektrik, priza, çelësa dhe kuadri.",
+         60000, 140000, U_LOW, None),
+        ("Nuk ka rrymë në gjysmën e shtëpisë",
+         "Prej mëngjesit nuk kemi rrymë në kuzhinë dhe në dy dhoma, ndërsa pjesa tjetër punon.",
+         2500, 6000, U_EMERG, None),
+        ("Montim interfoni në derë",
+         "Dua të montoj interfon me kamerë te dera e hyrjes së shtëpisë. Pajisjen e kam.",
+         2500, 6000, U_LOW, None),
+        ("Lidhje e furrës elektrike",
+         "Bleva furrë elektrike të re, duhet lidhur me kabllo të veçantë sepse priza e vjetër nxehet.",
+         1500, 3500, U_NORMAL, None),
+    ],
+    3: [  # Painter
+        ("Lyerje dhome gjumi",
+         "Dhomë gjumi rreth 14 m2, muret dhe tavani. Muret janë në gjendje të mirë, vetëm lyerje e bardhë.",
+         9000, 16000, U_LOW, None),
+        ("Lyerje apartamenti 2+1",
+         "Apartament 2+1 rreth 75 m2. Duhen lyer të gjitha muret dhe tavanet, disa vende duhen stukuar.",
+         55000, 100000, U_LOW, None),
+        ("Myk në mur nga lagështia",
+         "Pas dimrit doli myk i zi në murin e dhomës nga ana e veriut. Duhet pastruar, trajtuar dhe lyer me bojë kundër mykut.",
+         8000, 18000, U_NORMAL, "winter"),
+        ("Lyerje ballkoni dhe hekurave",
+         "Ballkoni ka bojën të rënë dhe hekurat kanë ndryshk. Duhet pastruar ndryshku dhe lyer.",
+         6000, 12000, U_LOW, "summer"),
+        ("Lyerje tavani në kuzhinë",
+         "Tavani i kuzhinës është nxirë nga avulli e tymi. Duhet lyer me bojë që lahet.",
+         5000, 9000, U_LOW, None),
+    ],
+    4: [  # Carpenter
+        ("Dera e dhomës nuk mbyllet",
+         "Dera prej druri e dhomës u fry nga lagështia dhe nuk mbyllet më. Duhet zdrukthuar dhe rregulluar menteshat.",
+         2000, 4000, U_NORMAL, None),
+        ("Riparim dollapësh kuzhine",
+         "Dy kapakë të dollapëve të kuzhinës kanë rënë dhe një sirtar nuk del. Duhen menteshë e guida të reja.",
+         4000, 12000, U_NORMAL, None),
+        ("Shtrim parketi laminat",
+         "Dua të shtroj parket laminat në një dhomë rreth 20 m2. Parketin e kam blerë.",
+         12000, 20000, U_LOW, None),
+        ("Dritarja prej druri fut ajër",
+         "Dritarja e vjetër prej druri në dhomën e ndenjes nuk mbyllet mirë dhe fut ajër e ujë kur bie shi.",
+         3000, 7000, U_NORMAL, "winter"),
+        ("Garderobë me masë",
+         "Dua një garderobë me masë 2.4 m të gjatë deri në tavan, me dyer rrëshqitëse.",
+         60000, 120000, U_LOW, None),
+    ],
+    5: [  # Mason
+        ("Lagështi në murin e katit përdhe",
+         "Pas përmbytjes së dimrit muri i katit përdhe thith ujë, suvaja po bie. Duhet hequr suvaja dhe izoluar.",
+         15000, 45000, U_NORMAL, "winter"),
+        ("Suvatim muri pas riparimit",
+         "Pas ndërrimit të tubave mbeti një pjesë muri pa suva rreth 6 m2. Duhet suvatuar dhe rregulluar.",
+         8000, 20000, U_NORMAL, None),
+        ("Riparim shkallësh në oborr",
+         "Shkallët prej betoni në hyrje të shtëpisë janë plasaritur dhe dy shkallë janë thyer.",
+         10000, 25000, U_LOW, None),
+        ("Mur ndarës me tulla",
+         "Dua të ndaj dhomën e madhe në dy me mur tullash rreth 4 m të gjatë.",
+         20000, 45000, U_LOW, None),
+    ],
+    6: [  # Roofer
+        ("Pikon çatia kur bie shi",
+         "Sa herë që bie shi i fortë pikon uji nga tavani i katit të fundit. Çatia është me tjegulla.",
+         10000, 35000, U_HIGH, "winter"),
+        ("Ndërrim tjegullash të thyera",
+         "Era e fortë theu disa tjegulla në çati. Duhen ndërruar para se të fillojnë shirat.",
+         6000, 15000, U_HIGH, None),
+        ("Pastrim dhe riparim ulluqesh",
+         "Ulluqet janë bllokuar me gjethe dhe një pjesë ka rënë. Uji derdhet mbi mur.",
+         4000, 9000, U_NORMAL, None),
+        ("Hidroizolim tarrace",
+         "Tarraca e pallatit ka nevojë për hidroizolim të ri, banesat e katit të fundit lagen.",
+         30000, 70000, U_NORMAL, "summer"),
+    ],
+    7: [  # HVAC Technician
+        ("Montim kondicioneri 12000 BTU",
+         "Kam blerë kondicioner 12000 BTU. Duhet montuar në dhomën e ndenjes, njësia e jashtme në ballkon.",
+         6000, 9000, U_NORMAL, "summer"),
+        ("Kondicioneri nuk ftoh",
+         "Kondicioneri punon por nxjerr ajër të ngrohtë. Ndoshta i ka mbaruar gazi.",
+         4000, 7500, U_HIGH, "summer"),
+        ("Pastrim dhe servis kondicioneri",
+         "Dua pastrim të plotë dhe dezinfektim për dy kondicionerë para verës.",
+         2500, 4500, U_LOW, "summer"),
+        ("Kondicioneri pikon ujë brenda",
+         "Nga njësia e brendshme e kondicionerit pikon ujë mbi mur dhe dysheme.",
+         2500, 4500, U_NORMAL, "summer"),
+        ("Çmontim dhe montim kondicioneri",
+         "Po ndërrojmë shtëpi brenda Shkodrës. Duhet çmontuar kondicioneri dhe montuar në banesën e re.",
+         7000, 11000, U_NORMAL, None),
+        ("Kondicioneri nuk ngroh në dimër",
+         "Kondicioneri në modalitetin e ngrohjes nxjerr ajër të ftohtë dhe njësia e jashtme ngrin.",
+         3500, 7000, U_HIGH, "winter"),
+    ],
+    8: [  # Gardener
+        ("Krasitje pemësh në oborr",
+         "Kemi katër pemë frutore dhe një hardhi në oborr që duhen krasitur dhe pastruar degët.",
+         4000, 9000, U_LOW, "winter"),
+    ],
+    9: [  # Cleaner
+        ("Pastrim i thellë apartamenti",
+         "Apartament 2+1 rreth 80 m2. Pastrim i thellë: kuzhina, banjo, dritaret dhe dyshemetë.",
+         6000, 12000, U_LOW, None),
+        ("Pastrim pas rikonstruksionit",
+         "Mbaruam rikonstruksionin e apartamentit. Ka shumë pluhur, bojë në dysheme dhe xhama për t'u pastruar.",
+         12000, 25000, U_NORMAL, None),
+        ("Pastrim apartamenti me qira në Velipojë",
+         "Kam apartament me qira për pushues në Velipojë. Duhet pastrim pas çdo largimi të mysafirëve gjatë verës.",
+         4000, 7000, U_NORMAL, "summer"),
+        ("Pastrim pas përmbytjes",
+         "Na hyri uji në katin përdhe. Duhet pastruar balta, dezinfektuar dyshemeja dhe muret e poshtme.",
+         10000, 20000, U_EMERG, "winter"),
+        ("Pastrim xhamash dhe perdesh",
+         "Duhet larë xhamat e të gjitha dritareve dhe hequr e larë perdet në një shtëpi dykatëshe.",
+         4000, 8000, U_LOW, None),
+    ],
+    10: [  # Locksmith
+        ("Mbeta jashtë derës",
+         "Më mbeti çelësi brenda dhe dera u mbyll. Kam nevojë ta hap sa më shpejt pa e dëmtuar.",
+         3000, 6000, U_EMERG, None),
+        ("Ndërrim cilindri të bravës",
+         "Humba çelësat e shtëpisë dhe dua të ndërroj cilindrin e bravës së derës së hyrjes.",
+         3000, 6000, U_HIGH, None),
+        ("Bravë sigurie në derë të blinduar",
+         "Dua të montoj bravë sigurie më të mirë në derën e blinduar të apartamentit.",
+         5000, 9000, U_LOW, None),
+    ],
+    11: [  # Tiler
+        ("Ndërrim pllakash në banjo",
+         "Dua të heq pllakat e vjetra në banjo dhe të vendos të reja në mure e dysheme, rreth 22 m2 gjithsej.",
+         30000, 55000, U_LOW, None),
+        ("Pllaka të thyera në kuzhinë",
+         "Në dyshemenë e kuzhinës janë thyer katër pllaka. Kam pllaka rezervë nga i njëjti model.",
+         4000, 9000, U_NORMAL, None),
+        ("Shtrim pllakash në ballkon",
+         "Ballkon rreth 8 m2, pllakat e vjetra janë ngritur. Duhen hequr dhe shtruar pllaka të reja.",
+         10000, 20000, U_LOW, "summer"),
+        ("Fugim i ri në dush",
+         "Fugat në dush janë nxirë dhe kanë myk. Duhen hequr dhe bërë fuga të reja me silikon.",
+         3000, 6000, U_LOW, None),
+    ],
+    12: [  # Welder
+        ("Riparim porte metalike",
+         "Porta metalike e oborrit është ulur dhe nuk mbyllet. Duhet saldim te menteshat.",
+         4000, 10000, U_NORMAL, None),
+        ("Kangjella hekuri për ballkon",
+         "Dua kangjella të reja hekuri për ballkonin, rreth 5 m të gjata, të lyera.",
+         25000, 60000, U_LOW, None),
+        ("Hekura dritaresh për katin përdhe",
+         "Dua hekura mbrojtës për tre dritare të katit përdhe.",
+         20000, 45000, U_LOW, None),
+        ("Saldim strehe metalike",
+         "Streha metalike mbi derën e oborrit u shkëput nga era. Duhet saldim dhe përforcim.",
+         3000, 8000, U_HIGH, None),
+    ],
+    13: [  # Appliance Repair
+        ("Lavatriçja nuk shtrydh",
+         "Lavatriçja mbush dhe shkarkon ujin, por kazani nuk rrotullohet në shtrydhje.",
+         3000, 7000, U_HIGH, None),
+        ("Frigoriferi nuk ftoh",
+         "Frigoriferi punon, drita ndizet, por nuk ftoh më. Ngrirësi gjithashtu.",
+         4000, 9000, U_EMERG, "summer"),
+        ("Furra elektrike nuk ndizet",
+         "Furra elektrike nuk ngroh më, sipër pjatat punojnë normalisht.",
+         2500, 6000, U_NORMAL, None),
+        ("Pjatalarësja nxjerr ujë",
+         "Pjatalarësja nxjerr ujë poshtë derës gjatë larjes.",
+         3000, 6500, U_NORMAL, None),
+    ],
+    14: [  # Moving & Transport
+        ("Transport mobiliesh brenda Shkodrës",
+         "Kam nevojë të transportoj një divan, një frigorifer dhe dy dollapë brenda qytetit, kati i tretë pa ashensor.",
+         8000, 20000, U_NORMAL, None),
+        ("Lëvizje apartamenti",
+         "Po ndërrojmë apartament brenda Shkodrës. Duhet ngarkim, transport dhe shkarkim i gjithë shtëpisë 2+1.",
+         15000, 28000, U_LOW, None),
+    ],
+    15: [  # General Handyman
+        ("Montim televizori në mur",
+         "Dua të montoj televizor 55 inç në mur. Mbajtësen e kam, muri është me tulla.",
+         1500, 3000, U_LOW, None),
+        ("Montim mobiliesh",
+         "Bleva garderobë dhe komodinë që vijnë të çmontuara. Duhen montuar në dhomën e gjumit.",
+         3000, 7000, U_NORMAL, None),
+        ("Varje perdesh dhe raftesh",
+         "Duhen vendosur korniza perdesh në tri dritare dhe dy rafte në mur.",
+         1500, 3500, U_LOW, None),
+        ("Riparime të vogla në shtëpi",
+         "Disa punë të vogla: dorezë dere e lirë, një raft që ka rënë dhe silikon në banjo.",
+         3000, 6000, U_LOW, None),
+    ],
+}
+
+# per-category demand weight (out of 150 problems) — HVAC/plumber/electric top
+DEMAND = {1: 26, 2: 22, 3: 12, 4: 8, 5: 6, 6: 6, 7: 18, 8: 1, 9: 12,
+          10: 6, 11: 8, 12: 5, 13: 12, 14: 3, 15: 5}
+
+EXTRAS = [
+    "Jam në katin e {floor}, pallati nuk ka ashensor.",
+    "Jam në katin e {floor}, ka ashensor.",
+    "Mund të vini pas orës 17:00, para jam në punë.",
+    "Preferoj në mëngjes, para orës 12.",
+    "Pagesa cash në fund të punës.",
+    "Ju lutem më shkruani çmimin para se të vini.",
+    "Kemi fëmijë të vegjël në shtëpi, prandaj sa më shpejt.",
+    "Shtëpia është private me oborr.",
+    "Mund të dërgoj edhe më shumë foto në mesazh.",
+    "Materialet mund t'i blej vetë nëse më thoni çfarë duhet.",
+    "Jam në mërgim, punën e ndjek motra ime që jeton aty.",
+    "",
+    "",
+]
+
+STREETS = ["Rruga Kolë Idromeno", "Rruga 13 Dhjetori", "Rruga Studenti", "Rruga Marin Barleti",
+           "Rruga Gjuhadol", "Rruga Ndre Mjeda", "Rruga Hasan Riza Pasha", "Rruga Bujar Bishanaku",
+           "Bulevardi Skënderbeu", "Rruga Qemal Draçini", "Rruga Ded Gjo Luli", "Rruga Fushë Çela",
+           "Rruga At Gjergj Fishta", "Rruga Mbretëresha Teutë", "Rruga Vaso Pasha", "Rruga Kiras"]
+
+# ---------------------------------------------------------------- names
+MALE = ["Arben", "Gjergj", "Pjetër", "Mark", "Kolë", "Zef", "Ndue", "Lekë", "Tonin", "Gjon",
+        "Prekë", "Ilir", "Besnik", "Fatmir", "Ermal", "Gentian", "Altin", "Erion", "Erjon",
+        "Klodian", "Dritan", "Edmond", "Arjan", "Sokol", "Agron", "Bujar", "Valon", "Kristian",
+        "Mikel", "Aleksandër", "Donald", "Arlind", "Endrit", "Fabjan", "Gëzim", "Kujtim",
+        "Luan", "Marjan", "Nikoll", "Orges", "Paulin", "Rexhep", "Shpëtim", "Tomor", "Viktor",
+        "Xhuljan", "Ylli", "Zamir", "Anton", "Bledar"]
+FEMALE = ["Elira", "Anisa", "Klea", "Ardita", "Brikena", "Mimoza", "Teuta", "Rudina", "Jonida",
+          "Enkeleda", "Silvana", "Lindita", "Bora", "Era", "Sara", "Ajola", "Xhoana", "Marjana",
+          "Valbona", "Drane", "Mrika", "Liza", "Rozafa", "Mirela", "Diana", "Alketa", "Besjana",
+          "Fjorela", "Ilda", "Kristina", "Majlinda", "Nertila", "Orjeta", "Pranvera", "Suela",
+          "Tereza", "Vjollca", "Arta", "Erisa", "Greta"]
+SURNAMES = ["Gjoni", "Marku", "Prendi", "Kola", "Ndoja", "Lazri", "Dedaj", "Gjeka", "Hoti",
+            "Kastrati", "Shkreli", "Beqiri", "Bajraktari", "Kuçi", "Selimi", "Hasani", "Daija",
+            "Ndreca", "Bardhi", "Doda", "Leka", "Zefi", "Pjetri", "Vuksani", "Ivezaj", "Mulaj",
+            "Pali", "Toçi", "Sokoli", "Jubani", "Kaçinari", "Begolli", "Kodra", "Lici", "Luli",
+            "Mehmeti", "Dervishi", "Dushaj", "Nikolli", "Frroku", "Tusha", "Kurti", "Mazreku",
+            "Çoba", "Shllaku", "Pepa", "Kraja", "Dibra", "Gjyriqi", "Hysa", "Ymeri", "Bushati",
+            "Vata", "Rrota", "Gjinaj", "Lulashi", "Kasneci", "Spahiu", "Mustafa", "Osmani"]
+
+# ---------------------------------------------------------------- worker blurbs
+HEADLINES = {
+    1: ["Hidraulik me përvojë – riparime dhe instalime", "Hidraulik 24/7 për urgjenca",
+        "Instalime hidraulike dhe bojlerë"],
+    2: ["Elektricist i licencuar – instalime dhe defekte", "Elektricist për shtëpi dhe dyqane",
+        "Kuadro elektrike, priza, ndriçim"],
+    3: ["Bojaxhi – lyerje të brendshme dhe të jashtme", "Lyerje, stukime dhe trajtim myku"],
+    4: ["Marangoz – dyer, dritare, mobilie me masë", "Riparime druri dhe montime parketi"],
+    5: ["Murator – suva, izolime, riparime", "Punime ndërtimi të vogla dhe izolim lagështie"],
+    6: ["Riparime çatish dhe ulluqesh", "Hidroizolime tarracash dhe çatish"],
+    7: ["Teknik kondicionerësh – montim dhe servis", "Kondicionerë, gaz freon, pastrime"],
+    8: ["Kopshtar – krasitje dhe mirëmbajtje oborresh"],
+    9: ["Pastrim shtëpish dhe zyrash", "Pastrim pas rikonstruksionit dhe apartamente me qira"],
+    10: ["Çelësbërës – hapje dyersh dhe brava sigurie"],
+    11: ["Pllakashtrues – banjo, kuzhina, ballkone"],
+    12: ["Saldator – porta, kangjella, hekura"],
+    13: ["Riparim elektroshtëpiakesh – lavatriçe, frigoriferë"],
+    14: ["Transport mobiliesh brenda Shkodrës"],
+    15: ["Punë të vogla në shtëpi – montime dhe riparime"],
+}
+BIOS = [
+    "Punoj në Shkodër prej {y} vitesh. Vij në kohë dhe e lë vendin pastër pas punës.",
+    "{y} vite përvojë, kam punuar edhe në Itali. Jap garanci për punën që bëj.",
+    "Punoj vetë dhe me një ndihmës. Çmimin e them para se të filloj, pa surpriza.",
+    "Përgjigjem shpejt në mesazh. Për urgjenca mund të vij edhe në fundjavë.",
+    "Kam {y} vite në zanat. Materialet mund t'i siguroj vetë me çmim dyqani.",
+    "Punoj kryesisht në mëngjes. Pasditeve jam i lirë vetëm për urgjenca.",
+]
+
+# ---------------------------------------------------------------- reviews
+# aspect -> (positive phrases, negative phrases), {a}=i/e  {b}=sjellshëm/sjellshme ...
+ASPECTS = {
+    "punctual": (["Erdhi në orën që u morëm vesh.", "Ishte {a} përpiktë, erdhi edhe pak para orarit.",
+                  "Erdhi në kohë, siç kishte thënë.", "Saktë në orar, nuk na la të prisnim."],
+                 ["Vonoi gati dy orë dhe nuk lajmëroi.", "Na la të prisnim gjithë mëngjesin.",
+                  "Tha vij nesër dhe erdhi pas tri ditësh.", "Vonesë e madhe, mezi erdhi."]),
+    "price": (["Çmimi ishte i drejtë.", "Mori aq sa tha në ofertë, asnjë lek më shumë.",
+               "Çmim i arsyeshëm për punën që bëri.", "Më lirë se sa prisja."],
+              ["Shumë shtrenjtë për një punë kaq të vogël.", "Në fund kërkoi më shumë se oferta.",
+               "Çmimi ishte i kripur.", "Na kërkoi para shtesë për materiale që nuk i pamë."]),
+    "quality": (["Puna u bë shumë pastër dhe me kujdes.", "Gjithçka funksionon perfekt.",
+                 "Punë profesionale.", "Punë e mirë fort, si duhet.", "E zgjidhi problemin që herën e parë."],
+                ["Pas dy ditësh problemi u përsërit.", "Punë e nxituar dhe la pluhur kudo.",
+                 "Puna nuk u bë mirë, duhet thirrur dikush tjetër.", "Prapë e kemi të njëjtin problem."]),
+    "response": (["U përgjigj brenda një ore.", "Erdhi po atë ditë që shkrova.",
+                  "Ktheu përgjigje menjëherë në mesazh."],
+                 ["Iu deshën dy ditë të përgjigjej në mesazh.", "Mezi e kapa në telefon.",
+                  "Nuk kthente përgjigje fare për disa ditë."]),
+    "manner": (["Shumë {a} {nice} dhe {a} qetë.", "Na shpjegoi qartë çfarë ishte problemi.",
+                "Njeri {a} mirë dhe {a} {nice}."],
+               ["Foli ashpër kur i bëra pyetje.", "Nuk kishte durim dhe sillej keq.",
+                "{A} pasjellshëm me prindërit e mi."]),
+}
+# map to the review_analysis categories (positive, negative)
+ASPECT_LABELS = {"punctual": ("punctual", "late"), "price": ("price_fair", "overpriced"),
+                 "quality": ("high_quality", "poor_quality"),
+                 "response": ("fast_response", "slow_response"), "manner": ("friendly", "rude")}
+
+OPEN_POS = ["Shumë {kenaq}.", "Përvojë e mirë.", "Shumë mirë!", "", "", ""]
+OPEN_MID = ["Mesatare.", "Hiç keq, por jo perfekt.", "", ""]
+OPEN_NEG = ["Nuk jam {kenaq}.", "Përvojë e keqe.", "Zhgënjim.", ""]
+CLOSE_POS = ["E rekomandoj!", "Do e thërras prapë.", "Faleminderit!", "Ju faleminderit për punën.", "", ""]
+CLOSE_MID = ["Do e mendoj herën tjetër.", "", ""]
+CLOSE_NEG = ["Nuk e thërras më.", "Nuk e rekomandoj.", ""]
+
+# ---------------------------------------------------------------- offers / chat
+OFFER_MSGS = [
+    "Mund të vij sot pas orës 17.", "Nesër në mëngjes jam i lirë, puna zgjat rreth një orë.",
+    "Duhet ta shoh nga afër, por çmimi përafërsisht ky.", "Çmimi përfshin edhe materialet e vogla.",
+    "Mund të filloj këtë javë.", "Kam bërë shumë punë të tilla, zgjidhet shpejt.",
+    "Materialet i blini ju, unë marr vetëm punën.", "Vij brenda një ore nëse është urgjente.",
+    "Të shtunën jam i lirë gjithë ditën.", "Jap garanci 6 muaj për punën.",
+]
+CHAT = [
+    ("Përshëndetje, a mund të vini nesër në orën 10?", "Po, vij rreth orës 10. Më dërgoni adresën e saktë ju lutem."),
+    ("Adresa është {street}, pranë dyqanit. Kati i {floor}.", "Në rregull, shihemi nesër."),
+    ("A duhet të blej unë ndonjë material?", "Jo, i sjell vetë. Paguani në fund bashkë me punën."),
+    ("Mirëmëngjes, jeni rrugës?", "Po, jam pas 15 minutash. Pak trafik te Rusi."),
+    ("Faleminderit për punën, gjithçka funksionon.", "Ju lutem. Nëse ka ndonjë problem më shkruani."),
+    ("A mund ta shtyjmë për të enjten?", "Po, të enjten në orën 9 është mirë për mua."),
+    ("Sa kohë mendoni që zgjat puna?", "Rreth dy orë, nëse nuk ka probleme të tjera brenda."),
+]
