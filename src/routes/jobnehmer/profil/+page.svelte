@@ -87,7 +87,7 @@
                 </p>
 
                 <a
-                    href="/jobnehmer"
+                    href="/jobnehmer/hauptseite"
                     class="mt-5 inline-flex rounded-xl bg-[#62AA97] px-5 py-3 text-sm font-bold text-white transition hover:bg-[#529b88]"
                 >
                     {$t('profile_back_to_jobs')}

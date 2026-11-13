@@ -77,7 +77,7 @@
                 </div>
 
                 <a
-                    href="/jobnehmerHauptseite"
+                    href="/jobnehmer/hauptseite"
                     class="inline-flex items-center justify-center rounded-xl bg-[#62AA97] px-5 py-3 text-sm font-bold text-white transition hover:bg-[#529b88]"
                 >
                     + {$t('saved_discover_jobs')}
@@ -282,7 +282,7 @@
                 </p>
 
                 <a
-                    href="/jobnehmerHauptseite"
+                    href="/jobnehmer/hauptseite"
                     class="mt-5 inline-block rounded-xl bg-[#62AA97] px-5 py-3 text-sm font-bold text-white transition hover:bg-[#529b88]"
                 >
                     {$t('saved_discover_jobs')}
