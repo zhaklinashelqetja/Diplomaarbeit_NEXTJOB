@@ -1,4 +1,5 @@
 <script>
+ import RegistrationGrowthChart from '$lib/components/RegistrationGrowthChart.svelte';
     let { data } = $props();
 
     const stats = [
@@ -232,78 +233,9 @@
         </section>
 
 
-        <!-- Registration growth -->
-        <section class="mt-6 rounded-2xl border border-[#2A2E38]/10 bg-white p-6 shadow-sm">
-
-            <div class="mb-5">
-                <h2 class="text-lg font-bold text-[#2A2E38]">
-                    Nutzerentwicklung
-                </h2>
-
-                <p class="mt-1 text-sm text-[#2A2E38]/60">
-                    Registrierte Nutzer und neue Jobnehmerprofile
-                </p>
-            </div>
-
-            {#if data.registrationGrowth.length > 0}
-
-                <div class="overflow-x-auto">
-
-                    <table class="w-full min-w-[500px] text-left text-sm">
-
-                        <thead>
-                            <tr class="border-b border-[#2A2E38]/10">
-                                <th class="px-4 py-3 font-semibold">
-                                    Monat
-                                </th>
-
-                                <th class="px-4 py-3 font-semibold">
-                                    Neue Nutzer
-                                </th>
-
-                                <th class="px-4 py-3 font-semibold">
-                                    Neue Jobnehmer
-                                </th>
-                            </tr>
-                        </thead>
-         <tbody>
-
-                            {#each data.registrationGrowth as month}
-                                <tr class="border-b border-[#2A2E38]/5 last:border-0">
-
-                                    <td class="px-4 py-3 font-medium">
-                                        {month.month}
-                                    </td>
-
-                                    <td class="px-4 py-3">
-                                        {month.new_users}
-                                    </td>
-
-                                    <td class="px-4 py-3">
-                                        {month.new_workers}
-                                    </td>
-
-                                </tr>
-                            {/each}
-
-                        </tbody>
-
-                    </table>
-
-                </div>
-
-            {:else}
-
-                <div class="rounded-xl bg-[#F5F1EE] px-4 py-8 text-center">
-                    <p class="text-sm text-[#2A2E38]/50">
-                        Noch keine Registrierungsdaten vorhanden.
-                    </p>
-                </div>
-
-            {/if}
-
-        </section>
-        <registrationGrowthChart />
+        <!-- Registration growth chart -->
+        <section class="mt-10">
+        <RegistrationGrowthChart data={data.registrationGrowth} />
 
 
         <!-- Footer information -->
