@@ -57,8 +57,32 @@
 			// Rolle und Verifizierungsstatus sofort laden
 			await loadCurrentUser();
 
-			// Bestehende Weiterleitung beibehalten
-			await goto(resolve('/'));
+			// Benutzerdaten vom Backend abrufen
+			const userRes = await fetch(`${API_URL}/api/auth/me`, {
+				headers: {
+					Authorization: `Bearer ${data.token}`
+				}
+			});
+
+			if (!userRes.ok) {
+				error = 'login_failed';
+				return;
+			}
+
+			const userData = await userRes.json();
+			const user = userData.user ?? userData;
+			const accountType = user.account_type;
+
+			// Zur passenden Hauptseite weiterleiten
+			if (user.is_admin) {
+				await goto(resolve('/admin'));
+			} else if (accountType === 'jobnehmer') {
+				await goto(resolve('/jobnehmer/hauptseite'));
+			} else if (accountType === 'jobgeber') {
+				await goto(resolve('/jobgeber/hauptseite'));
+			} else {
+				error = 'login_failed';
+			}
 		} catch {
 			error = 'login_server_error';
 		} finally {

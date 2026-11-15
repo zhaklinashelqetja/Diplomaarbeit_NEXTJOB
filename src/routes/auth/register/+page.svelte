@@ -73,8 +73,12 @@
 			// Benutzerdaten und Verifizierungsstatus laden
 			await loadCurrentUser();
 
-			// Zur E-Mail-Verifizierungsseite weiterleiten
-			await goto(resolve('/auth/verifizierung'));
+			// Nach der Registrierung zur passenden Hauptseite weiterleiten
+			if (role === 'jobnehmer') {
+				await goto(resolve('/jobnehmer/hauptseite'));
+			} else if (role === 'jobgeber') {
+				await goto(resolve('/jobgeber/hauptseite'));
+			}
 		} catch {
 			error = 'common_server_error';
 		} finally {

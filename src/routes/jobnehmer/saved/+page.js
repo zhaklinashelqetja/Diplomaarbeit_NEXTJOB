@@ -1,7 +1,8 @@
+
 import { API_URL } from '$lib/api.js';
 
-export async function load({ fetch, cookies }) {
-    const token = cookies.get('token');
+export async function load({ fetch }) {
+    const token = localStorage.getItem('token');
 
     if (!token) {
         return {
