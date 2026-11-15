@@ -103,4 +103,63 @@
       </div>
     </div>
   </section>
+
+  <section id="how-it-works" class="how-section" aria-labelledby="how-title">
+    <div class="how-layout page-pad">
+      <div class="how-copy glass-dark">
+        <p class="eyebrow">02 / So funktioniert’s</p>
+        <h2 id="how-title">Eine gute Verbindung.<br />Ein großartiger Start.</h2>
+        <p class="how-intro">Dein nächstes Projekt in 3 einfachen Schritten.</p>
+        <div class="steps" role="group" aria-label="Wähle einen Schritt, um sein Foto zu sehen">
+          {#each steps as step, i}
+            <button type="button" class="step-row" class:is-active={activeStep === i} aria-pressed={activeStep === i} aria-controls="step-photo" onclick={() => activeStep = i} disabled={!ready}>
+              <span class="step-number">0{i + 1}</span><span><span class="step-title">{step.title}</span><span class="step-text">{step.text}</span></span><ArrowUpRight size={23} />
+            </button>
+          {/each}
+        </div>
+      </div>
+      <div class="how-media">
+        <div id="step-photo" class="step-images">
+          <img class="step-image" data-step={activeStep} src={'/images/' + steps[activeStep].image} alt={steps[activeStep].alt} width="800" height="1000" loading="lazy" />
+        </div>
+        <div class="how-caption"><span>KLEINE ANFÄNGE.<br />SOLIDE ERGEBNISSE.</span><Plus size={30} strokeWidth={1} /></div>
+      </div>
+    </div>
+  </section>
+
+  <Reviews />
+
+  <section class="for-pros page-pad section-space" aria-labelledby="pros-title">
+    <div class="pros-photo"><img src="/images/hospitality.jpg" alt="Ein Barista bereitet Pour-over-Kaffee zu" width="800" height="1200" loading="lazy" /><span class="image-tag">DEIN KÖNNEN. DEIN NÄCHSTER SCHRITT.</span></div>
+    <div class="pros-copy glass-sheet"><p class="eyebrow">03 / Für alle, die anpacken</p><h2 id="pros-title">Deine Fähigkeiten.<br />Deine nächste<br /><span class="outline-line">Chance.</span></h2><p>Du gestaltest, unterrichtest, organisierst, baust. NextJob entsteht, damit du deine Arbeit vorstellen und Menschen finden kannst, die sie brauchen.</p><a class="button" href="#get-started" onclick={() => chooseAudience('work')}>Finde deine nächste Chance <ArrowUpRight size={20} /></a></div>
+  </section>
+
+  <section id="get-started" class="get-started page-pad section-space" aria-labelledby="start-title">
+    <div class="start-copy"><p class="eyebrow">04 / Dein nächster Schritt</p><h2 id="start-title">Jeder gute Job<br />beginnt mit<br />einem Gespräch<span>.</span></h2><p>Wie wird deins aussehen?</p><ArrowUpRight class="start-arrow" size={105} strokeWidth={1} /></div>
+    <div class="start-form-wrap glass-sheet">
+      <div class="audience-switch" aria-label="Wähle, was du brauchst"><button class:chosen={audience === 'hire'} aria-pressed={audience === 'hire'} onclick={() => chooseAudience('hire')}>Ich suche eine Fachperson</button><button class:chosen={audience === 'work'} aria-pressed={audience === 'work'} onclick={() => chooseAudience('work')}>Ich suche Arbeit</button></div>
+      <h3>{audience === 'hire' ? 'Gib deinem Projekt einen Startpunkt.' : 'Sag deiner nächsten Kundschaft, was du machst.'}</h3>
+      <noscript><p class="form-note">Aktiviere JavaScript, um ein Briefing zu erstellen und herunterzuladen. Alle Leistungen und Informationen auf dieser Seite kannst du trotzdem ansehen.</p></noscript>
+      <form onsubmit={createBrief}>
+        <fieldset disabled={!ready}>
+        <div class="form-row"><div class="field"><label for="category">{audience === 'hire' ? 'Welche Art von Hilfe?' : 'Deine Leistung'}</label><select id="category" bind:value={category} required><option value="" disabled>Leistung auswählen</option>{#each categories as service}<option>{service.name}</option>{/each}<option>Büro- &amp; Verwaltungsunterstützung</option><option>Etwas anderes</option></select></div><div class="field"><label for="location">Wo?</label><input id="location" name="location" bind:value={location} required maxlength="100" placeholder="Stadt oder remote" /></div></div>
+        <div class="field"><label for="description">{audience === 'hire' ? 'Ein paar Worte zum Job' : 'Ein paar Worte zu deinen Fähigkeiten'}</label><textarea id="description" name="description" bind:value={description} required minlength="12" maxlength="2000" rows="3" placeholder={audience === 'hire' ? 'Zum Beispiel: Ich brauche eine einfache Webseite für mein Café…' : 'Zum Beispiel: Ich unterrichte Englisch und helfe Schülern bei der Prüfungsvorbereitung…'}></textarea></div>
+        <button class="button submit-button" type="submit">{audience === 'hire' ? 'Mein Projektbriefing erstellen' : 'Meine Vorstellung erstellen'}<ArrowUpRight size={20} /></button>
+        <p class="form-note">Probier die Vorschau aus: Erstelle ein Briefing zum Herunterladen. Nichts wird veröffentlicht oder gesendet, und deine Angaben bleiben auf dieser Seite.</p>
+        </fieldset>
+      </form>
+      <div aria-live="polite">
+        {#if brief}<div class="brief-result"><div><Check size={20} /><h4>{audience === 'hire' ? 'Dein Projektbriefing ist fertig.' : 'Deine Vorstellung ist fertig.'}</h4></div><p>Behalte es, bearbeite es und nutze es, um dein nächstes Gespräch zu beginnen.</p><a class="text-link" href={'data:text/plain;charset=utf-8,' + encodeURIComponent(brief)} download={audience === 'hire' ? 'nextjob-projektbriefing.txt' : 'nextjob-vorstellung.txt'}>Briefing herunterladen <Download size={17} /></a></div>{/if}
+      </div>
+    </div>
+  </section>
+
+  <section class="faq-section page-pad section-space" aria-labelledby="faq-title"><div><p class="eyebrow">Ein bisschen mehr Klarheit</p><h2 id="faq-title">Gute Fragen.</h2></div><div class="faq-list glass-sheet">
+    <details><summary>Für wen ist NextJob?<Plus size={21} /></summary><p>Für Menschen und Unternehmen, die Hilfe suchen, und für Fachleute, die ihr nächstes Projekt suchen. Das können Designer, Nachhilfelehrer, Fotografen, Eventhelfer oder Menschen sein, die zu Hause etwas reparieren können.</p></details>
+    <details><summary>Wo geht es los?<Plus size={21} /></summary><p>In Shkodër, Albanien. Wir starten mit den Fähigkeiten und alltäglichen Projekten ganz in der Nähe.</p></details>
+    <details><summary>Muss die Arbeit vor Ort stattfinden?<Plus size={21} /></summary><p>Das hängt vom Job ab. Eine Reparatur braucht jemanden vor Ort; Design, Texten und manche Nachhilfestunden können remote stattfinden. Besprecht direkt, wo und wie die Arbeit erledigt wird.</p></details>
+    <details><summary>Kann ich jetzt gleich jemanden buchen?<Plus size={21} /></summary><p>Dies ist eine Vorschau der NextJob-Homepage. Du kannst Leistungen entdecken und ein Projektbriefing oder eine berufliche Vorstellung herunterladen. Live-Profile, Jobausschreibungen und Buchungen sind noch nicht angebunden.</p></details>
+    <details><summary>Wer vereinbart Preis und Zeitplan?<Plus size={21} /></summary><p>Kunde und Fachperson sollten vor Arbeitsbeginn direkt vereinbaren, was der Job umfasst, was er kostet und wann er stattfindet.</p></details>
+  </div></section>
+  <p class="photo-credit page-pad">Illustrative Stock-Fotografie · <a href="/photo-credits.txt" target="_blank" rel="noreferrer">Bildnachweise</a></p>
 </div>
