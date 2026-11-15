@@ -1,4 +1,17 @@
 @import 'tailwindcss';
+@import './landing.css';
 
 @plugin '@tailwindcss/forms';
 @plugin '@tailwindcss/typography';
+
+/* Farben und Schriften der Startseite (siehe landing.css) */
+@theme {
+  --color-sage: #A8B79E;
+  --color-soft-blue: #8FB0C4;
+  --color-charcoal: #2A2E38;
+  --color-off-white: #F5F1EE;
+  --color-fresh: #62AA97;
+  --font-display: 'Neue Haas Grotesk Text Pro', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  --font-body: 'Acumin Pro', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  --font-quote: 'Neue Haas Grotesk Display', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+}
