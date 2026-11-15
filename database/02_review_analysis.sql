@@ -6,22 +6,21 @@ USE nextjob;
 
 -- one analysis result per review
 CREATE TABLE IF NOT EXISTS review_analysis (
-    analysis_id          INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-    review_id            INT UNSIGNED NOT NULL UNIQUE,
+    analysis_id          INT AUTO_INCREMENT PRIMARY KEY,
+    review_id            INT NOT NULL UNIQUE,
     sentiment            ENUM('positive','negative','mixed','neutral') NOT NULL,
     sentiment_confidence DECIMAL(5,4) NOT NULL DEFAULT 0,
     model_version        VARCHAR(10)  NOT NULL DEFAULT '1.0',
     analyzed_at          TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP
                                       ON UPDATE CURRENT_TIMESTAMP,
     CONSTRAINT fk_ra_review FOREIGN KEY (review_id)
-        REFERENCES reviews(review_id) ON DELETE CASCADE,
-    INDEX idx_ra_sentiment (sentiment)
-) ENGINE=InnoDB;
+        REFERENCES reviews(review_id) ON DELETE CASCADE
+);
 
 -- detected categories per analysis (0..n rows)
 CREATE TABLE IF NOT EXISTS review_analysis_categories (
-    id          INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-    analysis_id INT UNSIGNED NOT NULL,
+    id          INT AUTO_INCREMENT PRIMARY KEY,
+    analysis_id INT NOT NULL,
     category    ENUM('price_fair','punctual','high_quality','fast_response',
                      'friendly','overpriced','late','poor_quality',
                      'slow_response','rude') NOT NULL,
@@ -29,9 +28,8 @@ CREATE TABLE IF NOT EXISTS review_analysis_categories (
     score       DECIMAL(5,4) NOT NULL,
     CONSTRAINT fk_rac_analysis FOREIGN KEY (analysis_id)
         REFERENCES review_analysis(analysis_id) ON DELETE CASCADE,
-    UNIQUE KEY uq_analysis_category (analysis_id, category),
-    INDEX idx_rac_category (category)
-) ENGINE=InnoDB;
+    UNIQUE KEY uq_analysis_category (analysis_id, category)
+);
 
 -- ------------------------------------------------------------
 -- Aggregation views

@@ -3,13 +3,16 @@
 Flow (per pyetje, pa histori bisede):
   1. Pyetja + perdoruesi i kycur (g.user) vijne ne /api/chat.
   2. EXTRACT  (Groq, thirrja 1): AI nxjerr vetem JSON me qellimin
-     (intent), profesionin, qytetin, kriteret (i shpejte, i lire ...).
+     (intent), profesionin, lagjen, kriteret (i shpejte, i lire ...).
   3. FETCH    (Python, pa AI): sipas intent-it ekzekutohen query fikse
      dhe te sigurta ne MySQL. AI nuk prek kurre databazen.
   4. ANSWER   (Groq, thirrja 2): AI pergjigjet shqip VETEM nga te
      dhenat e marra. Nese s'ka te dhena -> e thote qarte.
 
-Endpoint:  POST /api/chat   {"message": "..."}   (login i detyrueshem)
+  5. LOG      pyetja + pergjigjja ruhen ne ai_conversations / ai_messages.
+
+Endpoint:  POST /api/chat   {"message": "...", "conversation_id": 7?}
+           (login i detyrueshem; pa conversation_id fillon bisede e re)
 Env:       GROQ_API_KEY, GROQ_MODEL  (/etc/nextjob/nextjob.env)
 """
 import json
@@ -20,7 +23,7 @@ import requests as http
 from flask import Blueprint, current_app, g, jsonify, request
 
 from auth import login_required
-from db import fetch_all, fetch_one
+from db import execute, fetch_all, fetch_one
 
 bp = Blueprint("chat", __name__, url_prefix="/api")
 
@@ -56,12 +59,15 @@ question. You only return one JSON object describing what the user wants.
 Trade categories that exist on the platform (use the exact name or null):
 {categories}
 
+NextJob works only in Shkodër. Neighborhoods (use the exact name or null):
+{neighborhoods}
+
 Return exactly this JSON shape:
-{{"intents": [], "category": null, "city": null, "criteria": [], \
+{{"intents": [], "category": null, "neighborhood": null, "criteria": [], \
 "worker_name": null, "keywords": []}}
 
 intents: 1 to 3 values, only from this list:
-- "find_workers": looking for tradespeople (e.g. "hidraulik në Shkodër", \
+- "find_workers": looking for tradespeople (e.g. "hidraulik në Rus", \
 "elektricist i shpejtë", "kush është bojaxhiu më i mirë")
 - "worker_details": asks about one specific worker by name
 - "my_problems": the user's own posted jobs/problems and their status
@@ -76,7 +82,9 @@ knowledge, coding, other websites ...)
 category: the trade asked for, mapped to one name from the list above \
 (e.g. "hidraulik" -> "Plumber", "bojaxhi" -> "Painter", "elektricist" -> \
 "Electrician"). null if none is asked or none fits.
-city: city name without diacritics ("Shkodër" -> "Shkoder"), or null.
+neighborhood: the neighborhood from the list above if one is named \
+(e.g. "te Parruca" -> "Parrucë", "në Rusi" -> "Rus"), else null. \
+"Shkodër"/"Shkodra" alone is NOT a neighborhood -> null.
 criteria: zero or more of
   "fast" (i shpejtë, urgjent, sa më shpejt),
   "cheap" (i lirë, çmim i ulët),
@@ -105,8 +113,8 @@ përgjigjes është në orë. Vlerësimi është nga 1 deri në 5. Një vlerë n
 do të thotë që ende s'ka të dhëna; thuaje kështu, mos e quaj zero.
 6. Kur rekomandon mjeshtra, shpjego pse (vlerësimi, çmimi, shpejtësia, \
 pikat e forta/dobëta) sipas të dhënave.
-7. Nëse te të dhënat ka "same_trade_other_cities", thuaj që në qytetin e \
-kërkuar nuk ka, por përmend ata në qytete të tjera.
+7. Nëse te të dhënat ka "same_trade_other_areas", thuaj që në lagjen e \
+kërkuar nuk punon askush, por përmend ata që punojnë në lagje të tjera.
 8. Mos përmend SQL, tabela, JSON, ID apo detaje teknike.
 Para se të përgjigjesh, kontrollo që çdo fakt në përgjigje ndodhet te \
 TË DHËNAT."""
@@ -117,6 +125,20 @@ def _norm(s):
     """lowercase + strip accents, so 'Shkodër' matches 'Shkoder'."""
     s = unicodedata.normalize("NFKD", str(s or "").lower())
     return "".join(c for c in s if not unicodedata.combining(c))
+
+
+def _match_neighborhood(value, neighborhoods):
+    """Model answer -> exact neighborhood name, or None.
+    Accepts Albanian word forms: "Rusi" -> Rus, "Parrucës" -> Parrucë
+    (compares the stems without the endings -a -e -ë -i -s)."""
+    if not value:
+        return None
+    exact = {_norm(n): n for n in neighborhoods}
+    if _norm(value) in exact:
+        return exact[_norm(value)]
+    stem = lambda x: _norm(x).rstrip("aeis")
+    hits = [n for n in neighborhoods if stem(n) == stem(value)]
+    return hits[0] if len(hits) == 1 else None
 
 
 def _in_clause(ids):
@@ -158,10 +180,12 @@ def _strengths(worker_ids):
 
 
 # ------------------------------------------------------------------ step 2: extract
-def extract(question, categories):
+def extract(question, categories, neighborhoods):
     raw = call_groq(
         [{"role": "system",
-          "content": EXTRACT_PROMPT.format(categories=", ".join(categories))},
+          "content": EXTRACT_PROMPT.format(
+              categories=", ".join(categories),
+              neighborhoods=", ".join(neighborhoods))},
          {"role": "user", "content": question}],
         json_mode=True, effort="low", max_tokens=600)
     try:
@@ -175,11 +199,12 @@ def extract(question, categories):
     intents = [i for i in (data.get("intents") or []) if i in INTENTS][:3]
     cat_lookup = {c.lower(): c for c in categories}
     category = cat_lookup.get(str(data.get("category") or "").lower())
+    neighborhood = _match_neighborhood(data.get("neighborhood"), neighborhoods)
     criteria = [c for c in (data.get("criteria") or []) if c in CRITERIA]
     return {
         "intents": intents or ["off_topic"],
         "category": category,
-        "city": (str(data["city"]).strip() or None) if data.get("city") else None,
+        "neighborhood": neighborhood,
         "criteria": criteria,
         "worker_name": (str(data["worker_name"]).strip() or None)
                        if data.get("worker_name") else None,
@@ -189,7 +214,7 @@ def extract(question, categories):
 
 # ------------------------------------------------------------------ step 3: fetch
 WORKER_SQL = """
-SELECT ws.worker_id, ws.full_name, ws.headline, ws.service_area,
+SELECT ws.worker_id, ws.full_name, ws.headline, ws.neighborhood,
        ws.years_experience, ws.is_available, ws.review_count, ws.avg_rating,
        ws.completed_jobs, ws.avg_job_price, ws.avg_response_hours,
        (SELECT GROUP_CONCAT(c.name ORDER BY c.name SEPARATOR ', ')
@@ -234,26 +259,30 @@ def fetch_find_workers(ex):
     if "available" in ex["criteria"]:
         rows = [r for r in rows if r["is_available"]]
 
-    other_cities = []
-    if ex["city"]:
-        city = _norm(ex["city"])
-        in_city = [r for r in rows if city in _norm(r["service_area"])]
-        if not in_city and ex["category"]:
-            other_cities = rows
-        rows = in_city
+    other_areas = []
+    if ex["neighborhood"]:      # exact match on the service areas, no text guessing
+        serving = {r["user_id"] for r in fetch_all(
+            """SELECT a.user_id FROM worker_service_areas a
+                 JOIN neighborhoods n ON n.neighborhood_id = a.neighborhood_id
+                WHERE n.name = %s""", (ex["neighborhood"],))}
+        in_area = [r for r in rows if r["worker_id"] in serving]
+        if not in_area and ex["category"]:
+            other_areas = rows
+        rows = in_area
 
     rows = _sort_workers(rows, ex["criteria"])[:MAX_WORKERS]
-    other_cities = _sort_workers(other_cities, ex["criteria"])[:MAX_WORKERS]
-    points = _strengths([r["worker_id"] for r in rows + other_cities])
-    for r in rows + other_cities:
+    other_areas = _sort_workers(other_areas, ex["criteria"])[:MAX_WORKERS]
+    points = _strengths([r["worker_id"] for r in rows + other_areas])
+    for r in rows + other_areas:
         r.update(points.get(r["worker_id"], {}))
         r.pop("worker_id", None)
 
-    result = {"filters": {"profesioni": ex["category"], "qyteti": ex["city"],
+    result = {"filters": {"profesioni": ex["category"],
+                          "lagjja": ex["neighborhood"],
                           "kriteret": ex["criteria"]},
               "workers_found": len(rows), "workers": rows}
-    if other_cities:
-        result["same_trade_other_cities"] = other_cities
+    if other_areas:
+        result["same_trade_other_areas"] = other_areas
     return result
 
 
@@ -280,13 +309,14 @@ def fetch_worker_details(ex):
 
 def fetch_my_problems(ex, user):
     return {"my_problems": fetch_all(
-        """SELECT p.title, c.name AS category, p.location, p.budget,
-                  p.urgency, p.status, p.created_at,
+        """SELECT p.title, c.name AS category, n.name AS neighborhood,
+                  p.budget, p.urgency, p.status, p.created_at,
                   (SELECT COUNT(*) FROM offers o
                     WHERE o.problem_id = p.problem_id) AS offers_count,
                   CONCAT(u.first_name, ' ', u.last_name) AS assigned_worker
              FROM problems p
              JOIN categories c ON c.category_id = p.category_id
+             JOIN neighborhoods n ON n.neighborhood_id = p.neighborhood_id
              LEFT JOIN users u ON u.user_id = p.assigned_worker_id
             WHERE p.customer_id = %s
             ORDER BY p.created_at DESC LIMIT 10""", (user["user_id"],))}
@@ -304,10 +334,11 @@ def fetch_my_offers(ex, user, is_worker):
             ORDER BY o.created_at DESC LIMIT 10""", (user["user_id"],))}
     if is_worker:
         out["offers_i_sent_as_worker"] = fetch_all(
-            """SELECT p.title AS problem, p.location, o.price, o.status,
-                      o.created_at
+            """SELECT p.title AS problem, n.name AS neighborhood, o.price,
+                      o.status, o.created_at
                  FROM offers o
                  JOIN problems p ON p.problem_id = o.problem_id
+                 JOIN neighborhoods n ON n.neighborhood_id = p.neighborhood_id
                 WHERE o.worker_id = %s
                 ORDER BY o.created_at DESC LIMIT 10""", (user["user_id"],))
     return out
@@ -338,7 +369,7 @@ def fetch_my_reviews(ex, user, is_worker):
 def fetch_my_profile(ex, user, is_worker):
     out = {"account": {k: user.get(k) for k in
                        ("first_name", "last_name", "email", "phone",
-                        "location")},
+                        "neighborhood", "account_type")},
            "is_worker": is_worker}
     if is_worker:
         prof = fetch_one(WORKER_SQL + " WHERE ws.worker_id = %s",
@@ -371,8 +402,7 @@ def fetch_platform_stats(ex):
 
 
 def gather(ex, user):
-    is_worker = fetch_one("SELECT 1 AS x FROM worker_profiles WHERE user_id = %s",
-                          (user["user_id"],)) is not None
+    is_worker = user["is_worker"]
     data = {"current_user": {"first_name": user.get("first_name"),
                              "is_worker": is_worker}}
     for intent in ex["intents"]:
@@ -405,6 +435,26 @@ def answer(question, data):
         effort="medium", max_tokens=2000)
 
 
+# ------------------------------------------------------------------ step 5: log
+def log_exchange(user_id, conversation_id, question, reply):
+    """Saves question + answer. Without a valid conversation_id of this
+    user a new conversation starts (title = start of the question).
+    Returns the conversation_id so the frontend can continue it."""
+    if conversation_id and not fetch_one(
+            "SELECT 1 AS ok FROM ai_conversations "
+            "WHERE conversation_id=%s AND user_id=%s",
+            (conversation_id, user_id)):
+        conversation_id = None
+    if not conversation_id:
+        conversation_id = execute(
+            "INSERT INTO ai_conversations (user_id, title) VALUES (%s,%s)",
+            (user_id, question[:150]))
+    execute("INSERT INTO ai_messages (conversation_id, sender, content) "
+            "VALUES (%s,'user',%s), (%s,'assistant',%s)",
+            (conversation_id, question, conversation_id, reply))
+    return conversation_id
+
+
 # ------------------------------------------------------------------ route
 @bp.post("/chat")
 @login_required
@@ -423,23 +473,26 @@ def chat():
     try:
         categories = [r["name"] for r in
                       fetch_all("SELECT name FROM categories ORDER BY name")]
-        ex = extract(question, categories)
+        neighborhoods = [r["name"] for r in
+                         fetch_all("SELECT name FROM neighborhoods ORDER BY name")]
+        ex = extract(question, categories, neighborhoods)
         if ex is None:
-            return jsonify({"reply": "Më fal, s'e kuptova pyetjen. "
-                                     "Provo ta formulosh ndryshe."})
-        current_app.logger.warning(
-            "CHAT user_id=%s intents=%s category=%s city=%s criteria=%s q=%r",
-            user["user_id"], ex["intents"], ex["category"], ex["city"],
-            ex["criteria"], question)
+            reply = "Më fal, s'e kuptova pyetjen. Provo ta formulosh ndryshe."
+        else:
+            current_app.logger.warning(
+                "CHAT user_id=%s intents=%s category=%s neighborhood=%s "
+                "criteria=%s q=%r", user["user_id"], ex["intents"],
+                ex["category"], ex["neighborhood"], ex["criteria"], question)
+            if ex["intents"] == ["off_topic"]:
+                reply = OFF_TOPIC_REPLY
+            else:
+                reply = answer(question, gather(ex, user)).strip() or \
+                    "Më fal, s'munda ta formuloj përgjigjen. Provo përsëri."
 
-        if ex["intents"] == ["off_topic"]:
-            return jsonify({"reply": OFF_TOPIC_REPLY, "extracted": ex})
-
-        data = gather(ex, user)
-        reply = answer(question, data).strip()
-        if not reply:
-            reply = "Më fal, s'munda ta formuloj përgjigjen. Provo përsëri."
-        return jsonify({"reply": reply, "extracted": ex})
+        conversation_id = log_exchange(user["user_id"],
+                                       d.get("conversation_id"), question, reply)
+        return jsonify({"reply": reply, "extracted": ex,
+                        "conversation_id": conversation_id})
 
     except http.HTTPError as e:
         current_app.logger.error("CHAT groq error: %s", e.response.text[:300])

@@ -27,6 +27,7 @@ def close_db(_exc=None):
 
 
 def fetch_all(sql, params=()):
+    """SELECT -> list of rows, each row a dict {column: value}."""
     cur = get_db().cursor(dictionary=True)
     cur.execute(sql, params)
     rows = cur.fetchall()
@@ -35,11 +36,9 @@ def fetch_all(sql, params=()):
 
 
 def fetch_one(sql, params=()):
-    cur = get_db().cursor(dictionary=True)
-    cur.execute(sql, params)
-    row = cur.fetchone()
-    cur.close()
-    return row
+    """SELECT -> the first row as a dict, or None if nothing matched."""
+    rows = fetch_all(sql, params)
+    return rows[0] if rows else None
 
 
 def execute(sql, params=()):
@@ -51,6 +50,23 @@ def execute(sql, params=()):
     last_id = cur.lastrowid
     cur.close()
     return last_id
+
+
+def replace_list(delete_sql, insert_sql, owner_id, ids):
+    """Replace a whole M:N list in ONE transaction, e.g. a worker's trades:
+    delete the old rows, insert the new ones, then commit once.
+    If one id is invalid the foreign key fails and nothing is changed."""
+    db = get_db()
+    cur = db.cursor()
+    try:
+        cur.execute(delete_sql, (owner_id,))
+        cur.executemany(insert_sql, [(owner_id, i) for i in ids])
+        db.commit()
+    except mysql.connector.Error:
+        db.rollback()          # keep the old list
+        raise
+    finally:
+        cur.close()
 
 
 def call_proc(name, params=()):
