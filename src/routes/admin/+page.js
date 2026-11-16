@@ -1,6 +1,7 @@
 
 import { browser } from '$app/environment';
-import { API_URL } from '$lib/api';
+import { redirect } from '@sveltejs/kit';
+import { API_URL } from '$lib/api.js';
 
 const emptyStats = {
     totalUsers: 0,
@@ -9,16 +10,16 @@ const emptyStats = {
     reportedContent: 0
 };
 
-export async function load({ fetch }) {
-    const emptyData = {
-        stats: emptyStats,
-        categoryDemand: [],
-        topSearches: [],
-        registrationGrowth: [],
-        topProblems: [],
-        topWorkers: []
-    };
+const emptyData = {
+    stats: emptyStats,
+    categoryDemand: [],
+    topSearches: [],
+    registrationGrowth: [],
+    topProblems: [],
+    topWorkers: []
+};
 
+export async function load({ fetch }) {
     if (!browser) {
         return emptyData;
     }
@@ -26,13 +27,34 @@ export async function load({ fetch }) {
     const token = localStorage.getItem('token');
 
     if (!token) {
-        return {
-            ...emptyData,
-            error: 'Nicht angemeldet'
-        };
+        throw redirect(302, '/login');
     }
 
     try {
+        // Angemeldeten Benutzer überprüfen
+        const authResponse = await fetch(`${API_URL}/api/auth/me`, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        });
+
+        if (!authResponse.ok) {
+            localStorage.removeItem('token');
+            throw redirect(302, '/login');
+        }
+
+        const authData = await authResponse.json();
+        const user = authData.user ?? authData;
+
+        // Nur das festgelegte Admin-Konto darf das Dashboard öffnen
+        if (
+            !user.is_admin ||
+            user.email?.toLowerCase() !== 'admin@nextjob.al'
+        ) {
+            throw redirect(302, '/');
+        }
+
+        // Statistiken abrufen
         const response = await fetch(`${API_URL}/api/admin/stats`, {
             headers: {
                 Authorization: `Bearer ${token}`
@@ -54,6 +76,8 @@ export async function load({ fetch }) {
 
         const apiData = await response.json();
 
+        console.log('Admin statistics:', apiData);
+
         return {
             stats: {
                 totalUsers: apiData.total_users ?? 0,
@@ -67,12 +91,17 @@ export async function load({ fetch }) {
             topProblems: apiData.top_problems ?? [],
             topWorkers: apiData.top_workers ?? []
         };
+
     } catch (error) {
+        if (error?.status === 302) {
+            throw error;
+        }
+
         console.error('Admin API error:', error);
 
         return {
             ...emptyData,
-            error: 'Verbindung zum Server fehlgeschlagen'
+            error: 'Verbindung zum Server fehlgeschlagen.'
         };
     }
 }
