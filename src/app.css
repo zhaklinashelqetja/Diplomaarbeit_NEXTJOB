@@ -15,3 +15,42 @@
   --font-body: 'Acumin Pro', 'Helvetica Neue', Helvetica, Arial, sans-serif;
   --font-quote: 'Neue Haas Grotesk Display', 'Helvetica Neue', Helvetica, Arial, sans-serif;
 }
+
+/* NextJob design tokens – Tailwind CSS v4 (@theme)
+ * Everyone uses these names, nobody types hex codes or font names by hand.
+ *
+ * Colors  ->  bg-ink  text-sky  border-sage  bg-cream  bg-teal  (+ /opacity, e.g. bg-ink/80)
+ * Fonts   ->  font-display  font-heading  font-body
+ */
+
+@theme {
+  /* ---------- Colors ---------- */
+  --color-ink:   #2a2e38; /* dark navy-grey: main text, dark sections */
+  --color-sky:   #8fb0c4; /* soft blue: secondary / highlights */
+  --color-sage:  #a8b79e; /* muted green: backgrounds, cards, accents */
+  --color-cream: #f5f1ee; /* off-white: page background */
+  --color-teal:  #62aa97; /* teal green: buttons, CTAs, links */
+
+  /* ---------- Fonts ---------- */
+  /* Neue Haas Grotesk Text Pro -> big display headings */
+  --font-display: "Neue Haas Grotesk Text Pro", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  /* Acumin Pro (Bold) -> section headings, H1/H2 */
+  --font-heading: "Acumin Pro", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  /* Acumin Pro (Regular & Light) -> body text */
+  --font-body: "Acumin Pro", "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+/* ---------- Defaults so nobody has to think about it ---------- */
+@layer base {
+  body {
+    @apply bg-cream text-ink font-body font-normal;
+  }
+
+  h1, h2 {
+    @apply font-heading font-bold uppercase;
+  }
+
+  h3, h4 {
+    @apply font-heading font-bold;
+  }
+}
