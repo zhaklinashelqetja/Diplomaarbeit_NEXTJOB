@@ -1,5 +1,8 @@
+
 <script>
- import RegistrationGrowthChart from '$lib/components/RegistrationGrowthChart.svelte';
+    import RegistrationGrowthChart from '$lib/components/RegistrationGrowthChart.svelte';
+    import { goto } from '$app/navigation';
+
     let { data } = $props();
 
     const stats = [
@@ -55,7 +58,6 @@
             </div>
         {/if}
 
-
         <!-- Statistics -->
         <section>
             <div class="mb-5">
@@ -109,6 +111,28 @@
             </div>
         </section>
 
+        <!-- Admin management navigation -->
+        <section class="mt-8">
+            <div class="flex flex-col gap-4 rounded-2xl border border-[#2A2E38]/10 bg-white p-6 shadow-sm sm:flex-row sm:items-center sm:justify-between">
+                <div>
+                    <h2 class="text-lg font-bold text-[#2A2E38]">
+                        Plattformverwaltung
+                    </h2>
+
+                    <p class="mt-1 text-sm text-[#2A2E38]/60">
+                        Benutzer verwalten und Jobs kontrollieren.
+                    </p>
+                </div>
+
+                <button
+                    onclick={() => goto('/admin/verwaltung')}
+                    class="inline-flex items-center justify-center gap-2 rounded-xl bg-[#2A2E38] px-5 py-3 text-sm font-semibold text-white transition hover:bg-[#62AA97]"
+                >
+                    Benutzer- und Jobverwaltung
+                    <span>→</span>
+                </button>
+            </div>
+        </section>
 
         <!-- Additional statistics -->
         <section class="mt-10 grid gap-6 lg:grid-cols-2">
@@ -171,6 +195,7 @@
                 {/if}
 
             </div>
+
             <!-- Top searches -->
             <div class="rounded-2xl border border-[#2A2E38]/10 bg-white p-6 shadow-sm">
 
@@ -232,11 +257,10 @@
 
         </section>
 
-
         <!-- Registration growth chart -->
         <section class="mt-10">
-        <RegistrationGrowthChart data={data.registrationGrowth} />
-
+            <RegistrationGrowthChart data={data.registrationGrowth} />
+        </section>
 
         <!-- Footer information -->
         <div class="mt-8 flex flex-col gap-2 border-t border-[#2A2E38]/10 pt-5 text-xs text-[#2A2E38]/50 sm:flex-row sm:items-center sm:justify-between">

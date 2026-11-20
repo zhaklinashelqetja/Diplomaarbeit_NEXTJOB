@@ -1,4 +1,3 @@
-
 <script>
     let { data = [] } = $props();
 
@@ -9,11 +8,52 @@
     const top = 20;
     const bottom = 48;
 
+    const monthNames = [
+        'Jan.',
+        'Feb.',
+        'März',
+        'Apr.',
+        'Mai',
+        'Juni',
+        'Juli',
+        'Aug.',
+        'Sep.',
+        'Okt.',
+        'Nov.',
+        'Dez.'
+    ];
+
     let months = $derived(data ?? []);
 
     let maxValue = $derived(
         Math.max(1, ...months.map((item) => Number(item.new_users || 0)))
     );
+
+    function formatMonth(monthString) {
+        if (!monthString) return '';
+
+        const [year, month] = monthString.split('-');
+        const monthIndex = Number(month) - 1;
+
+        if (monthIndex < 0 || monthIndex > 11) {
+            return monthString;
+        }
+
+        return `${monthNames[monthIndex]} ${year}`;
+    }
+
+    function formatShortMonth(monthString) {
+        if (!monthString) return '';
+
+        const [, month] = monthString.split('-');
+        const monthIndex = Number(month) - 1;
+
+        if (monthIndex < 0 || monthIndex > 11) {
+            return monthString;
+        }
+
+        return monthNames[monthIndex];
+    }
 
     function getX(index) {
         if (months.length <= 1) {
@@ -102,18 +142,33 @@
                         stroke="white"
                         stroke-width="2"
                     >
-                        <title>{month.month}: {month.new_users} neue Nutzer</title>
+                        <title>
+                            {formatMonth(month.month)}: {month.new_users} neue Nutzer
+                        </title>
                     </circle>
 
                     <text
                         x={getX(index)}
-                        y={chartHeight - 18}
+                        y={chartHeight - 28}
                         text-anchor="middle"
                         font-size="11"
                         fill="#2A2E38"
                     >
-                        {month.month}
+                        {formatShortMonth(month.month)}
                     </text>
+
+                    {#if index === 0 || months[index - 1].month.split('-')[0] !== month.month.split('-')[0]}
+                        <text
+                            x={getX(index)}
+                            y={chartHeight - 10}
+                            text-anchor="middle"
+                            font-size="10"
+                            fill="#2A2E38"
+                            opacity="0.65"
+                        >
+                            {month.month.split('-')[0]}
+                        </text>
+                    {/if}
                 {/each}
             </svg>
         </div>
