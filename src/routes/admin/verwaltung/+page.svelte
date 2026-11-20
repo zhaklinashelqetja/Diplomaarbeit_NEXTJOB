@@ -5,14 +5,25 @@
     let searchUsers = $state('');
     let searchJobs = $state('');
 
+    // Daten sicher laden, auch wenn die API nichts zurückgibt
+    const allUsers = $derived(
+        Array.isArray(data?.users) ? data.users : []
+    );
+
+    const allJobs = $derived(
+        Array.isArray(data?.jobs) ? data.jobs : []
+    );
+
+    // Nutzer filtern
     const users = $derived(
-        data.users.filter((user) => {
+        allUsers.filter((user) => {
             const query = searchUsers.toLowerCase().trim();
 
-            const name = [
+            const searchable = [
                 user.first_name,
                 user.last_name,
                 user.name,
+                user.full_name,
                 user.username,
                 user.email
             ]
@@ -20,18 +31,21 @@
                 .join(' ')
                 .toLowerCase();
 
-            return !query || name.includes(query);
+            return !query || searchable.includes(query);
         })
     );
 
+    // Aufträge filtern
     const jobs = $derived(
-        data.jobs.filter((job) => {
+        allJobs.filter((job) => {
             const query = searchJobs.toLowerCase().trim();
 
             const searchable = [
                 job.title,
+                job.name,
                 job.description,
                 job.location,
+                job.city,
                 job.category,
                 job.category_name,
                 job.status
@@ -44,41 +58,76 @@
         })
     );
 
+    // Nutzer-ID ermitteln
     function userId(user) {
-        return user.id ?? user.user_id ?? user._id;
+        return user.id ?? user.user_id ?? user._id ?? null;
     }
 
+    // Auftrags-ID ermitteln
     function jobId(job) {
-        return job.id ?? job.problem_id ?? job.job_id ?? job._id;
+        return job.id ?? job.problem_id ?? job.job_id ?? job._id ?? null;
     }
 
+    // Nutzernamen ermitteln
     function userName(user) {
-        const fullName = [user.first_name, user.last_name]
+        const fullName = [
+            user.first_name,
+            user.last_name
+        ]
             .filter(Boolean)
             .join(' ');
 
         return (
             user.name ??
             user.full_name ??
-            (fullName || user.username || 'Unbekannter Nutzer')
+            fullName ??
+            user.username ??
+            'Unbekannter Nutzer'
         );
     }
 
+    // Nutzerstatus ermitteln
     function isUserActive(user) {
-        if (typeof user.is_active === 'boolean') return user.is_active;
-        if (typeof user.active === 'boolean') return user.active;
-        if (typeof user.is_blocked === 'boolean') return !user.is_blocked;
-        if (typeof user.is_suspended === 'boolean') return !user.is_suspended;
+        if (typeof user.is_active === 'boolean') {
+            return user.is_active;
+        }
+
+        if (typeof user.active === 'boolean') {
+            return user.active;
+        }
+
+        if (typeof user.is_blocked === 'boolean') {
+            return !user.is_blocked;
+        }
+
+        if (typeof user.is_suspended === 'boolean') {
+            return !user.is_suspended;
+        }
 
         return true;
     }
 
+    // Nutzerrolle ermitteln
     function userRole(user) {
-        return user.role ?? user.user_type ?? user.account_type ?? 'Nutzer';
+        const role =
+            user.role ??
+            user.user_type ??
+            user.account_type ??
+            'Nutzer';
+
+        const roles = {
+            jobgeber: 'Jobgeber',
+            jobnehmer: 'Jobnehmer',
+            admin: 'Administrator',
+            administrator: 'Administrator'
+        };
+
+        return roles[String(role).toLowerCase()] ?? role;
     }
 
-    function confirmDelete(message) {
-        return confirm(message);
+    // Lösch- und Änderungsbestätigung
+    function confirmAction(message) {
+        return window.confirm(message);
     }
 </script>
 

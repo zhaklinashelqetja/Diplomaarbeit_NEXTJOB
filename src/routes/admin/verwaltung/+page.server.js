@@ -1,255 +1,217 @@
-import { fail } from '@sveltejs/kit';
+
 import { API_URL } from '$lib/api.js';
+import { redirect, fail } from '@sveltejs/kit';
 
-async function apiRequest(fetch, token, path, options = {}) {
-    return fetch(`${API_URL}${path}`, {
-        ...options,
-        headers: {
-            Authorization: `Bearer ${token}`,
-            ...(options.body ? { 'Content-Type': 'application/json' } : {}),
-            ...options.headers
-        }
-    });
+const ADMIN_EMAIL = 'admin@nextjob.al';
+
+const emptyData = {
+	users: [],
+	jobs: [],
+	error: null
+};
+
+function readList(payload, keys) {
+	if (Array.isArray(payload)) return payload;
+
+	for (const key of keys) {
+		if (Array.isArray(payload?.[key])) return payload[key];
+		if (Array.isArray(payload?.data?.[key])) return payload.data[key];
+	}
+
+	if (Array.isArray(payload?.data)) return payload.data;
+
+	return [];
 }
 
-async function readList(response) {
-    const payload = await response.json();
+async function apiRequest(fetch, endpoint, token, options = {}) {
+	const response = await fetch(`${API_URL}${endpoint}`, {
+		...options,
+		headers: {
+			Accept: 'application/json',
+			Authorization: `Bearer ${token}`,
+			...(options.body ? { 'Content-Type': 'application/json' } : {}),
+			...options.headers
+		}
+	});
 
-    if (Array.isArray(payload)) return payload;
-    if (Array.isArray(payload.users)) return payload.users;
-    if (Array.isArray(payload.problems)) return payload.problems;
-    if (Array.isArray(payload.jobs)) return payload.jobs;
-    if (Array.isArray(payload.items)) return payload.items;
-    if (Array.isArray(payload.data)) return payload.data;
+	const text = await response.text();
 
-    return [];
+	let payload = null;
+
+	try {
+		payload = text ? JSON.parse(text) : null;
+	} catch {
+		payload = text;
+	}
+
+	if (!response.ok) {
+		throw new Error(
+			payload?.message ||
+				payload?.error ||
+				(typeof payload === 'string' ? payload : '') ||
+				`API Fehler ${response.status}`
+		);
+	}
+
+	return payload;
 }
 
-async function getErrorMessage(response) {
-    try {
-        const payload = await response.json();
-        return payload.message ?? payload.error ?? `API-Fehler ${response.status}`;
-    } catch {
-        return `API-Fehler ${response.status}`;
-    }
+async function requireAdmin(fetch, cookies) {
+	const token = cookies.get('token');
+
+	if (!token) {
+		throw redirect(303, '/login');
+	}
+
+	let authData;
+
+	try {
+		authData = await apiRequest(fetch, '/api/auth/me', token);
+	} catch {
+		cookies.delete('token', { path: '/' });
+		throw redirect(303, '/login');
+	}
+
+	const user = authData?.user ?? authData;
+
+	if (
+		!user?.is_admin ||
+		user.email?.toLowerCase() !== ADMIN_EMAIL
+	) {
+		throw redirect(303, '/');
+	}
+
+	return token;
 }
 
 export async function load({ fetch, cookies }) {
-    const token = cookies.get('token');
+	const token = await requireAdmin(fetch, cookies);
 
-    if (!token) {
-        return {
-            users: [],
-            jobs: [],
-            error: 'Bitte melde dich zuerst mit deinem Admin-Konto an.'
-        };
-    }
+	const [usersResult, jobsResult] = await Promise.allSettled([
+		apiRequest(fetch, '/api/admin/users', token),
+		apiRequest(fetch, '/api/admin/problems', token)
+	]);
 
-    try {
-        const [usersResponse, jobsResponse] = await Promise.all([
-            apiRequest(fetch, token, '/api/admin/users'),
-            apiRequest(fetch, token, '/api/admin/problems')
-        ]);
+	const users =
+		usersResult.status === 'fulfilled'
+			? readList(usersResult.value, ['users', 'items', 'results'])
+			: [];
 
-        const errors = [];
+	const jobs =
+		jobsResult.status === 'fulfilled'
+			? readList(jobsResult.value, ['problems', 'jobs', 'items', 'results'])
+			: [];
 
-        let users = [];
-        let jobs = [];
+	const errors = [];
 
-        if (usersResponse.ok) {
-            users = await readList(usersResponse);
-        } else {
-            errors.push(
-                `Nutzer konnten nicht geladen werden: ${await getErrorMessage(usersResponse)}`
-            );
-        }
+	if (usersResult.status === 'rejected') {
+		errors.push(
+			`Benutzer konnten nicht geladen werden: ${usersResult.reason?.message}`
+		);
+	}
 
-        if (jobsResponse.ok) {
-            jobs = await readList(jobsResponse);
-        } else {
-            errors.push(
-                `Aufträge konnten nicht geladen werden: ${await getErrorMessage(jobsResponse)}`
-            );
-        }
+	if (jobsResult.status === 'rejected') {
+		errors.push(
+			`Jobs konnten nicht geladen werden: ${jobsResult.reason?.message}`
+		);
+	}
 
-        return {
-            users,
-            jobs,
-            error: errors.length ? errors.join(' ') : null
-        };
-    } catch (error) {
-        console.error('Admin-Verwaltung:', error);
-
-        return {
-            users: [],
-            jobs: [],
-            error: 'Der Backend-Server ist nicht erreichbar.'
-        };
-    }
+	return {
+		users,
+		jobs,
+		error: errors.length ? errors.join(' | ') : null
+	};
 }
 
 export const actions = {
-    toggleUser: async ({ request, fetch, cookies }) => {
-        const token = cookies.get('token');
+	toggleUser: async ({ request, fetch, cookies }) => {
+		const token = await requireAdmin(fetch, cookies);
+		const formData = await request.formData();
 
-        if (!token) {
-            return fail(401, { actionError: 'Bitte melde dich erneut an.' });
-        }
+		const id = formData.get('id');
+		const isActive = formData.get('isActive') === 'true';
 
-        const formData = await request.formData();
-        const userId = formData.get('userId')?.toString();
-        const isActive = formData.get('isActive') === 'true';
+		if (!id) {
+			return fail(400, { actionError: 'Benutzer-ID fehlt.' });
+		}
 
-        if (!userId) {
-            return fail(400, { actionError: 'Die Nutzer-ID fehlt.' });
-        }
+		try {
+			await apiRequest(fetch, `/api/admin/users/${id}/status`, token, {
+				method: 'PATCH',
+				body: JSON.stringify({ is_active: !isActive })
+			});
 
-        try {
-            const response = await apiRequest(
-                fetch,
-                token,
-                `/api/admin/users/${encodeURIComponent(userId)}/status`,
-                {
-                    method: 'PATCH',
-                    body: JSON.stringify({ is_active: !isActive })
-                }
-            );
+			return { success: 'Benutzerstatus wurde geändert.' };
+		} catch (error) {
+			return fail(500, { actionError: error.message });
+		}
+	},
 
-            if (!response.ok) {
-                return fail(response.status, {
-                    actionError: `Nutzerstatus konnte nicht geändert werden: ${await getErrorMessage(response)}`
-                });
-            }
+	deleteUser: async ({ request, fetch, cookies }) => {
+		const token = await requireAdmin(fetch, cookies);
+		const formData = await request.formData();
 
-            return {
-                success: true,
-                message: !isActive
-                    ? 'Nutzer wurde aktiviert.'
-                    : 'Nutzer wurde gesperrt.'
-            };
-        } catch {
-            return fail(500, {
-                actionError: 'Der Server ist nicht erreichbar.'
-            });
-        }
-    },
+		const id = formData.get('id');
 
-    deleteUser: async ({ request, fetch, cookies }) => {
-        const token = cookies.get('token');
+		if (!id) {
+			return fail(400, { actionError: 'Benutzer-ID fehlt.' });
+		}
 
-        if (!token) {
-            return fail(401, { actionError: 'Bitte melde dich erneut an.' });
-        }
+		try {
+			await apiRequest(fetch, `/api/admin/users/${id}`, token, {
+				method: 'DELETE'
+			});
 
-        const formData = await request.formData();
-        const userId = formData.get('userId')?.toString();
+			return { success: 'Benutzer wurde gelöscht.' };
+		} catch (error) {
+			return fail(500, { actionError: error.message });
+		}
+	},
 
-        if (!userId) {
-            return fail(400, { actionError: 'Die Nutzer-ID fehlt.' });
-        }
+	updateJob: async ({ request, fetch, cookies }) => {
+		const token = await requireAdmin(fetch, cookies);
+		const formData = await request.formData();
 
-        try {
-            const response = await apiRequest(
-                fetch,
-                token,
-                `/api/admin/users/${encodeURIComponent(userId)}`,
-                { method: 'DELETE' }
-            );
+		const id = formData.get('id');
 
-            if (!response.ok) {
-                return fail(response.status, {
-                    actionError: `Nutzer konnte nicht gelöscht werden: ${await getErrorMessage(response)}`
-                });
-            }
+		if (!id) {
+			return fail(400, { actionError: 'Job-ID fehlt.' });
+		}
 
-            return { success: true, message: 'Nutzer wurde gelöscht.' };
-        } catch {
-            return fail(500, {
-                actionError: 'Der Server ist nicht erreichbar.'
-            });
-        }
-    },
+		try {
+			await apiRequest(fetch, `/api/admin/problems/${id}`, token, {
+				method: 'PUT',
+				body: JSON.stringify({
+					title: formData.get('title'),
+					description: formData.get('description'),
+					status: formData.get('status')
+				})
+			});
 
-    updateJob: async ({ request, fetch, cookies }) => {
-        const token = cookies.get('token');
+			return { success: 'Job wurde aktualisiert.' };
+		} catch (error) {
+			return fail(500, { actionError: error.message });
+		}
+	},
 
-        if (!token) {
-            return fail(401, { actionError: 'Bitte melde dich erneut an.' });
-        }
+	deleteJob: async ({ request, fetch, cookies }) => {
+		const token = await requireAdmin(fetch, cookies);
+		const formData = await request.formData();
 
-        const formData = await request.formData();
-        const jobId = formData.get('jobId')?.toString();
-        const title = formData.get('title')?.toString().trim();
-        const description = formData.get('description')?.toString().trim();
-        const status = formData.get('status')?.toString();
+		const id = formData.get('id');
 
-        if (!jobId || !title || !description) {
-            return fail(400, {
-                actionError: 'Bitte fülle Titel und Beschreibung aus.'
-            });
-        }
+		if (!id) {
+			return fail(400, { actionError: 'Job-ID fehlt.' });
+		}
 
-        try {
-            const response = await apiRequest(
-                fetch,
-                token,
-                `/api/admin/problems/${encodeURIComponent(jobId)}`,
-                {
-                    method: 'PUT',
-                    body: JSON.stringify({ title, description, status })
-                }
-            );
+		try {
+			await apiRequest(fetch, `/api/admin/problems/${id}`, token, {
+				method: 'DELETE'
+			});
 
-            if (!response.ok) {
-                return fail(response.status, {
-                    actionError: `Auftrag konnte nicht aktualisiert werden: ${await getErrorMessage(response)}`
-                });
-            }
-
-            return {
-                success: true,
-                message: 'Auftrag wurde aktualisiert.'
-            };
-        } catch {
-            return fail(500, {
-                actionError: 'Der Server ist nicht erreichbar.'
-            });
-        }
-    },
-
-    deleteJob: async ({ request, fetch, cookies }) => {
-        const token = cookies.get('token');
-
-        if (!token) {
-            return fail(401, { actionError: 'Bitte melde dich erneut an.' });
-        }
-
-        const formData = await request.formData();
-        const jobId = formData.get('jobId')?.toString();
-
-        if (!jobId) {
-            return fail(400, { actionError: 'Die Auftrags-ID fehlt.' });
-        }
-
-        try {
-            const response = await apiRequest(
-                fetch,
-                token,
-                `/api/admin/problems/${encodeURIComponent(jobId)}`,
-                { method: 'DELETE' }
-            );
-
-            if (!response.ok) {
-                return fail(response.status, {
-                    actionError: `Auftrag konnte nicht gelöscht werden: ${await getErrorMessage(response)}`
-                });
-            }
-
-            return { success: true, message: 'Auftrag wurde gelöscht.' };
-        } catch {
-            return fail(500, {
-                actionError: 'Der Server ist nicht erreichbar.'
-            });
-        }
-    }
+			return { success: 'Job wurde gelöscht.' };
+		} catch (error) {
+			return fail(500, { actionError: error.message });
+		}
+	}
 };
