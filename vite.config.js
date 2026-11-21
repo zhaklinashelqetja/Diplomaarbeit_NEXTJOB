@@ -1,43 +1,52 @@
+
+import { paraglideVitePlugin } from '@inlang/paraglide-js';
 import { sveltekit } from '@sveltejs/kit/vite';
 import { SvelteKitPWA } from '@vite-pwa/sveltekit';
 import tailwindcss from '@tailwindcss/vite';
 import { defineConfig } from 'vite';
 
 export default defineConfig({
-	plugins: [
-		tailwindcss(),
-		sveltekit(),
+    plugins: [
+        paraglideVitePlugin({
+            project: './project.inlang',
+            outdir: './src/lib/paraglide',
+            emitTsDeclarations: true
+        }),
 
-		SvelteKitPWA({
-			registerType: 'autoUpdate',
+        tailwindcss(),
 
-			devOptions: {
-				enabled: true
-			},
+        sveltekit(),
 
-			manifest: {
-				name: 'NextJob',
-				short_name: 'NextJob',
-				description: 'Digitale Jobvermittlung für lokale Dienstleistungen in Shkodër',
+        SvelteKitPWA({
+            registerType: 'autoUpdate',
 
-				theme_color: '#8FB0C4',
-				background_color: '#F5F1EE',
+            devOptions: {
+                enabled: true
+            },
 
-				display: 'standalone',
-				start_url: '/',
-				lang: 'de',
+            manifest: {
+                name: 'NextJob',
+                short_name: 'NextJob',
+                description: 'Digitale Jobvermittlung für lokale Dienstleistungen in Shkodër',
 
-				icons: [
-					{
-						src: '/images/nextjob-logo.png',
-						type: 'image/png'
-					}
-				]
-			},
+                theme_color: '#8FB0C4',
+                background_color: '#F5F1EE',
 
-			workbox: {
-				globPatterns: ['**/*.{js,css,html,png,svg,ico}']
-			}
-		})
-	]
+                display: 'standalone',
+                start_url: '/',
+                lang: 'de',
+
+                icons: [
+                    {
+                        src: '/images/nextjob-logo.png',
+                        type: 'image/png'
+                    }
+                ]
+            },
+
+            workbox: {
+                globPatterns: ['**/*.{js,css,html,png,svg,ico}']
+            }
+        })
+    ]
 });

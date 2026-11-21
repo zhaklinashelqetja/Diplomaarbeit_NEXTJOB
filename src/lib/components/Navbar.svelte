@@ -1,30 +1,23 @@
-
 <script>
     import { goto } from '$app/navigation';
     import { resolve } from '$app/paths';
     import { page } from '$app/state';
+    import * as m from '$lib/paraglide/messages.js';
+    import { getLocale, setLocale } from '$lib/paraglide/runtime.js';
     import { isLoggedIn, currentUser, logout } from '$lib/auth.js';
 
     import {
-        House,
-        BriefcaseBusiness,
-        MessageCircle,
-        Bell,
-        UserRound,
-        Menu,
-        X,
-        ChevronDown,
-        ArrowUpRight,
-        LogOut,
-        Search
+        House, BriefcaseBusiness, MessageCircle, Bell,
+        UserRound, Menu, X, ChevronDown, ArrowUpRight,
+        LogOut, Search
     } from '@lucide/svelte';
 
     let menuOpen = $state(false);
     let profileOpen = $state(false);
-
     let searchQuery = $state('');
     let searchCategory = $state('all');
     let searchOpen = $state(false);
+    let selectedLocale = $state(getLocale());
 
     let accountType = $derived($currentUser?.account_type);
 
@@ -48,7 +41,6 @@
     function closeMenu() {
         menuOpen = false;
         profileOpen = false;
-        searchOpen = false;
     }
 
     function handleLogout() {
@@ -65,7 +57,6 @@
         event.preventDefault();
 
         const query = searchQuery.trim();
-
         if (!query) return;
 
         const params = new URLSearchParams({
@@ -79,6 +70,14 @@
 
     function selectCategory(category) {
         searchCategory = category;
+    }
+
+    function changeLanguage(locale) {
+        if (selectedLocale === locale) return;
+
+        setLocale(locale);
+        selectedLocale = locale;
+        searchOpen = false;
     }
 </script>
 
@@ -94,7 +93,7 @@
             href={resolve('/')}
             class="brand"
             onclick={closeMenu}
-            aria-label="NextJob Startseite"
+            aria-label={m.nav_home_aria()}
         >
             <img
                 src="/images/nextjob-logo.png"
@@ -122,8 +121,8 @@
                     type="search"
                     bind:value={searchQuery}
                     onfocus={() => (searchOpen = true)}
-                    placeholder="Jobs oder Nutzer suchen"
-                    aria-label="Jobs oder Nutzer suchen"
+                    placeholder={m.search_jobs()}
+                    aria-label={m.search_jobs()}
                 />
 
                 {#if searchQuery}
@@ -131,7 +130,7 @@
                         type="button"
                         class="search-clear"
                         onclick={() => (searchQuery = '')}
-                        aria-label="Suche löschen"
+                        aria-label={m.nav_search_clear()}
                     >
                         <X size={16} />
                     </button>
@@ -141,7 +140,7 @@
                     type="submit"
                     class="search-submit"
                     disabled={!searchQuery.trim()}
-                    aria-label="Suche starten"
+                    aria-label={m.nav_search_submit()}
                 >
                     <ArrowUpRight size={19} />
                 </button>
@@ -150,12 +149,11 @@
             {#if searchOpen}
                 <div class="search-panel">
                     <div class="search-panel-header">
-                        <span>SUCHEN NACH</span>
-
+                        <span>{m.nav_search_filter_heading()}</span>
                         <button
                             type="button"
                             onclick={() => (searchOpen = false)}
-                            aria-label="Suchfilter schließen"
+                            aria-label={m.nav_search_filter_close()}
                         >
                             <X size={15} />
                         </button>
@@ -167,7 +165,7 @@
                             class:chosen={searchCategory === 'all'}
                             onclick={() => selectCategory('all')}
                         >
-                            Alle
+                            {m.search_all()}
                         </button>
 
                         <button
@@ -176,7 +174,7 @@
                             onclick={() => selectCategory('jobs')}
                         >
                             <BriefcaseBusiness size={15} />
-                            Jobs
+                            {m.nav_jobs_short()}
                         </button>
 
                         <button
@@ -185,12 +183,12 @@
                             onclick={() => selectCategory('users')}
                         >
                             <UserRound size={15} />
-                            Nutzer
+                            {m.search_users()}
                         </button>
                     </div>
 
                     <p class="search-help">
-                        Suche nach Jobs, Dienstleistungen oder Personen.
+                        {m.nav_search_help()}
                     </p>
                 </div>
             {/if}
@@ -206,16 +204,17 @@
                     aria-current={isActive('/') ? 'page' : undefined}
                 >
                     <House size={21} strokeWidth={1.7} />
-                    <span>Start</span>
+                    <span>{m.nav_start()}</span>
                 </a>
 
                 <a
                     href={resolve('/jobs')}
                     class="nav-icon-link"
                     class:active={isActive('/jobs')}
+                    aria-current={isActive('/jobs') ? 'page' : undefined}
                 >
                     <BriefcaseBusiness size={21} strokeWidth={1.7} />
-                    <span>Jobs</span>
+                    <span>{m.nav_jobs_short()}</span>
                 </a>
 
                 {#if accountType === 'jobnehmer'}
@@ -225,7 +224,7 @@
                         class:active={isActive('/jobnehmer/hauptseite')}
                     >
                         <UserRound size={21} strokeWidth={1.7} />
-                        <span>Mein Bereich</span>
+                        <span>{m.nav_my_area()}</span>
                     </a>
                 {/if}
 
@@ -235,7 +234,7 @@
                     class:active={isActive('/chat')}
                 >
                     <MessageCircle size={21} strokeWidth={1.7} />
-                    <span>Nachrichten</span>
+                    <span>{m.nav_messages()}</span>
                 </a>
 
                 <a
@@ -244,7 +243,7 @@
                     class:active={isActive('/benachrichtigungen')}
                 >
                     <Bell size={21} strokeWidth={1.7} />
-                    <span>Mitteilungen</span>
+                    <span>{m.nav_notifications()}</span>
                 </a>
             {:else}
                 <a
@@ -252,7 +251,7 @@
                     class="public-link"
                     class:active={isActive('/')}
                 >
-                    Start
+                    {m.nav_start()}
                 </a>
 
                 <a
@@ -260,13 +259,37 @@
                     class="public-link"
                     class:active={isActive('/jobs')}
                 >
-                    Jobs & Dienstleistungen
+                    {m.nav_jobs_services()}
                 </a>
             {/if}
         </div>
 
         <!-- Desktop Actions -->
         <div class="desktop-actions">
+
+            <!-- Sprachwechsel -->
+            <div class="language-switch" aria-label="Sprache / Gjuha">
+                <button
+                    type="button"
+                    class:active={selectedLocale === 'de'}
+                    aria-pressed={selectedLocale === 'de'}
+                    onclick={() => changeLanguage('de')}
+                >
+                    DE
+                </button>
+
+                <span class="language-separator">|</span>
+
+                <button
+                    type="button"
+                    class:active={selectedLocale === 'sq'}
+                    aria-pressed={selectedLocale === 'sq'}
+                    onclick={() => changeLanguage('sq')}
+                >
+                    SQ
+                </button>
+            </div>
+
             {#if $isLoggedIn}
                 <div class="profile-container">
                     <button
@@ -274,7 +297,7 @@
                         class="profile-trigger"
                         onclick={() => (profileOpen = !profileOpen)}
                         aria-expanded={profileOpen}
-                        aria-label="Profilmenü"
+                        aria-label={m.nav_profile_menu()}
                     >
                         <span class="avatar">
                             {profileInitial}
@@ -289,7 +312,6 @@
                                 <p class="profile-name">
                                     {profileName}
                                 </p>
-
                                 <p class="profile-email">
                                     {$currentUser?.email || ''}
                                 </p>
@@ -302,7 +324,7 @@
                                     class="dropdown-link"
                                 >
                                     <UserRound size={17} />
-                                    Mein Bereich
+                                    {m.nav_my_area()}
                                 </a>
                             {/if}
 
@@ -312,7 +334,7 @@
                                 onclick={handleLogout}
                             >
                                 <LogOut size={17} />
-                                Abmelden
+                                {m.nav_logout()}
                             </button>
                         </div>
                     {/if}
@@ -322,26 +344,26 @@
                     href={resolve('/auth/login')}
                     class="login-link"
                 >
-                    Anmelden
+                    {m.nav_login()}
                 </a>
 
                 <a
                     href={resolve('/auth/register')}
                     class="register-button"
                 >
-                    Registrieren
+                    {m.nav_register()}
                     <ArrowUpRight size={17} strokeWidth={1.8} />
                 </a>
             {/if}
         </div>
 
-        <!-- Mobile Menu -->
+        <!-- Mobile Menu Button -->
         <button
             type="button"
             class="mobile-toggle"
             onclick={() => (menuOpen = !menuOpen)}
             aria-expanded={menuOpen}
-            aria-label={menuOpen ? 'Menü schließen' : 'Menü öffnen'}
+            aria-label={menuOpen ? m.nav_menu_close() : m.nav_menu_open()}
         >
             {#if menuOpen}
                 <X size={25} strokeWidth={1.7} />
@@ -354,6 +376,34 @@
     <!-- Mobile Navigation -->
     {#if menuOpen}
         <div class="mobile-navigation">
+
+            <!-- Sprachwechsel Mobile -->
+            <div class="mobile-language-row">
+                <span>Sprache / Gjuha</span>
+
+                <div class="language-switch">
+                    <button
+                        type="button"
+                        class:active={selectedLocale === 'de'}
+                        aria-pressed={selectedLocale === 'de'}
+                        onclick={() => changeLanguage('de')}
+                    >
+                        DE
+                    </button>
+
+                    <span class="language-separator">|</span>
+
+                    <button
+                        type="button"
+                        class:active={selectedLocale === 'sq'}
+                        aria-pressed={selectedLocale === 'sq'}
+                        onclick={() => changeLanguage('sq')}
+                    >
+                        SQ
+                    </button>
+                </div>
+            </div>
+
             {#if $isLoggedIn}
                 <div class="mobile-profile">
                     <span class="avatar">
@@ -373,7 +423,7 @@
                 class="mobile-link"
             >
                 <House size={19} />
-                Start
+                {m.nav_start()}
             </a>
 
             <a
@@ -382,7 +432,7 @@
                 class="mobile-link"
             >
                 <BriefcaseBusiness size={19} />
-                Jobs & Dienstleistungen
+                {m.nav_jobs_services()}
             </a>
 
             {#if $isLoggedIn}
@@ -393,7 +443,7 @@
                         class="mobile-link"
                     >
                         <UserRound size={19} />
-                        Mein Bereich
+                        {m.nav_my_area()}
                     </a>
                 {/if}
 
@@ -403,7 +453,7 @@
                     class="mobile-link"
                 >
                     <MessageCircle size={19} />
-                    Nachrichten
+                    {m.nav_messages()}
                 </a>
 
                 <a
@@ -412,7 +462,7 @@
                     class="mobile-link"
                 >
                     <Bell size={19} />
-                    Benachrichtigungen
+                    {m.nav_notifications()}
                 </a>
 
                 <button
@@ -421,7 +471,7 @@
                     class="mobile-logout"
                 >
                     <LogOut size={19} />
-                    Abmelden
+                    {m.nav_logout()}
                 </button>
             {:else}
                 <a
@@ -430,7 +480,7 @@
                     class="mobile-link"
                 >
                     <UserRound size={19} />
-                    Anmelden
+                    {m.nav_login()}
                 </a>
 
                 <a
@@ -438,7 +488,7 @@
                     onclick={closeMenu}
                     class="mobile-register"
                 >
-                    Registrieren
+                    {m.nav_register()}
                     <ArrowUpRight size={19} />
                 </a>
             {/if}
@@ -448,12 +498,10 @@
     <!-- E-Mail Verification -->
     {#if emailUnverified}
         <div class="verification-notice">
-            <span>
-                Bitte bestätige deine E-Mail-Adresse.
-            </span>
+            <span>{m.nav_verify_notice()}</span>
 
             <a href={resolve('/auth/verifizierung')}>
-                Jetzt bestätigen
+                {m.nav_verify_action()}
                 <ArrowUpRight size={15} />
             </a>
         </div>
@@ -761,6 +809,44 @@
         color: var(--color-charcoal);
     }
 
+    /* Sprachwechsel */
+    .language-switch {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+        margin-right: 8px;
+        white-space: nowrap;
+    }
+
+    .language-switch button {
+        border: 0;
+        padding: 7px 3px;
+        background: transparent;
+        color: var(--color-charcoal);
+        font-family: var(--font-body);
+        font-size: 13px;
+        font-weight: 600;
+        opacity: 0.5;
+        cursor: pointer;
+        transition: opacity 0.2s, color 0.2s;
+    }
+
+    .language-switch button:hover {
+        opacity: 1;
+    }
+
+    .language-switch button.active {
+        opacity: 1;
+        color: var(--color-fresh);
+    }
+
+    .language-separator {
+        color: var(--color-charcoal);
+        opacity: 0.3;
+        font-size: 13px;
+    }
+
     /* Profile */
     .profile-container {
         position: relative;
@@ -870,6 +956,22 @@
             color-mix(in srgb, var(--color-charcoal) 12%, transparent);
     }
 
+    .mobile-language-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        padding: 12px 10px;
+        border-bottom: 1px solid
+            color-mix(in srgb, var(--color-charcoal) 12%, transparent);
+        font-size: 13px;
+        font-weight: 500;
+    }
+
+    .mobile-language-row .language-switch {
+        margin-right: 0;
+    }
+
     .mobile-link {
         display: flex;
         align-items: center;
@@ -954,20 +1056,18 @@
 
     /* Responsive */
     @media (max-width: 1350px) and (min-width: 951px) {
-        .nav-container {
-            flex-wrap: wrap;
-            padding-top: 12px;
-            padding-bottom: 12px;
-            row-gap: 8px;
-        }
-
-        .search-wrapper {
-            order: 3;
-            flex: 1 0 100%;
-            max-width: 430px;
-        }
+    .nav-container {
+        flex-wrap: nowrap;
+        gap: 12px;
     }
 
+    .search-wrapper {
+        order: 0;
+        flex: 1 1 220px;
+        min-width: 150px;
+        max-width: 330px;
+    }
+}
     @media (max-width: 1150px) {
         .brand-name {
             font-size: 19px;
