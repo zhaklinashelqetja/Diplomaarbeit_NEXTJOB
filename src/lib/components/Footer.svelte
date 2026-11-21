@@ -1,34 +1,34 @@
-<script>
-	import { resolve } from '$app/paths';
-	import { t } from '$lib/i18n.js';
-</script>
 
-<footer class="border-t border-[#8FB0C4]/30 bg-[#8FB0C4]/15">
+<footer
+	class="bg-[#F5F1EE] text-[#2A2E38]"
+	style="font-family: var(--font-body);"
+>
 	<div
-		class="mx-auto flex max-w-6xl flex-col items-center justify-between gap-3 px-4 py-3 sm:flex-row"
+		class="mx-auto flex max-w-7xl flex-col gap-5 px-6 py-8
+		sm:flex-row sm:items-center sm:justify-between lg:px-8"
 	>
-		<div class="flex items-center gap-2">
-			<img src="/images/nextjob-logo.png" alt="NextJob Logo" class="h-7 w-auto" />
+		<div class="flex flex-col gap-2">
+			<p class="text-sm font-medium">
+				© {new Date().getFullYear()} NextJob
+			</p>
 
-			<p class="text-xs text-[#2A2E38]/60">
-				© {new Date().getFullYear()} NextJob · Shkodër
+			<p class="text-xs text-[#2A2E38]/55">
+				Alle Rechte vorbehalten.
 			</p>
 		</div>
 
-		<div class="flex gap-5">
+		<div class="flex flex-col gap-2 sm:items-end">
 			<a
-				href={resolve('/wer-wir-sind')}
-				class="text-xs text-[#2A2E38]/70 hover:text-[#62AA97]"
+				href="mailto:nextjob.team26@gmail.com"
+				class="text-sm font-medium text-[#2A2E38]/75
+				transition-colors duration-200 hover:text-[#62AA97]"
 			>
-				{$t('footer_ueber_uns')}
+				nextjob.team26@gmail.com
 			</a>
 
-			<a
-				href={resolve('/kontakt')}
-				class="text-xs text-[#2A2E38]/70 hover:text-[#62AA97]"
-			>
-				{$t('footer_kontakt')}
-			</a>
+			<p class="text-xs text-[#2A2E38]/55">
+				Shkodër, Shqipëri
+			</p>
 		</div>
 	</div>
 </footer>
