@@ -1,4 +1,8 @@
 
+<script>
+  import * as m from '$lib/paraglide/messages.js';
+</script>
+
 <footer
 	class="bg-[#F5F1EE] text-[#2A2E38]"
 	style="font-family: var(--font-body);"
@@ -13,7 +17,7 @@
 			</p>
 
 			<p class="text-xs text-[#2A2E38]/55">
-				Alle Rechte vorbehalten.
+				{m.footer_rights()}
 			</p>
 		</div>
 

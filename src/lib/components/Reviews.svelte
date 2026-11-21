@@ -1,43 +1,46 @@
+
 <script>
   import { Quote, Star } from '@lucide/svelte';
+  import * as m from '$lib/paraglide/messages.js';
 
-  const reviews = [
+  const reviews = $derived([
     {
       name: 'Elira K.',
       initials: 'EK',
-      role: 'Sample customer',
-      service: 'Digital & creative',
-      quote: 'I needed a simple website for my shop. She helped me work out what to include, kept me updated, and showed me how to make changes myself.',
+      role: m.reviews_sample_customer(),
+      service: m.reviews_service_digital(),
+      quote: m.reviews_quote_elira(),
       tone: 'sage'
     },
     {
       name: 'Arben M.',
       initials: 'AM',
-      role: 'Sample customer',
-      service: 'Lessons & languages',
-      quote: 'We went back over the parts of maths I had never quite understood. Being able to ask the same question twice made all the difference.',
+      role: m.reviews_sample_customer(),
+      service: m.reviews_service_lessons(),
+      quote: m.reviews_quote_arben(),
       tone: 'blue'
     },
     {
       name: 'Sara D.',
       initials: 'SD',
-      role: 'Sample professional',
-      service: 'Events & hospitality',
-      quote: 'The café needed someone for a busy weekend. We agreed on the hours and the pay beforehand, so I knew exactly what to expect on my first shift.',
+      role: m.reviews_sample_professional(),
+      service: m.reviews_service_events(),
+      quote: m.reviews_quote_sara(),
       tone: 'fresh'
     }
-  ];
+  ]);
 </script>
+
 
 <section id="reviews" class="reviews-section page-pad section-space" aria-labelledby="reviews-title">
   <div class="reviews-heading">
     <div>
-      <p class="eyebrow">Reviews &amp; experiences</p>
-      <h2 id="reviews-title">A little feedback.<br />A lot of confidence.</h2>
+      <p class="eyebrow">{m.reviews_eyebrow()}</p>
+      <h2 id="reviews-title">{m.reviews_title1()}<br />{m.reviews_title2()}</h2>
     </div>
     <div class="reviews-intro">
-      <p>The communication. The care. The finished job.<br />The small things people remember.</p>
-      <span class="preview-note">Design preview · Sample names and reviews</span>
+      <p>{m.reviews_intro1()}<br />{m.reviews_intro2()}</p>
+      <span class="preview-note">{m.reviews_preview_note()}</span>
     </div>
   </div>
 
@@ -48,7 +51,7 @@
           <span class="service-label">{review.service}</span>
           <Quote size={22} strokeWidth={1.4} aria-hidden="true" />
         </div>
-        <div class="review-stars" role="img" aria-label="Example rating: 5 out of 5 stars">
+        <div class="review-stars" role="img" aria-label={m.reviews_rating_aria()}>
           {#each Array(5) as _}
             <Star size={16} strokeWidth={1.4} fill="currentColor" aria-hidden="true" />
           {/each}
@@ -60,7 +63,7 @@
             <span class="review-name">{review.name}</span>
             <span class="review-role">{review.role}</span>
           </div>
-          <span class="example-label">Example review</span>
+          <span class="example-label">{m.reviews_example_label()}</span>
         </figcaption>
       </figure>
     {/each}
