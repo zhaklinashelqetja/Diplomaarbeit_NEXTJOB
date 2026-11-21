@@ -1,731 +1,1032 @@
 
 <script>
-	import { goto } from '$app/navigation';
-	import { resolve } from '$app/paths';
-	import { page } from '$app/state';
-	import { isLoggedIn, currentUser, logout } from '$lib/auth.js';
+    import { goto } from '$app/navigation';
+    import { resolve } from '$app/paths';
+    import { page } from '$app/state';
+    import { isLoggedIn, currentUser, logout } from '$lib/auth.js';
 
-	import {
-		House,
-		BriefcaseBusiness,
-		MessageCircle,
-		Bell,
-		UserRound,
-		Menu,
-		X,
-		ChevronDown,
-		ArrowUpRight,
-		LogOut,
-		Search
-	} from '@lucide/svelte';
+    import {
+        House,
+        BriefcaseBusiness,
+        MessageCircle,
+        Bell,
+        UserRound,
+        Menu,
+        X,
+        ChevronDown,
+        ArrowUpRight,
+        LogOut,
+        Search
+    } from '@lucide/svelte';
 
-	let menuOpen = $state(false);
-	let profileOpen = $state(false);
+    let menuOpen = $state(false);
+    let profileOpen = $state(false);
 
-	let accountType = $derived($currentUser?.account_type);
+    let searchQuery = $state('');
+    let searchCategory = $state('all');
+    let searchOpen = $state(false);
 
-	let emailUnverified = $derived(
-		$isLoggedIn &&
-		$currentUser &&
-		$currentUser.is_verified === false
-	);
+    let accountType = $derived($currentUser?.account_type);
 
-	let profileName = $derived(
-		$currentUser?.name ||
-		$currentUser?.username ||
-		$currentUser?.email?.split('@')[0] ||
-		'NextJob'
-	);
+    let emailUnverified = $derived(
+        $isLoggedIn &&
+        $currentUser &&
+        $currentUser.is_verified === false
+    );
 
-	let profileInitial = $derived(
-		profileName.charAt(0).toUpperCase()
-	);
+    let profileName = $derived(
+        $currentUser?.name ||
+        $currentUser?.username ||
+        $currentUser?.email?.split('@')[0] ||
+        'NextJob'
+    );
 
-	function closeMenu() {
-		menuOpen = false;
-		profileOpen = false;
-	}
+    let profileInitial = $derived(
+        profileName.charAt(0).toUpperCase()
+    );
 
-	function handleLogout() {
-		logout();
-		closeMenu();
-		goto(resolve('/'));
-	}
+    function closeMenu() {
+        menuOpen = false;
+        profileOpen = false;
+        searchOpen = false;
+    }
 
-	function isActive(path) {
-		return page.url.pathname === resolve(path);
-	}
+    function handleLogout() {
+        logout();
+        closeMenu();
+        goto(resolve('/'));
+    }
+
+    function isActive(path) {
+        return page.url.pathname === resolve(path);
+    }
+
+    function submitSearch(event) {
+        event.preventDefault();
+
+        const query = searchQuery.trim();
+
+        if (!query) return;
+
+        const params = new URLSearchParams({
+            q: query,
+            type: searchCategory
+        });
+
+        searchOpen = false;
+        goto(`${resolve('/suche')}?${params.toString()}`);
+    }
+
+    function selectCategory(category) {
+        searchCategory = category;
+    }
 </script>
 
 <svelte:head>
-	<meta name="theme-color" content="#F5F1EE" />
+    <meta name="theme-color" content="#F5F1EE" />
 </svelte:head>
 
 <nav class="nextjob-nav">
-	<div class="nav-container">
+    <div class="nav-container">
 
-		<!-- Logo -->
-		<a
-			href={resolve('/')}
-			class="brand"
-			onclick={closeMenu}
-			aria-label="NextJob Startseite"
-		>
-			<img
-				src="/images/nextjob-logo.png"
-				alt="NextJob Logo"
-				class="brand-logo"
-			/>
+        <!-- Logo -->
+        <a
+            href={resolve('/')}
+            class="brand"
+            onclick={closeMenu}
+            aria-label="NextJob Startseite"
+        >
+            <img
+                src="/images/nextjob-logo.png"
+                alt="NextJob Logo"
+                class="brand-logo"
+            />
+            <span class="brand-name">NEXTJOB</span>
+        </a>
 
-			<span class="brand-name">NEXTJOB</span>
-		</a>
+        <!-- Suche -->
+        <div class="search-wrapper">
+            <form
+                class="nav-search"
+                role="search"
+                onsubmit={submitSearch}
+            >
+                <Search
+                    size={19}
+                    strokeWidth={1.8}
+                    class="search-icon"
+                    aria-hidden="true"
+                />
 
-		<!-- Desktop Navigation -->
-		<div class="desktop-navigation">
-			{#if $isLoggedIn}
+                <input
+                    type="search"
+                    bind:value={searchQuery}
+                    onfocus={() => (searchOpen = true)}
+                    placeholder="Jobs oder Nutzer suchen"
+                    aria-label="Jobs oder Nutzer suchen"
+                />
 
-				<a
-					href={resolve('/')}
-					class="nav-icon-link"
-					class:active={isActive('/')}
-					aria-current={isActive('/') ? 'page' : undefined}
-				>
-					<House size={21} strokeWidth={1.7} />
-					<span>Start</span>
-				</a>
+                {#if searchQuery}
+                    <button
+                        type="button"
+                        class="search-clear"
+                        onclick={() => (searchQuery = '')}
+                        aria-label="Suche löschen"
+                    >
+                        <X size={16} />
+                    </button>
+                {/if}
 
-				<a
-					href={resolve('/jobs')}
-					class="nav-icon-link"
-					class:active={isActive('/jobs')}
-					aria-current={isActive('/jobs') ? 'page' : undefined}
-				>
-					<BriefcaseBusiness size={21} strokeWidth={1.7} />
-					<span>Jobs</span>
-				</a>
+                <button
+                    type="submit"
+                    class="search-submit"
+                    disabled={!searchQuery.trim()}
+                    aria-label="Suche starten"
+                >
+                    <ArrowUpRight size={19} />
+                </button>
+            </form>
 
-				{#if accountType === 'jobnehmer'}
-					<a
-						href={resolve('/jobnehmer/hauptseite')}
-						class="nav-icon-link"
-						class:active={isActive('/jobnehmer/hauptseite')}
-					>
-						<UserRound size={21} strokeWidth={1.7} />
-						<span>Mein Bereich</span>
-					</a>
-				{/if}
+            {#if searchOpen}
+                <div class="search-panel">
+                    <div class="search-panel-header">
+                        <span>SUCHEN NACH</span>
 
-				<a
-					href={resolve('/chat')}
-					class="nav-icon-link"
-					class:active={isActive('/chat')}
-				>
-					<MessageCircle size={21} strokeWidth={1.7} />
-					<span>Nachrichten</span>
-				</a>
+                        <button
+                            type="button"
+                            onclick={() => (searchOpen = false)}
+                            aria-label="Suchfilter schließen"
+                        >
+                            <X size={15} />
+                        </button>
+                    </div>
 
-				<a
-					href={resolve('/benachrichtigungen')}
-					class="nav-icon-link"
-					class:active={isActive('/benachrichtigungen')}
-				>
-					<Bell size={21} strokeWidth={1.7} />
-					<span>Mitteilungen</span>
-				</a>
+                    <div class="search-filters">
+                        <button
+                            type="button"
+                            class:chosen={searchCategory === 'all'}
+                            onclick={() => selectCategory('all')}
+                        >
+                            Alle
+                        </button>
 
-			{:else}
+                        <button
+                            type="button"
+                            class:chosen={searchCategory === 'jobs'}
+                            onclick={() => selectCategory('jobs')}
+                        >
+                            <BriefcaseBusiness size={15} />
+                            Jobs
+                        </button>
 
-				<a
-					href={resolve('/')}
-					class="public-link"
-					class:active={isActive('/')}
-				>
-					Start
-				</a>
+                        <button
+                            type="button"
+                            class:chosen={searchCategory === 'users'}
+                            onclick={() => selectCategory('users')}
+                        >
+                            <UserRound size={15} />
+                            Nutzer
+                        </button>
+                    </div>
 
-				<a
-					href={resolve('/jobs')}
-					class="public-link"
-					class:active={isActive('/jobs')}
-				>
-					Jobs & Dienstleistungen
-				</a>
+                    <p class="search-help">
+                        Suche nach Jobs, Dienstleistungen oder Personen.
+                    </p>
+                </div>
+            {/if}
+        </div>
 
-			{/if}
-		</div>
+        <!-- Desktop Navigation -->
+        <div class="desktop-navigation">
+            {#if $isLoggedIn}
+                <a
+                    href={resolve('/')}
+                    class="nav-icon-link"
+                    class:active={isActive('/')}
+                    aria-current={isActive('/') ? 'page' : undefined}
+                >
+                    <House size={21} strokeWidth={1.7} />
+                    <span>Start</span>
+                </a>
 
-		<!-- Desktop Actions -->
-		<div class="desktop-actions">
-			{#if $isLoggedIn}
+                <a
+                    href={resolve('/jobs')}
+                    class="nav-icon-link"
+                    class:active={isActive('/jobs')}
+                >
+                    <BriefcaseBusiness size={21} strokeWidth={1.7} />
+                    <span>Jobs</span>
+                </a>
 
-				<div class="profile-container">
-					<button
-						type="button"
-						class="profile-trigger"
-						onclick={() => (profileOpen = !profileOpen)}
-						aria-expanded={profileOpen}
-						aria-label="Profilmenü"
-					>
-						<span class="avatar">
-							{profileInitial}
-						</span>
+                {#if accountType === 'jobnehmer'}
+                    <a
+                        href={resolve('/jobnehmer/hauptseite')}
+                        class="nav-icon-link"
+                        class:active={isActive('/jobnehmer/hauptseite')}
+                    >
+                        <UserRound size={21} strokeWidth={1.7} />
+                        <span>Mein Bereich</span>
+                    </a>
+                {/if}
 
-						<ChevronDown
-							size={15}
-							strokeWidth={1.7}
-						/>
-					</button>
+                <a
+                    href={resolve('/chat')}
+                    class="nav-icon-link"
+                    class:active={isActive('/chat')}
+                >
+                    <MessageCircle size={21} strokeWidth={1.7} />
+                    <span>Nachrichten</span>
+                </a>
 
-					{#if profileOpen}
-						<div class="profile-dropdown">
+                <a
+                    href={resolve('/benachrichtigungen')}
+                    class="nav-icon-link"
+                    class:active={isActive('/benachrichtigungen')}
+                >
+                    <Bell size={21} strokeWidth={1.7} />
+                    <span>Mitteilungen</span>
+                </a>
+            {:else}
+                <a
+                    href={resolve('/')}
+                    class="public-link"
+                    class:active={isActive('/')}
+                >
+                    Start
+                </a>
 
-							<div class="profile-info">
-								<p class="profile-name">
-									{profileName}
-								</p>
+                <a
+                    href={resolve('/jobs')}
+                    class="public-link"
+                    class:active={isActive('/jobs')}
+                >
+                    Jobs & Dienstleistungen
+                </a>
+            {/if}
+        </div>
 
-								<p class="profile-email">
-									{$currentUser?.email || ''}
-								</p>
-							</div>
+        <!-- Desktop Actions -->
+        <div class="desktop-actions">
+            {#if $isLoggedIn}
+                <div class="profile-container">
+                    <button
+                        type="button"
+                        class="profile-trigger"
+                        onclick={() => (profileOpen = !profileOpen)}
+                        aria-expanded={profileOpen}
+                        aria-label="Profilmenü"
+                    >
+                        <span class="avatar">
+                            {profileInitial}
+                        </span>
 
-							{#if accountType === 'jobnehmer'}
-								<a
-									href={resolve('/jobnehmer/hauptseite')}
-									onclick={closeMenu}
-									class="dropdown-link"
-								>
-									<UserRound size={17} />
-									Mein Bereich
-								</a>
-							{/if}
+                        <ChevronDown size={15} strokeWidth={1.7} />
+                    </button>
 
-							<button
-								type="button"
-								class="dropdown-link logout-link"
-								onclick={handleLogout}
-							>
-								<LogOut size={17} />
-								Abmelden
-							</button>
-						</div>
-					{/if}
-				</div>
+                    {#if profileOpen}
+                        <div class="profile-dropdown">
+                            <div class="profile-info">
+                                <p class="profile-name">
+                                    {profileName}
+                                </p>
 
-			{:else}
+                                <p class="profile-email">
+                                    {$currentUser?.email || ''}
+                                </p>
+                            </div>
 
-				<a
-					href={resolve('/auth/login')}
-					class="login-link"
-				>
-					Anmelden
-				</a>
+                            {#if accountType === 'jobnehmer'}
+                                <a
+                                    href={resolve('/jobnehmer/hauptseite')}
+                                    onclick={closeMenu}
+                                    class="dropdown-link"
+                                >
+                                    <UserRound size={17} />
+                                    Mein Bereich
+                                </a>
+                            {/if}
 
-				<a
-					href={resolve('/auth/register')}
-					class="register-button"
-				>
-					Registrieren
-					<ArrowUpRight size={17} strokeWidth={1.8} />
-				</a>
+                            <button
+                                type="button"
+                                class="dropdown-link logout-link"
+                                onclick={handleLogout}
+                            >
+                                <LogOut size={17} />
+                                Abmelden
+                            </button>
+                        </div>
+                    {/if}
+                </div>
+            {:else}
+                <a
+                    href={resolve('/auth/login')}
+                    class="login-link"
+                >
+                    Anmelden
+                </a>
 
-			{/if}
-		</div>
+                <a
+                    href={resolve('/auth/register')}
+                    class="register-button"
+                >
+                    Registrieren
+                    <ArrowUpRight size={17} strokeWidth={1.8} />
+                </a>
+            {/if}
+        </div>
 
-		<!-- Mobile Menu Button -->
-		<button
-			type="button"
-			class="mobile-toggle"
-			onclick={() => (menuOpen = !menuOpen)}
-			aria-expanded={menuOpen}
-			aria-label={menuOpen ? 'Menü schließen' : 'Menü öffnen'}
-		>
-			{#if menuOpen}
-				<X size={25} strokeWidth={1.7} />
-			{:else}
-				<Menu size={25} strokeWidth={1.7} />
-			{/if}
-		</button>
-	</div>
+        <!-- Mobile Menu -->
+        <button
+            type="button"
+            class="mobile-toggle"
+            onclick={() => (menuOpen = !menuOpen)}
+            aria-expanded={menuOpen}
+            aria-label={menuOpen ? 'Menü schließen' : 'Menü öffnen'}
+        >
+            {#if menuOpen}
+                <X size={25} strokeWidth={1.7} />
+            {:else}
+                <Menu size={25} strokeWidth={1.7} />
+            {/if}
+        </button>
+    </div>
 
-	<!-- Mobile Navigation -->
-	{#if menuOpen}
-		<div class="mobile-navigation">
+    <!-- Mobile Navigation -->
+    {#if menuOpen}
+        <div class="mobile-navigation">
+            {#if $isLoggedIn}
+                <div class="mobile-profile">
+                    <span class="avatar">
+                        {profileInitial}
+                    </span>
 
-			{#if $isLoggedIn}
-				<div class="mobile-profile">
-					<span class="avatar">
-						{profileInitial}
-					</span>
+                    <div class="mobile-profile-text">
+                        <strong>{profileName}</strong>
+                        <small>{$currentUser?.email || ''}</small>
+                    </div>
+                </div>
+            {/if}
 
-					<div class="mobile-profile-text">
-						<strong>{profileName}</strong>
-						<small>{$currentUser?.email || ''}</small>
-					</div>
-				</div>
-			{/if}
+            <a
+                href={resolve('/')}
+                onclick={closeMenu}
+                class="mobile-link"
+            >
+                <House size={19} />
+                Start
+            </a>
 
-			<a
-				href={resolve('/')}
-				onclick={closeMenu}
-				class="mobile-link"
-			>
-				<House size={19} />
-				Start
-			</a>
+            <a
+                href={resolve('/jobs')}
+                onclick={closeMenu}
+                class="mobile-link"
+            >
+                <BriefcaseBusiness size={19} />
+                Jobs & Dienstleistungen
+            </a>
 
-			<a
-				href={resolve('/jobs')}
-				onclick={closeMenu}
-				class="mobile-link"
-			>
-				<BriefcaseBusiness size={19} />
-				Jobs & Dienstleistungen
-			</a>
+            {#if $isLoggedIn}
+                {#if accountType === 'jobnehmer'}
+                    <a
+                        href={resolve('/jobnehmer/hauptseite')}
+                        onclick={closeMenu}
+                        class="mobile-link"
+                    >
+                        <UserRound size={19} />
+                        Mein Bereich
+                    </a>
+                {/if}
 
-			{#if $isLoggedIn}
+                <a
+                    href={resolve('/chat')}
+                    onclick={closeMenu}
+                    class="mobile-link"
+                >
+                    <MessageCircle size={19} />
+                    Nachrichten
+                </a>
 
-				{#if accountType === 'jobnehmer'}
-					<a
-						href={resolve('/jobnehmer/hauptseite')}
-						onclick={closeMenu}
-						class="mobile-link"
-					>
-						<UserRound size={19} />
-						Mein Bereich
-					</a>
-				{/if}
+                <a
+                    href={resolve('/benachrichtigungen')}
+                    onclick={closeMenu}
+                    class="mobile-link"
+                >
+                    <Bell size={19} />
+                    Benachrichtigungen
+                </a>
 
-				<a
-					href={resolve('/chat')}
-					onclick={closeMenu}
-					class="mobile-link"
-				>
-					<MessageCircle size={19} />
-					Nachrichten
-				</a>
+                <button
+                    type="button"
+                    onclick={handleLogout}
+                    class="mobile-logout"
+                >
+                    <LogOut size={19} />
+                    Abmelden
+                </button>
+            {:else}
+                <a
+                    href={resolve('/auth/login')}
+                    onclick={closeMenu}
+                    class="mobile-link"
+                >
+                    <UserRound size={19} />
+                    Anmelden
+                </a>
 
-				<a
-					href={resolve('/benachrichtigungen')}
-					onclick={closeMenu}
-					class="mobile-link"
-				>
-					<Bell size={19} />
-					Benachrichtigungen
-				</a>
+                <a
+                    href={resolve('/auth/register')}
+                    onclick={closeMenu}
+                    class="mobile-register"
+                >
+                    Registrieren
+                    <ArrowUpRight size={19} />
+                </a>
+            {/if}
+        </div>
+    {/if}
 
-				<button
-					type="button"
-					onclick={handleLogout}
-					class="mobile-logout"
-				>
-					<LogOut size={19} />
-					Abmelden
-				</button>
+    <!-- E-Mail Verification -->
+    {#if emailUnverified}
+        <div class="verification-notice">
+            <span>
+                Bitte bestätige deine E-Mail-Adresse.
+            </span>
 
-			{:else}
-
-				<a
-					href={resolve('/auth/login')}
-					onclick={closeMenu}
-					class="mobile-link"
-				>
-					<UserRound size={19} />
-					Anmelden
-				</a>
-
-				<a
-					href={resolve('/auth/register')}
-					onclick={closeMenu}
-					class="mobile-register"
-				>
-					Registrieren
-					<ArrowUpRight size={19} />
-				</a>
-
-			{/if}
-		</div>
-	{/if}
-
-	<!-- E-Mail Verification -->
-	{#if emailUnverified}
-		<div class="verification-notice">
-			<span>
-				Bitte bestätige deine E-Mail-Adresse.
-			</span>
-
-			<a href={resolve('/auth/verifizierung')}>
-				Jetzt bestätigen
-				<ArrowUpRight size={15} />
-			</a>
-		</div>
-	{/if}
+            <a href={resolve('/auth/verifizierung')}>
+                Jetzt bestätigen
+                <ArrowUpRight size={15} />
+            </a>
+        </div>
+    {/if}
 </nav>
 
 <style>
-	.nextjob-nav {
-		position: sticky;
-		top: 0;
-		z-index: 50;
-		background: var(--color-off-white);
-		color: var(--color-charcoal);
-		font-family: var(--font-body);
-		border-bottom: 1px solid
-			color-mix(in srgb, var(--color-charcoal) 12%, transparent);
-	}
+    .nextjob-nav {
+        position: sticky;
+        top: 0;
+        z-index: 50;
+        background: var(--color-off-white);
+        color: var(--color-charcoal);
+        font-family: var(--font-body);
+        border-bottom: 1px solid
+            color-mix(in srgb, var(--color-charcoal) 12%, transparent);
+    }
 
-	.nav-container {
-		max-width: 1600px;
-		margin: 0 auto;
-		padding: 0 clamp(24px, 4.2vw, 88px);
-		min-height: 82px;
-		display: flex;
-		align-items: center;
-		justify-content: space-between;
-		gap: 24px;
-	}
+    .nav-container {
+        max-width: 1600px;
+        margin: 0 auto;
+        padding: 0 clamp(24px, 4.2vw, 88px);
+        min-height: 82px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+    }
 
-	.brand {
-		display: inline-flex;
-		align-items: center;
-		gap: 10px;
-		flex-shrink: 0;
-		text-decoration: none;
-		color: inherit;
-	}
+    .brand {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        flex-shrink: 0;
+        text-decoration: none;
+        color: inherit;
+    }
 
-	.brand-logo {
-		height: 42px;
-		width: auto;
-		object-fit: contain;
-	}
+    .brand-logo {
+        height: 42px;
+        width: auto;
+        object-fit: contain;
+    }
 
-	.brand-name {
-		font-family: var(--font-display);
-		font-size: 22px;
-		font-weight: 700;
-		letter-spacing: -0.035em;
-	}
+    .brand-name {
+        font-family: var(--font-display);
+        font-size: 22px;
+        font-weight: 700;
+        letter-spacing: -0.035em;
+    }
 
-	.desktop-navigation,
-	.desktop-actions {
-		display: flex;
-		align-items: center;
-		gap: 12px;
-	}
+    /* Suche */
+    .search-wrapper {
+        position: relative;
+        flex: 0 1 330px;
+        min-width: 0;
+    }
 
-	.desktop-navigation {
-		margin-left: auto;
-	}
+    .nav-search {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        width: 100%;
+        min-height: 46px;
+        padding: 0 7px 0 15px;
+        border: 1px solid
+            color-mix(in srgb, var(--color-charcoal) 13%, transparent);
+        border-radius: 7px;
+        background: color-mix(
+            in srgb,
+            var(--color-sage) 13%,
+            var(--color-off-white)
+        );
+        transition: border-color 0.2s, background 0.2s;
+    }
 
-	.public-link {
-		display: inline-flex;
-		align-items: center;
-		padding: 12px 15px;
-		font-size: 14px;
-		font-weight: 500;
-		color: var(--color-charcoal);
-		text-decoration: none;
-		transition: color 0.2s;
-	}
+    .nav-search:focus-within {
+        border-color: var(--color-fresh);
+        background: var(--color-off-white);
+    }
 
-	.public-link:hover,
-	.public-link.active {
-		color: var(--color-fresh);
-	}
+    .nav-search :global(.search-icon) {
+        flex-shrink: 0;
+        color: var(--color-charcoal);
+        opacity: 0.6;
+    }
 
-	.nav-icon-link {
-		display: flex;
-		min-width: 75px;
-		align-items: center;
-		justify-content: center;
-		flex-direction: column;
-		gap: 6px;
-		padding: 13px 9px 10px;
-		border-bottom: 2px solid transparent;
-		color: var(--color-charcoal);
-		font-size: 11px;
-		font-weight: 500;
-		text-decoration: none;
-		transition: color 0.2s, border-color 0.2s;
-	}
+    .nav-search input {
+        flex: 1;
+        width: 100%;
+        min-width: 0;
+        padding: 11px 0;
+        border: 0;
+        outline: 0;
+        background: transparent;
+        color: var(--color-charcoal);
+        font-family: var(--font-body);
+        font-size: 13px;
+    }
 
-	.nav-icon-link:hover,
-	.nav-icon-link.active {
-		color: var(--color-fresh);
-		border-bottom-color: var(--color-fresh);
-	}
+    .nav-search input::placeholder {
+        color: var(--color-charcoal);
+        opacity: 0.55;
+    }
 
-	.login-link {
-		padding: 11px 12px;
-		color: var(--color-charcoal);
-		font-size: 14px;
-		font-weight: 500;
-		text-decoration: none;
-	}
+    .nav-search input::-webkit-search-cancel-button {
+        display: none;
+    }
 
-	.login-link:hover {
-		color: var(--color-fresh);
-	}
+    .search-clear,
+    .search-submit {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        border: 0;
+        cursor: pointer;
+    }
 
-	.register-button {
-		display: inline-flex;
-		align-items: center;
-		justify-content: center;
-		gap: 16px;
-		min-height: 46px;
-		padding: 12px 17px;
-		background: var(--color-charcoal);
-		color: var(--color-off-white);
-		font-size: 14px;
-		font-weight: 600;
-		text-decoration: none;
-		transition: background 0.2s;
-	}
+    .search-clear {
+        width: 26px;
+        height: 30px;
+        background: transparent;
+        color: var(--color-charcoal);
+        opacity: 0.65;
+    }
 
-	.register-button:hover {
-		background: var(--color-fresh);
-		color: var(--color-charcoal);
-	}
+    .search-submit {
+        width: 32px;
+        height: 32px;
+        border-radius: 5px;
+        background: var(--color-charcoal);
+        color: var(--color-off-white);
+        transition: background 0.2s;
+    }
 
-	.profile-container {
-		position: relative;
-	}
+    .search-submit:hover:not(:disabled) {
+        background: var(--color-fresh);
+        color: var(--color-charcoal);
+    }
 
-	.profile-trigger {
-		display: flex;
-		align-items: center;
-		gap: 7px;
-		padding: 5px;
-		border: 0;
-		background: transparent;
-		color: var(--color-charcoal);
-		cursor: pointer;
-	}
+    .search-submit:disabled {
+        opacity: 0.35;
+        cursor: not-allowed;
+    }
 
-	.avatar {
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		width: 39px;
-		height: 39px;
-		flex-shrink: 0;
-		background: var(--color-sage);
-		color: var(--color-charcoal);
-		font-family: var(--font-display);
-		font-size: 17px;
-		font-weight: 600;
-	}
+    .search-panel {
+        position: absolute;
+        top: calc(100% + 10px);
+        left: 0;
+        width: 100%;
+        min-width: 290px;
+        padding: 16px;
+        border: 1px solid
+            color-mix(in srgb, var(--color-charcoal) 12%, transparent);
+        border-radius: 8px;
+        background: var(--color-off-white);
+        box-shadow: 0 15px 35px
+            color-mix(in srgb, var(--color-charcoal) 10%, transparent);
+        z-index: 60;
+    }
 
-	.profile-dropdown {
-		position: absolute;
-		right: 0;
-		top: calc(100% + 13px);
-		width: 250px;
-		padding: 8px;
-		background: var(--color-off-white);
-		border: 1px solid
-			color-mix(in srgb, var(--color-charcoal) 15%, transparent);
-		box-shadow: 0 15px 35px
-			color-mix(in srgb, var(--color-charcoal) 12%, transparent);
-	}
+    .search-panel-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 15px;
+    }
 
-	.profile-info {
-		padding: 12px;
-		margin-bottom: 7px;
-		border-bottom: 1px solid
-			color-mix(in srgb, var(--color-charcoal) 12%, transparent);
-	}
+    .search-panel-header span {
+        font-size: 10px;
+        font-weight: 700;
+        letter-spacing: 0.13em;
+        opacity: 0.65;
+    }
 
-	.profile-name {
-		font-size: 14px;
-		font-weight: 600;
-		overflow-wrap: anywhere;
-	}
+    .search-panel-header button {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: 0;
+        background: transparent;
+        color: var(--color-charcoal);
+        cursor: pointer;
+    }
 
-	.profile-email {
-		margin-top: 5px;
-		font-size: 11px;
-		opacity: 0.65;
-		overflow-wrap: anywhere;
-	}
+    .search-filters {
+        display: flex;
+        gap: 7px;
+    }
 
-	.dropdown-link {
-		display: flex;
-		align-items: center;
-		gap: 11px;
-		width: 100%;
-		padding: 12px;
-		border: 0;
-		background: transparent;
-		color: var(--color-charcoal);
-		font-size: 13px;
-		text-align: left;
-		text-decoration: none;
-		cursor: pointer;
-	}
+    .search-filters button {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+        padding: 9px 11px;
+        border: 1px solid
+            color-mix(in srgb, var(--color-charcoal) 12%, transparent);
+        border-radius: 5px;
+        background: transparent;
+        color: var(--color-charcoal);
+        font-family: var(--font-body);
+        font-size: 12px;
+        cursor: pointer;
+        transition: background 0.2s;
+    }
 
-	.dropdown-link:hover {
-		background: var(--color-sage);
-	}
+    .search-filters button:hover {
+        background: var(--color-sage);
+    }
 
-	.logout-link {
-		font-weight: 600;
-	}
+    .search-filters button.chosen {
+        border-color: var(--color-sage);
+        background: var(--color-sage);
+        font-weight: 600;
+    }
 
-	.mobile-toggle {
-		display: none;
-		align-items: center;
-		justify-content: center;
-		width: 42px;
-		height: 42px;
-		border: 1px solid
-			color-mix(in srgb, var(--color-charcoal) 20%, transparent);
-		background: transparent;
-		color: var(--color-charcoal);
-		cursor: pointer;
-	}
+    .search-help {
+        margin: 14px 0 0;
+        font-size: 11px;
+        line-height: 1.5;
+        opacity: 0.65;
+    }
 
-	.mobile-navigation {
-		display: none;
-		padding: 14px 24px 24px;
-		background: var(--color-off-white);
-		border-top: 1px solid
-			color-mix(in srgb, var(--color-charcoal) 12%, transparent);
-	}
+    /* Desktop Navigation */
+    .desktop-navigation,
+    .desktop-actions {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
 
-	.mobile-link {
-		display: flex;
-		align-items: center;
-		gap: 13px;
-		padding: 14px 10px;
-		color: var(--color-charcoal);
-		font-size: 14px;
-		font-weight: 500;
-		text-decoration: none;
-	}
+    .desktop-navigation {
+        margin-left: auto;
+    }
 
-	.mobile-link:hover {
-		background: var(--color-sage);
-	}
+    .public-link {
+        display: inline-flex;
+        align-items: center;
+        padding: 12px 15px;
+        font-size: 14px;
+        font-weight: 500;
+        color: var(--color-charcoal);
+        text-decoration: none;
+        transition: color 0.2s;
+    }
 
-	.mobile-profile {
-		display: flex;
-		align-items: center;
-		gap: 12px;
-		padding: 12px 10px 18px;
-		margin-bottom: 8px;
-		border-bottom: 1px solid
-			color-mix(in srgb, var(--color-charcoal) 12%, transparent);
-	}
+    .public-link:hover,
+    .public-link.active {
+        color: var(--color-fresh);
+    }
 
-	.mobile-profile-text {
-		display: flex;
-		flex-direction: column;
-		min-width: 0;
-		gap: 5px;
-	}
+    .nav-icon-link {
+        display: flex;
+        min-width: 75px;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        gap: 6px;
+        padding: 13px 9px 10px;
+        border-bottom: 2px solid transparent;
+        color: var(--color-charcoal);
+        font-size: 11px;
+        font-weight: 500;
+        text-decoration: none;
+        transition: color 0.2s, border-color 0.2s;
+    }
 
-	.mobile-profile-text strong {
-		font-size: 14px;
-	}
+    .nav-icon-link:hover,
+    .nav-icon-link.active {
+        color: var(--color-fresh);
+        border-bottom-color: var(--color-fresh);
+    }
 
-	.mobile-profile-text small {
-		font-size: 11px;
-		opacity: 0.65;
-		overflow-wrap: anywhere;
-	}
+    .login-link {
+        padding: 11px 12px;
+        color: var(--color-charcoal);
+        font-size: 14px;
+        font-weight: 500;
+        text-decoration: none;
+    }
 
-	.mobile-register,
-	.mobile-logout {
-		display: flex;
-		align-items: center;
-		justify-content: space-between;
-		gap: 12px;
-		width: 100%;
-		margin-top: 12px;
-		padding: 15px;
-		border: 0;
-		background: var(--color-charcoal);
-		color: var(--color-off-white);
-		font-size: 14px;
-		font-weight: 600;
-		text-decoration: none;
-		cursor: pointer;
-	}
+    .login-link:hover {
+        color: var(--color-fresh);
+    }
 
-	.verification-notice {
-		display: flex;
-		justify-content: center;
-		align-items: center;
-		gap: 10px;
-		flex-wrap: wrap;
-		padding: 12px 20px;
-		background: var(--color-sage);
-		font-size: 12px;
-	}
+    .register-button {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 16px;
+        min-height: 46px;
+        padding: 12px 17px;
+        background: var(--color-charcoal);
+        color: var(--color-off-white);
+        font-size: 14px;
+        font-weight: 600;
+        text-decoration: none;
+        transition: background 0.2s;
+    }
 
-	.verification-notice a {
-		display: inline-flex;
-		align-items: center;
-		gap: 5px;
-		color: var(--color-charcoal);
-		font-weight: 600;
-		text-decoration: underline;
-		text-underline-offset: 3px;
-	}
+    .register-button:hover {
+        background: var(--color-fresh);
+        color: var(--color-charcoal);
+    }
 
-	@media (max-width: 1150px) {
-		.nav-container {
-			gap: 10px;
-		}
+    /* Profile */
+    .profile-container {
+        position: relative;
+    }
 
-		.brand-name {
-			font-size: 19px;
-		}
+    .profile-trigger {
+        display: flex;
+        align-items: center;
+        gap: 7px;
+        padding: 5px;
+        border: 0;
+        background: transparent;
+        color: var(--color-charcoal);
+        cursor: pointer;
+    }
 
-		.desktop-navigation,
-		.desktop-actions {
-			gap: 4px;
-		}
+    .avatar {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 39px;
+        height: 39px;
+        flex-shrink: 0;
+        background: var(--color-sage);
+        color: var(--color-charcoal);
+        font-family: var(--font-display);
+        font-size: 17px;
+        font-weight: 600;
+    }
 
-		.nav-icon-link {
-			min-width: 65px;
-			padding-inline: 6px;
-		}
-	}
+    .profile-dropdown {
+        position: absolute;
+        right: 0;
+        top: calc(100% + 13px);
+        width: 250px;
+        padding: 8px;
+        background: var(--color-off-white);
+        border: 1px solid
+            color-mix(in srgb, var(--color-charcoal) 15%, transparent);
+        box-shadow: 0 15px 35px
+            color-mix(in srgb, var(--color-charcoal) 12%, transparent);
+        z-index: 70;
+    }
 
-	@media (max-width: 950px) {
-		.desktop-navigation,
-		.desktop-actions {
-			display: none;
-		}
+    .profile-info {
+        padding: 12px;
+        margin-bottom: 7px;
+        border-bottom: 1px solid
+            color-mix(in srgb, var(--color-charcoal) 12%, transparent);
+    }
 
-		.mobile-toggle,
-		.mobile-navigation {
-			display: flex;
-		}
+    .profile-name {
+        font-size: 14px;
+        font-weight: 600;
+        overflow-wrap: anywhere;
+    }
 
-		.mobile-navigation {
-			flex-direction: column;
-		}
+    .profile-email {
+        margin-top: 5px;
+        font-size: 11px;
+        opacity: 0.65;
+        overflow-wrap: anywhere;
+    }
 
-		.nav-container {
-			min-height: 72px;
-		}
-	}
+    .dropdown-link {
+        display: flex;
+        align-items: center;
+        gap: 11px;
+        width: 100%;
+        padding: 12px;
+        border: 0;
+        background: transparent;
+        color: var(--color-charcoal);
+        font-size: 13px;
+        text-align: left;
+        text-decoration: none;
+        cursor: pointer;
+    }
 
-	@media (max-width: 420px) {
-		.brand-logo {
-			height: 36px;
-		}
+    .dropdown-link:hover {
+        background: var(--color-sage);
+    }
 
-		.brand-name {
-			font-size: 19px;
-		}
+    .logout-link {
+        font-weight: 600;
+    }
 
-		.nav-container {
-			padding-inline: 20px;
-		}
-	}
+    /* Mobile */
+    .mobile-toggle {
+        display: none;
+        align-items: center;
+        justify-content: center;
+        width: 42px;
+        height: 42px;
+        border: 1px solid
+            color-mix(in srgb, var(--color-charcoal) 20%, transparent);
+        background: transparent;
+        color: var(--color-charcoal);
+        cursor: pointer;
+    }
+
+    .mobile-navigation {
+        display: none;
+        padding: 14px 24px 24px;
+        background: var(--color-off-white);
+        border-top: 1px solid
+            color-mix(in srgb, var(--color-charcoal) 12%, transparent);
+    }
+
+    .mobile-link {
+        display: flex;
+        align-items: center;
+        gap: 13px;
+        padding: 14px 10px;
+        color: var(--color-charcoal);
+        font-size: 14px;
+        font-weight: 500;
+        text-decoration: none;
+    }
+
+    .mobile-link:hover {
+        background: var(--color-sage);
+    }
+
+    .mobile-profile {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 12px 10px 18px;
+        margin-bottom: 8px;
+        border-bottom: 1px solid
+            color-mix(in srgb, var(--color-charcoal) 12%, transparent);
+    }
+
+    .mobile-profile-text {
+        display: flex;
+        flex-direction: column;
+        min-width: 0;
+        gap: 5px;
+    }
+
+    .mobile-profile-text strong {
+        font-size: 14px;
+    }
+
+    .mobile-profile-text small {
+        font-size: 11px;
+        opacity: 0.65;
+        overflow-wrap: anywhere;
+    }
+
+    .mobile-register,
+    .mobile-logout {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        width: 100%;
+        margin-top: 12px;
+        padding: 15px;
+        border: 0;
+        background: var(--color-charcoal);
+        color: var(--color-off-white);
+        font-size: 14px;
+        font-weight: 600;
+        text-decoration: none;
+        cursor: pointer;
+    }
+
+    /* Verification */
+    .verification-notice {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 10px;
+        flex-wrap: wrap;
+        padding: 12px 20px;
+        background: var(--color-sage);
+        font-size: 12px;
+    }
+
+    .verification-notice a {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        color: var(--color-charcoal);
+        font-weight: 600;
+        text-decoration: underline;
+        text-underline-offset: 3px;
+    }
+
+    /* Responsive */
+    @media (max-width: 1350px) and (min-width: 951px) {
+        .nav-container {
+            flex-wrap: wrap;
+            padding-top: 12px;
+            padding-bottom: 12px;
+            row-gap: 8px;
+        }
+
+        .search-wrapper {
+            order: 3;
+            flex: 1 0 100%;
+            max-width: 430px;
+        }
+    }
+
+    @media (max-width: 1150px) {
+        .brand-name {
+            font-size: 19px;
+        }
+
+        .desktop-navigation,
+        .desktop-actions {
+            gap: 4px;
+        }
+
+        .nav-icon-link {
+            min-width: 65px;
+            padding-inline: 6px;
+        }
+    }
+
+    @media (max-width: 950px) {
+        .desktop-navigation,
+        .desktop-actions {
+            display: none;
+        }
+
+        .mobile-toggle,
+        .mobile-navigation {
+            display: flex;
+        }
+
+        .mobile-navigation {
+            flex-direction: column;
+        }
+
+        .nav-container {
+            min-height: 72px;
+            flex-wrap: wrap;
+            padding-block: 12px;
+        }
+
+        .search-wrapper {
+            order: 3;
+            flex: 1 0 100%;
+            max-width: none;
+        }
+    }
+
+    @media (max-width: 420px) {
+        .brand-logo {
+            height: 36px;
+        }
+
+        .brand-name {
+            font-size: 19px;
+        }
+
+        .nav-container {
+            padding-inline: 20px;
+        }
+
+        .search-panel {
+            min-width: 0;
+        }
+    }
 </style>
