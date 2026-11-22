@@ -712,7 +712,17 @@
 "chat_loading": "Unterhaltungen werden geladen ...",
 "chat_empty": "Du hast noch keine Unterhaltungen.",
 "chat_load_error": "Unterhaltungen konnten nicht geladen werden.",
-"chat_server_error": "Der Server ist momentan nicht erreichbar."
+"chat_server_error": "Der Server ist momentan nicht erreichbar.",
+
+"chat_back": "Zurück zu den Nachrichten",
+"chat_loading_conversation": "Unterhaltung wird geladen ...",
+"chat_empty_conversation": "Noch keine Nachrichten. Schreibe die erste Nachricht.",
+"chat_message_placeholder": "Nachricht schreiben ...",
+"chat_sending": "Wird gesendet ...",
+"chat_send": "Senden",
+"chat_load_failed": "Die Unterhaltung konnte nicht geladen werden.",
+"chat_send_failed": "Die Nachricht konnte nicht gesendet werden."
+
 
 
 

@@ -711,7 +711,17 @@
 "chat_loading": "Bisedat po ngarkohen ...",
 "chat_empty": "Nuk ke ende asnjë bisedë.",
 "chat_load_error": "Bisedat nuk mund të ngarkoheshin.",
-"chat_server_error": "Serveri nuk është i disponueshëm për momentin."
+"chat_server_error": "Serveri nuk është i disponueshëm për momentin.",
+
+"chat_back": "Kthehu te mesazhet",
+"chat_loading_conversation": "Biseda po ngarkohet ...",
+"chat_empty_conversation": "Ende nuk ka mesazhe. Shkruaj mesazhin e parë.",
+"chat_message_placeholder": "Shkruaj një mesazh ...",
+"chat_sending": "Duke dërguar ...",
+"chat_send": "Dërgo",
+"chat_load_failed": "Biseda nuk mund të ngarkohej.",
+"chat_send_failed": "Mesazhi nuk mund të dërgohej."
+
 
 
 
