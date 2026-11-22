@@ -600,7 +600,13 @@
   "search_local_worker": "Lokaler Dienstleister",
   "search_and": "und",
   "search_load_failed": "{items} konnten nicht geladen werden.",
-  "search_load_error": "Beim Laden der Suchergebnisse ist ein Fehler aufgetreten."
+  "search_load_error": "Beim Laden der Suchergebnisse ist ein Fehler aufgetreten.",
+
+"error_label": "Fehler",
+"error_heading": "Etwas ist schiefgelaufen",
+"error_description": "Diese Seite existiert nicht oder ist nicht verfügbar.",
+"error_back_home": "Zurück zur Startseite"
+
 
 
 

@@ -599,7 +599,13 @@
   "search_local_worker": "Ofrues lokal shërbimesh",
   "search_and": "dhe",
   "search_load_failed": "Nuk u arrit të ngarkoheshin: {items}.",
-  "search_load_error": "Ndodhi një gabim gjatë ngarkimit të rezultateve të kërkimit."
+  "search_load_error": "Ndodhi një gabim gjatë ngarkimit të rezultateve të kërkimit.",
+  
+"error_label": "Gabim",
+"error_heading": "Diçka shkoi keq",
+"error_description": "Kjo faqe nuk ekziston ose nuk është e disponueshme.",
+"error_back_home": "Kthehu në faqen kryesore"
+
 
 
 
