@@ -63,14 +63,31 @@
 				return;
 			}
 
-			// Token speichern
+			// 1. Token weiterhin im localStorage speichern
 			localStorage.setItem('token', data.token);
-			isLoggedIn.set(true);
 
-			// Rolle und Verifizierungsstatus sofort laden
+			// 2. Dasselbe Token als HTTP-only Cookie speichern
+			const sessionRes = await fetch('/api/auth/session', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify({
+					token: data.token
+				})
+			});
+
+			if (!sessionRes.ok) {
+				localStorage.removeItem('token');
+				error = 'login_failed';
+				return;
+			}
+
+			// 3. Login-Status und Benutzerdaten laden
+			isLoggedIn.set(true);
 			await loadCurrentUser();
 
-			// Benutzerdaten vom Backend abrufen
+			// 4. Benutzerdaten vom Backend abrufen
 			const userRes = await fetch(`${API_URL}/api/auth/me`, {
 				headers: {
 					Authorization: `Bearer ${data.token}`
@@ -86,7 +103,7 @@
 			const user = userData.user ?? userData;
 			const accountType = user.account_type;
 
-			// Zur passenden Hauptseite weiterleiten
+			// 5. Zur passenden Hauptseite weiterleiten
 			if (user.is_admin) {
 				await goto(resolve('/admin'));
 			} else if (accountType === 'jobnehmer') {
@@ -96,7 +113,8 @@
 			} else {
 				error = 'login_failed';
 			}
-		} catch {
+		} catch (err) {
+			console.error('Login error:', err);
 			error = 'login_server_error';
 		} finally {
 			loading = false;
