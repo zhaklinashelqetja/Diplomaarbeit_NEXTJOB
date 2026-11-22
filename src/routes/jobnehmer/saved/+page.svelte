@@ -52,155 +52,180 @@
 </svelte:head>
 
 <div class="min-h-screen bg-[#F5F1EE] text-[#2A2E38]">
-    <main class="mx-auto max-w-7xl px-4 py-7 sm:px-6 sm:py-10">
-        <!-- SEITENKOPF -->
-        <section class="mb-8">
-            <p
-                class="text-sm font-semibold uppercase tracking-wider text-[#398875]"
-            >
-                {$t('profile_my_area')}
-            </p>
+    <main class="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-10">
 
-            <div
-                class="mt-2 flex flex-wrap items-end justify-between gap-4"
-            >
+        <!-- HEADER -->
+        <section class="mb-12">
+            <div class="flex flex-col justify-between gap-6 sm:flex-row sm:items-end">
                 <div>
-                    <h1 class="text-3xl font-bold tracking-tight sm:text-4xl">
+                    <p class="text-xs font-semibold uppercase tracking-[0.22em] text-[#398875]">
+                        NEXTJOB / {$t('profile_my_area')}
+                    </p>
+
+                    <h1 class="mt-3 text-4xl font-semibold tracking-tight sm:text-5xl">
                         {$t('saved_title')}
                     </h1>
 
-                    <p
-                        class="mt-2 max-w-2xl text-sm leading-6 text-[#2A2E38]/60 sm:text-base"
-                    >
+                    <p class="mt-4 max-w-xl text-sm leading-7 text-[#2A2E38]/60 sm:text-base">
                         {$t('saved_description')}
                     </p>
                 </div>
 
-                <a
-                    href="/jobnehmer/hauptseite"
-                    class="inline-flex items-center justify-center rounded-xl bg-[#62AA97] px-5 py-3 text-sm font-bold text-white transition hover:bg-[#529b88]"
-                >
-                    + {$t('saved_discover_jobs')}
-                </a>
             </div>
         </section>
 
-        <!-- FEHLERMELDUNG -->
+        <!-- ERROR -->
         {#if data.error}
-            <div
-                class="mb-6 rounded-2xl border border-[#8FB0C4]/40 bg-white p-5"
+            <section
+                class="mb-8 border-l-4 border-[#62AA97] bg-white p-6"
                 role="alert"
             >
-                <p class="font-semibold">
+                <h2 class="font-semibold">
                     {$t('saved_title')}
-                </p>
+                </h2>
 
-                <p class="mt-2 text-sm leading-6 text-[#2A2E38]/65">
+                <p class="mt-2 text-sm leading-7 text-[#2A2E38]/60">
                     {data.error}
                 </p>
-            </div>
+            </section>
         {/if}
 
-        <!-- ANZAHL DER JOBS -->
-        <section class="mb-6 flex items-center justify-between gap-3">
-            <h2 class="text-sm font-semibold">
-                {$t('saved_my_jobs')}
-            </h2>
+        <!-- JOB OVERVIEW -->
+        <section class="mb-7">
+            <div class="flex flex-wrap items-end justify-between gap-4 border-b border-[#2A2E38]/15 pb-5">
+                <div>
+                    <p class="text-xs uppercase tracking-[0.18em] text-[#2A2E38]/45">
+                        NEXTJOB / COLLECTION
+                    </p>
 
-            <span
-                class="rounded-full bg-[#A8B79E]/40 px-3 py-1.5 text-xs font-bold"
-            >
-                {savedJobs.length}
-                {savedJobs.length === 1 ? 'Job' : 'Jobs'}
-            </span>
+                    <h2 class="mt-2 text-xl font-semibold tracking-tight sm:text-2xl">
+                        {$t('saved_my_jobs')}
+                    </h2>
+                </div>
+
+                <div class="flex items-center gap-3">
+                    <span class="text-sm text-[#2A2E38]/50">
+                        {$t('saved_title')}
+                    </span>
+
+                    <span class="flex h-10 min-w-10 items-center justify-center border border-[#62AA97] bg-[#A8B79E]/30 px-3 text-sm font-semibold">
+                        {savedJobs.length}
+                    </span>
+                </div>
+            </div>
         </section>
 
-        <!-- JOBKARTEN -->
+        <!-- JOB CARDS -->
         {#if paginatedJobs.length > 0}
+
             <section class="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
                 {#each paginatedJobs as job, index (`${getJobId(job) ?? index}`)}
                     <article
-                        class="flex min-w-0 flex-col rounded-2xl border border-[#2A2E38]/10 bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-lg"
+                        class="group flex min-w-0 flex-col border border-[#2A2E38]/10 bg-white transition duration-300 hover:border-[#62AA97] hover:-translate-y-1"
                     >
-                        <div class="flex-1 p-5">
-                            <div
-                                class="mb-4 flex items-start justify-between gap-3"
-                            >
-                                <div
-                                    class="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-[#A8B79E]/45 text-xl"
-                                    aria-hidden="true"
-                                >
-                                    💼
+                        <!-- CARD CONTENT -->
+                        <div class="flex-1 p-6">
+
+                            <!-- TOP -->
+                            <div class="flex items-center justify-between gap-3">
+                                <div class="flex h-12 w-12 items-center justify-center bg-[#A8B79E]/30 text-xl text-[#2A2E38] transition group-hover:bg-[#A8B79E]/60">
+                                    <span aria-hidden="true">↗</span>
                                 </div>
 
                                 {#if job.urgency === 'high' || job.urgency === 'emergency'}
-                                    <span
-                                        class="rounded-full bg-[#62AA97]/15 px-3 py-1 text-xs font-bold text-[#398875]"
-                                    >
+                                    <span class="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-[#398875]">
+                                        <span class="h-2 w-2 rounded-full bg-[#62AA97]"></span>
                                         {$t('worker_urgent')}
                                     </span>
                                 {:else}
-                                    <span
-                                        class="rounded-full bg-[#8FB0C4]/20 px-3 py-1 text-xs font-medium"
-                                    >
+                                    <span class="text-xs font-medium text-[#2A2E38]/50">
                                         {$t('saved_status')}
                                     </span>
                                 {/if}
                             </div>
 
-                            <h2 class="break-words text-lg font-bold">
+                            <!-- TITLE -->
+                            <h2 class="mt-6 break-words text-xl font-semibold leading-snug tracking-tight transition group-hover:text-[#398875]">
                                 {job.title ?? $t('worker_no_title')}
                             </h2>
 
-                            <p
-                                class="mt-2 line-clamp-3 break-words text-sm leading-6 text-[#2A2E38]/60"
-                            >
+                            <!-- DESCRIPTION -->
+                            <p class="mt-3 line-clamp-3 break-words text-sm leading-7 text-[#2A2E38]/60">
                                 {job.description ??
                                     $t('worker_no_description')}
                             </p>
 
-                            <div class="mt-5 space-y-3">
-                                {#if job.location}
-                                    <p class="flex items-start gap-2 text-sm">
-                                        <span aria-hidden="true">📍</span>
-                                        <span
-                                            class="break-words text-[#2A2E38]/70"
-                                        >
-                                            {job.location}
+                            <!-- DETAILS -->
+                            <div class="mt-6 space-y-4 border-t border-[#2A2E38]/10 pt-5">
+
+                                {#if getCategory(job)}
+                                    <div class="flex items-start gap-3">
+                                        <span class="text-sm text-[#398875]" aria-hidden="true">
+                                            ◈
                                         </span>
-                                    </p>
+
+                                        <div class="min-w-0">
+                                            <p class="text-[10px] font-medium uppercase tracking-[0.15em] text-[#2A2E38]/40">
+                                                {$t('worker_category')}
+                                            </p>
+
+                                            <p class="mt-1 break-words text-sm font-medium">
+                                                {getCategory(job)}
+                                            </p>
+                                        </div>
+                                    </div>
+                                {/if}
+
+                                {#if job.location}
+                                    <div class="flex items-start gap-3">
+                                        <span class="text-sm text-[#398875]" aria-hidden="true">
+                                            ⌖
+                                        </span>
+
+                                        <div class="min-w-0">
+                                            <p class="text-[10px] font-medium uppercase tracking-[0.15em] text-[#2A2E38]/40">
+                                                {$t('profile_location')}
+                                            </p>
+
+                                            <p class="mt-1 break-words text-sm font-medium">
+                                                {job.location}
+                                            </p>
+                                        </div>
+                                    </div>
                                 {/if}
 
                                 {#if job.budget != null && job.budget !== ''}
-                                    <p class="flex items-start gap-2 text-sm">
-                                        <span aria-hidden="true">💰</span>
-                                        <span class="font-semibold">
-                                            {job.budget}
+                                    <div class="flex items-start gap-3">
+                                        <span class="text-sm text-[#398875]" aria-hidden="true">
+                                            €
                                         </span>
-                                    </p>
-                                {/if}
 
-                                {#if getCategory(job)}
-                                    <p class="flex items-start gap-2 text-sm">
-                                        <span aria-hidden="true">🏷️</span>
-                                        <span
-                                            class="break-words text-[#2A2E38]/70"
-                                        >
-                                            {getCategory(job)}
-                                        </span>
-                                    </p>
+                                        <div class="min-w-0">
+                                            <p class="text-[10px] font-medium uppercase tracking-[0.15em] text-[#2A2E38]/40">
+                                                Budget
+                                            </p>
+
+                                            <p class="mt-1 break-words text-sm font-semibold">
+                                                {job.budget}
+                                            </p>
+                                        </div>
+                                    </div>
                                 {/if}
                             </div>
                         </div>
 
-                        <!-- AUFTRAG ANSEHEN -->
-                        <div class="p-5 pt-0">
+                        <!-- CARD FOOTER -->
+                        <div class="border-t border-[#2A2E38]/10 p-6 pt-4">
                             {#if getJobId(job) != null}
                                 <a
                                     href={`/jobs/${getJobId(job)}`}
-                                    class="block w-full rounded-xl bg-[#62AA97] px-4 py-3 text-center text-sm font-bold text-white transition hover:bg-[#529b88]"
+                                    class="group/link flex w-full items-center justify-between bg-[#A8B79E] px-4 py-3 text-sm font-semibold text-[#2A2E38] transition hover:bg-[#62AA97]"
                                 >
-                                    {$t('worker_view_job')} →
+                                    <span>{$t('worker_view_job')}</span>
+
+                                    <span class="transition group-hover/link:translate-x-1">
+                                        →
+                                    </span>
                                 </a>
                             {:else}
                                 <p class="text-sm text-[#2A2E38]/50">
@@ -215,79 +240,103 @@
             <!-- PAGINATION -->
             {#if totalPages > 1}
                 <nav
-                    class="mt-8 flex flex-wrap items-center justify-center gap-2"
+                    class="mt-12 border-t border-[#2A2E38]/10 pt-6"
                     aria-label={$t('saved_pagination')}
                 >
-                    <button
-                        type="button"
-                        onclick={() => goToPage(currentPage - 1)}
-                        disabled={currentPage === 1}
-                        class="rounded-xl border border-[#2A2E38]/10 bg-white px-3 py-2 text-sm font-semibold hover:border-[#62AA97] disabled:cursor-not-allowed disabled:opacity-40"
-                    >
-                        ← {$t('worker_previous')}
-                    </button>
+                    <div class="flex flex-wrap items-center justify-center gap-2">
 
-                    {#each pageNumbers as page}
+                        <!-- PREVIOUS -->
                         <button
                             type="button"
-                            onclick={() => goToPage(page)}
-                            aria-label={`${$t('worker_page')} ${page}`}
-                            aria-current={currentPage === page
-                                ? 'page'
-                                : undefined}
-                            class={`h-10 min-w-10 rounded-xl border px-3 text-sm font-semibold ${
-                                currentPage === page
-                                    ? 'border-[#62AA97] bg-[#62AA97] text-white'
-                                    : 'border-[#2A2E38]/10 bg-white hover:border-[#62AA97]'
-                            }`}
+                            onclick={() => goToPage(currentPage - 1)}
+                            disabled={currentPage === 1}
+                            class="flex items-center gap-2 border border-[#2A2E38]/10 bg-white px-4 py-3 text-sm font-medium transition hover:border-[#62AA97] disabled:cursor-not-allowed disabled:opacity-40"
                         >
-                            {page}
+                            <span>←</span>
+                            {$t('worker_previous')}
                         </button>
-                    {/each}
 
-                    <button
-                        type="button"
-                        onclick={() => goToPage(currentPage + 1)}
-                        disabled={currentPage === totalPages}
-                        class="rounded-xl border border-[#2A2E38]/10 bg-white px-3 py-2 text-sm font-semibold hover:border-[#62AA97] disabled:cursor-not-allowed disabled:opacity-40"
-                    >
-                        {$t('worker_next')} →
-                    </button>
+                        <!-- PAGE NUMBERS -->
+                        {#each pageNumbers as page}
+                            <button
+                                type="button"
+                                onclick={() => goToPage(page)}
+                                aria-label={`${$t('worker_page')} ${page}`}
+                                aria-current={currentPage === page
+                                    ? 'page'
+                                    : undefined}
+                                class={`flex h-11 min-w-11 items-center justify-center border px-3 text-sm font-semibold transition ${
+                                    currentPage === page
+                                        ? 'border-[#2A2E38] bg-[#2A2E38] text-white'
+                                        : 'border-[#2A2E38]/10 bg-white hover:border-[#62AA97]'
+                                }`}
+                            >
+                                {page}
+                            </button>
+                        {/each}
+
+                        <!-- NEXT -->
+                        <button
+                            type="button"
+                            onclick={() => goToPage(currentPage + 1)}
+                            disabled={currentPage === totalPages}
+                            class="flex items-center gap-2 border border-[#2A2E38]/10 bg-white px-4 py-3 text-sm font-medium transition hover:border-[#62AA97] disabled:cursor-not-allowed disabled:opacity-40"
+                        >
+                            {$t('worker_next')}
+                            <span>→</span>
+                        </button>
+                    </div>
+
+                    <p class="mt-5 text-center text-xs tracking-wide text-[#2A2E38]/45">
+                        {$t('worker_page')} {currentPage} {$t('worker_of')} {totalPages}
+                    </p>
                 </nav>
-
-                <p class="mt-3 text-center text-xs text-[#2A2E38]/50">
-                    {$t('worker_page')} {currentPage} {$t('worker_of')} {totalPages}
-                </p>
             {/if}
+
         {:else}
-            <!-- LEERZUSTAND -->
-            <section
-                class="rounded-2xl border border-dashed border-[#2A2E38]/15 bg-white px-5 py-14 text-center sm:px-8 sm:py-16"
-            >
-                <div
-                    class="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-[#A8B79E]/35 text-3xl"
-                    aria-hidden="true"
-                >
-                    ♡
+
+            <!-- EMPTY STATE -->
+            <section class="relative overflow-hidden border border-[#2A2E38]/10 bg-white">
+
+                <div class="grid md:grid-cols-[1fr_280px]">
+
+                    <!-- TEXT -->
+                    <div class="flex flex-col justify-center px-6 py-12 sm:px-10 sm:py-16 lg:px-14">
+                        <p class="text-xs font-semibold uppercase tracking-[0.2em] text-[#398875]">
+                            NEXTJOB / 00
+                        </p>
+
+                        <h2 class="mt-5 max-w-lg text-3xl font-semibold tracking-tight sm:text-4xl">
+                            {$t('saved_empty_title')}
+                        </h2>
+
+                        <p class="mt-5 max-w-lg text-sm leading-8 text-[#2A2E38]/60 sm:text-base">
+                            {$t('saved_empty_description')}
+                        </p>
+ 
+                    </div>
+
+                    <!-- VISUAL -->
+                    <div class="flex min-h-[220px] items-center justify-center border-t border-[#2A2E38]/10 bg-[#A8B79E]/25 px-6 py-10 md:border-t-0 md:border-l">
+                        <div class="relative flex h-40 w-40 items-center justify-center">
+                            <div class="absolute inset-0 border border-[#2A2E38]/15"></div>
+
+                            <div class="absolute inset-5 border border-[#2A2E38]/15"></div>
+
+                            <span class="relative text-7xl font-light text-[#2A2E38]/50">
+                                ♡
+                            </span>
+                        </div>
+                    </div>
                 </div>
 
-                <h2 class="mt-5 text-xl font-bold">
-                    {$t('saved_empty_title')}
-                </h2>
-
-                <p
-                    class="mx-auto mt-2 max-w-md text-sm leading-6 text-[#2A2E38]/60"
-                >
-                    {$t('saved_empty_description')}
-                </p>
-
-                <a
-                    href="/jobnehmer/hauptseite"
-                    class="mt-5 inline-block rounded-xl bg-[#62AA97] px-5 py-3 text-sm font-bold text-white transition hover:bg-[#529b88]"
-                >
-                    {$t('saved_discover_jobs')}
-                </a>
+                <div class="border-t border-[#2A2E38]/10 px-6 py-4 sm:px-10">
+                    <p class="text-[10px] uppercase tracking-[0.2em] text-[#2A2E38]/40">
+                        NEXTJOB / FIND · SAVE · CONNECT
+                    </p>
+                </div>
             </section>
+
         {/if}
     </main>
 </div>
