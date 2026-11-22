@@ -558,7 +558,22 @@
   "profile_add_bio_hint": "Hier klicken, um etwas über dich zu schreiben.",
   "profile_skills_placeholder": "z. B. Maler, Elektriker, Reparaturen, Gartenarbeit...",
   "profile_skills_hint": "Trenne deine Fähigkeiten mit Kommas.",
-  "profile_add_skills": "Fähigkeiten hinzufügen"
+  "profile_add_skills": "Fähigkeiten hinzufügen",
+  "saved_title": "Gespeicherte Aufträge",
+  "saved_meta_description": "Verwalte deine gespeicherten Aufträge auf NextJob.",
+  "saved_description": "Hier findest du alle Aufträge, die du gespeichert hast, um sie später anzusehen.",
+  "saved_my_jobs": "Meine gespeicherten Aufträge",
+  "saved_status": "Gespeichert",
+  "saved_no_id": "Dieser Auftrag kann momentan nicht geöffnet werden.",
+  "saved_pagination": "Seitennavigation der gespeicherten Aufträge",
+  "saved_empty_title": "Noch keine gespeicherten Aufträge",
+  "saved_empty_description": "Du hast bisher keine Aufträge gespeichert. Entdecke interessante Möglichkeiten und speichere sie für später.",
+  "saved_collection": "Sammlung",
+  "saved_budget": "Budget",
+  "saved_footer_tagline": "FINDEN · SPEICHERN · VERBINDEN",
+  "worker_category": "Kategorie"
+
+
 
 
 

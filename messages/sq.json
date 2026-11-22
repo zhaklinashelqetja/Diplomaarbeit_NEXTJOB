@@ -522,7 +522,6 @@
   "worker_saved_description": "Këtu mund të gjesh punët që ke ruajtur.",
   "worker_footer_skills": "Aftësi lokale.",
   "worker_footer_opportunities": "Mundësi lokale.",
-
   "profile_about_me": "Rreth meje",
   "profile_back_to_jobs": "Kthehu te punët",
   "profile_contact_info": "Të dhënat e kontaktit",
@@ -558,7 +557,22 @@
   "profile_add_bio_hint": "Kliko këtu për të shkruar diçka për veten.",
   "profile_skills_placeholder": "p.sh. Bojaxhi, elektricist, riparime, kopshtari...",
   "profile_skills_hint": "Ndaji aftësitë me presje.",
-  "profile_add_skills": "Shto aftësi"
+  "profile_add_skills": "Shto aftësi",
+  "saved_title": "Punët e ruajtura",
+  "saved_meta_description": "Menaxho punët e ruajtura në NextJob.",
+  "saved_description": "Këtu mund të gjesh të gjitha punët që ke ruajtur për t'i parë më vonë.",
+  "saved_my_jobs": "Punët e mia të ruajtura",
+  "saved_status": "E ruajtur",
+  "saved_no_id": "Kjo punë nuk mund të hapet për momentin.",
+  "saved_pagination": "Navigimi i faqeve të punëve të ruajtura",
+  "saved_empty_title": "Ende nuk ke ruajtur punë",
+  "saved_empty_description": "Ende nuk ke ruajtur asnjë punë. Zbulo mundësi interesante dhe ruaji për më vonë.",
+  "saved_collection": "Koleksioni",
+  "saved_budget": "Buxheti",
+  "saved_footer_tagline": "GJEJ · RUAJ · LIDHU",
+  "worker_category": "Kategoria"
+
+
 
 
 
