@@ -2,8 +2,6 @@
 import { API_URL } from '$lib/api.js';
 import { redirect, fail } from '@sveltejs/kit';
 
-const ADMIN_EMAIL = 'admin@nextjob.al';
-
 const emptyData = {
 	users: [],
 	jobs: [],
@@ -56,10 +54,12 @@ async function apiRequest(fetch, endpoint, token, options = {}) {
 	return payload;
 }
 
+
 async function requireAdmin(fetch, cookies) {
 	const token = cookies.get('token');
 
 	if (!token) {
+		console.error('[ADMIN AUTH] Cookie not found.');
 		throw redirect(303, '/login');
 	}
 
@@ -67,22 +67,23 @@ async function requireAdmin(fetch, cookies) {
 
 	try {
 		authData = await apiRequest(fetch, '/api/auth/me', token);
-	} catch {
+	} catch (error) {
+		console.error('[ADMIN AUTH] Authentication failed:', error.message);
+
 		cookies.delete('token', { path: '/' });
 		throw redirect(303, '/login');
 	}
 
 	const user = authData?.user ?? authData;
 
-	if (
-		!user?.is_admin ||
-		user.email?.toLowerCase() !== ADMIN_EMAIL
-	) {
+	if (!user?.is_admin) {
+		console.error('[ADMIN AUTH] User is not an admin.');
 		throw redirect(303, '/');
 	}
 
 	return token;
 }
+
 
 export async function load({ fetch, cookies }) {
 	const token = await requireAdmin(fetch, cookies);
