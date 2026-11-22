@@ -444,7 +444,24 @@
   "verify_visual_title1": "Ein Klick.",
   "verify_visual_title2": "Viele Möglichkeiten.",
   "verify_visual_description": "Bestätige deine E-Mail-Adresse und entdecke lokale Projekte, neue Kontakte und passende Möglichkeiten in deiner Nähe.",
-  "verify_back_home": "Zurück zur Startseite"
+  "verify_back_home": "Zurück zur Startseite",
+  "reset_password_page_title": "Passwort zurücksetzen",
+  "reset_password_title": "Neues Passwort",
+  "reset_password_description": "Erstelle ein neues Passwort für dein NextJob-Konto.",
+  "reset_password_new": "Neues Passwort",
+  "reset_password_hint": "Mindestens 8 Zeichen.",
+  "reset_password_confirm": "Passwort bestätigen",
+  "reset_password_mismatch": "Die Passwörter stimmen nicht überein.",
+  "reset_password_too_short": "Das Passwort muss mindestens 8 Zeichen lang sein.",
+  "reset_password_invalid_link": "Der Link zum Zurücksetzen ist ungültig.",
+  "reset_password_failed": "Das Passwort konnte nicht geändert werden.",
+  "reset_password_success": "Dein Passwort wurde erfolgreich geändert.",
+  "reset_password_server_error": "Verbindung zum Server nicht möglich.",
+  "reset_password_login": "Zum Login →",
+  "reset_password_loading": "Wird gespeichert...",
+  "reset_password_button": "Passwort ändern"
+
+
 
 
 

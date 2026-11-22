@@ -442,7 +442,24 @@
   "verify_visual_title1": "Një klikim.",
   "verify_visual_title2": "Shumë mundësi.",
   "verify_visual_description": "Konfirmo adresën tënde të emailit dhe zbulo projekte lokale, kontakte të reja dhe mundësi pranë teje.",
-  "verify_back_home": "Kthehu në faqen kryesore"
+  "verify_back_home": "Kthehu në faqen kryesore",
+  "reset_password_page_title": "Rivendos fjalëkalimin",
+  "reset_password_title": "Fjalëkalim i ri",
+  "reset_password_description": "Krijo një fjalëkalim të ri për llogarinë tënde NextJob.",
+  "reset_password_new": "Fjalëkalim i ri",
+  "reset_password_hint": "Të paktën 8 karaktere.",
+  "reset_password_confirm": "Konfirmo fjalëkalimin",
+  "reset_password_mismatch": "Fjalëkalimet nuk përputhen.",
+  "reset_password_too_short": "Fjalëkalimi duhet të ketë të paktën 8 karaktere.",
+  "reset_password_invalid_link": "Lidhja për rivendosjen e fjalëkalimit është e pavlefshme.",
+  "reset_password_failed": "Fjalëkalimi nuk mund të ndryshohej.",
+  "reset_password_success": "Fjalëkalimi yt u ndryshua me sukses.",
+  "reset_password_server_error": "Nuk mund të lidhemi me serverin.",
+  "reset_password_login": "Te hyrja →",
+  "reset_password_loading": "Duke ruajtur...",
+  "reset_password_button": "Ndrysho fjalëkalimin"
+
+
 
 
 
