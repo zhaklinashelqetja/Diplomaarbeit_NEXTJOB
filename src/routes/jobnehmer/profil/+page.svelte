@@ -62,6 +62,26 @@
     let profileImage = $state('');
     let imageInput;
 
+    // FOLLOWERS & FOLLOWING
+    let showFollowers = $state(false);
+    let showFollowing = $state(false);
+
+    let followers = $derived(
+        Array.isArray(user?.followers) ? user.followers : []
+    );
+
+    let following = $derived(
+        Array.isArray(user?.following) ? user.following : []
+    );
+
+    let followersCount = $derived(
+        user?.followers_count ?? user?.follower_count ?? followers.length
+    );
+
+    let followingCount = $derived(
+        user?.following_count ?? user?.follow_count ?? following.length
+    );
+
     // INITIALIZATION
     let initializedUserKey = $state('');
 
@@ -357,6 +377,140 @@
                             </div>
                         {/if}
 
+                        <!-- FOLLOWERS & FOLLOWING -->
+                        <div class="mt-6 flex flex-wrap items-center gap-8">
+
+                            <!-- FOLLOWERS -->
+                            <button
+                                type="button"
+                                onclick={() => {
+                                    showFollowers = !showFollowers;
+                                    showFollowing = false;
+                                }}
+                                class="group text-left transition"
+                            >
+                                <div class="flex items-baseline gap-2">
+                                    <span class="text-2xl font-semibold text-white">
+                                        {followersCount}
+                                    </span>
+
+                                    <span class="text-sm text-white/60 transition group-hover:text-[#A8B79E]">
+                                        Followers
+                                    </span>
+                                </div>
+
+                                <div class="mt-1 h-px w-full bg-white/20 transition group-hover:bg-[#62AA97]"></div>
+                            </button>
+
+                            <!-- FOLLOWING -->
+                            <button
+                                type="button"
+                                onclick={() => {
+                                    showFollowing = !showFollowing;
+                                    showFollowers = false;
+                                }}
+                                class="group text-left transition"
+                            >
+                                <div class="flex items-baseline gap-2">
+                                    <span class="text-2xl font-semibold text-white">
+                                        {followingCount}
+                                    </span>
+
+                                    <span class="text-sm text-white/60 transition group-hover:text-[#A8B79E]">
+                                        Following
+                                    </span>
+                                </div>
+
+                                <div class="mt-1 h-px w-full bg-white/20 transition group-hover:bg-[#62AA97]"></div>
+                            </button>
+
+                        </div>
+
+                        <!-- FOLLOWERS LIST -->
+                        {#if showFollowers}
+                            <div class="mt-5 max-w-md border border-white/10 bg-white/5 p-5">
+                                <div class="mb-4 flex items-center justify-between">
+                                    <h3 class="text-sm font-semibold text-white">
+                                        Followers
+                                    </h3>
+
+                                    <button
+                                        type="button"
+                                        onclick={() => showFollowers = false}
+                                        class="text-white/50 transition hover:text-white"
+                                        aria-label="Close followers"
+                                    >
+                                        ✕
+                                    </button>
+                                </div>
+
+                                {#if followers.length > 0}
+                                    <div class="space-y-3">
+                                        {#each followers as follower, index (`follower-${follower.id ?? index}`)}
+                                            <div class="flex items-center gap-3 border-t border-white/10 pt-3">
+                                                <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#A8B79E] text-sm font-semibold text-[#2A2E38]">
+                                                    {(follower.first_name?.charAt(0) ?? '')}{(follower.last_name?.charAt(0) ?? '')}
+                                                </div>
+
+                                                <div class="min-w-0">
+                                                    <p class="break-words text-sm font-medium text-white">
+                                                        {follower.first_name ?? ''} {follower.last_name ?? ''}
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        {/each}
+                                    </div>
+                                {:else}
+                                    <p class="text-sm leading-6 text-white/50">
+                                        Noch keine Follower verfügbar.
+                                    </p>
+                                {/if}
+                            </div>
+                        {/if}
+
+                        <!-- FOLLOWING LIST -->
+                        {#if showFollowing}
+                            <div class="mt-5 max-w-md border border-white/10 bg-white/5 p-5">
+                                <div class="mb-4 flex items-center justify-between">
+                                    <h3 class="text-sm font-semibold text-white">
+                                        Following
+                                    </h3>
+
+                                    <button
+                                        type="button"
+                                        onclick={() => showFollowing = false}
+                                        class="text-white/50 transition hover:text-white"
+                                        aria-label="Close following"
+                                    >
+                                        ✕
+                                    </button>
+                                </div>
+
+                                {#if following.length > 0}
+                                    <div class="space-y-3">
+                                        {#each following as followedUser, index (`following-${followedUser.id ?? index}`)}
+                                            <div class="flex items-center gap-3 border-t border-white/10 pt-3">
+                                                <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#8FB0C4] text-sm font-semibold text-[#2A2E38]">
+                                                    {(followedUser.first_name?.charAt(0) ?? '')}{(followedUser.last_name?.charAt(0) ?? '')}
+                                                </div>
+
+                                                <div class="min-w-0">
+                                                    <p class="break-words text-sm font-medium text-white">
+                                                        {followedUser.first_name ?? ''} {followedUser.last_name ?? ''}
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        {/each}
+                                    </div>
+                                {:else}
+                                    <p class="text-sm leading-6 text-white/50">
+                                        Du folgst noch niemandem.
+                                    </p>
+                                {/if}
+                            </div>
+                        {/if}
+
+                        <!-- DISCOVER JOBS BUTTON -->
                         <div class="mt-8">
                             <a
                                 href="/jobnehmer/hauptseite"
