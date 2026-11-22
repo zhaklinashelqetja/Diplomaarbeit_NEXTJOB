@@ -356,7 +356,28 @@
   "reviews_preview_note": "Pamje demonstrimi · Emra dhe vlerësime shembull",
   "reviews_rating_aria": "Vlerësim shembull: 5 nga 5 yje",
   "reviews_example_label": "Vlerësim shembull",
-  "footer_rights": "Të gjitha të drejtat e rezervuara."
+  "footer_rights": "Të gjitha të drejtat e rezervuara.",
+  "login_page_title": "Hyrja | NextJob",
+  "login_title": "Hyr",
+  "login_description": "Hyr në llogarinë tënde NextJob.",
+  "login_email": "Email",
+  "login_password": "Fjalëkalimi",
+  "login_forgot": "Ke harruar fjalëkalimin?",
+  "login_button": "Hyr",
+  "login_loading": "Duke hyrë...",
+  "login_no_account": "Nuk ke ende një llogari?",
+  "login_email_error": "Emaili ose fjalëkalimi është i pasaktë.",
+  "login_verify_error": "Ju lutem, konfirmoni fillimisht adresën tuaj të emailit.",
+  "login_deactivated": "Kjo llogari është çaktivizuar.",
+  "login_failed": "Hyrja dështoi.",
+  "login_server_error": "Nuk mund të lidhemi me serverin.",
+  "nav_register": "Regjistrohu",
+  "login_eyebrow": "MIRË SE U KTHEVE",
+  "login_visual_eyebrow": "AFTËSI LOKALE. MUNDËSI TË VËRTETA.",
+  "login_visual_title1": "Punë e mirë.",
+  "login_visual_title2": "Pikërisht këtu.",
+  "login_visual_description": "Zbulo mundësi lokale, gjej projekte të përshtatshme dhe lidhu me njerëz pranë teje."
+
 
 
 

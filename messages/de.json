@@ -358,7 +358,27 @@
   "reviews_preview_note": "Designvorschau · Beispielnamen und -bewertungen",
   "reviews_rating_aria": "Beispielbewertung: 5 von 5 Sternen",
   "reviews_example_label": "Beispielbewertung",
-  "footer_rights": "Alle Rechte vorbehalten."
+  "footer_rights": "Alle Rechte vorbehalten.",
+  "login_page_title": "Login | NextJob",
+  "login_title": "Anmelden",
+  "login_description": "Melde dich bei deinem NextJob-Konto an.",
+  "login_email": "E-Mail",
+  "login_password": "Passwort",
+  "login_forgot": "Passwort vergessen?",
+  "login_button": "Anmelden",
+  "login_loading": "Anmelden...",
+  "login_no_account": "Noch kein Konto?",
+  "login_email_error": "E-Mail-Adresse oder Passwort ist falsch.",
+  "login_verify_error": "Bitte bestätige zuerst deine E-Mail-Adresse.",
+  "login_deactivated": "Dieses Konto wurde deaktiviert.",
+  "login_failed": "Login fehlgeschlagen.",
+  "login_server_error": "Verbindung zum Server nicht möglich.",
+  "nav_register": "Registrieren",
+  "login_eyebrow": "WILLKOMMEN ZURÜCK",
+  "login_visual_eyebrow": "LOKALE FÄHIGKEITEN. ECHTE CHANCEN.",
+  "login_visual_title1": "Gute Arbeit.",
+  "login_visual_title2": "Genau hier.",
+  "login_visual_description": "Entdecke lokale Möglichkeiten, finde passende Projekte und verbinde dich mit Menschen aus deiner Nähe."
 
 
 
