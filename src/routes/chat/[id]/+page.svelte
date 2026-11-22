@@ -222,12 +222,12 @@
                             {partner?.last_name}
                         </h2>
 
-                        {#if partner?.location}
-                            <p class="mt-2 flex items-center gap-2 text-sm text-[#2A2E38]/50">
-                                <MapPin size={15} strokeWidth={1.5} />
-                                {partner.location}
-                            </p>
-                        {/if}
+                       {#if partner?.neighborhood}
+    <p class="mt-2 flex items-center gap-2 text-sm text-[#2A2E38]/50">
+        <MapPin size={15} strokeWidth={1.5} />
+        {partner.neighborhood}
+    </p>
+{/if}
 
                     </div>
 
