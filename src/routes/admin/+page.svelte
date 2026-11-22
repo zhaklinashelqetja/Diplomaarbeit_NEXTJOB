@@ -2,46 +2,47 @@
 <script>
     import RegistrationGrowthChart from '$lib/components/RegistrationGrowthChart.svelte';
     import { goto } from '$app/navigation';
+    import * as m from '$lib/paraglide/messages.js';
 
     let { data } = $props();
 
-    const stats = [
+    const stats = $derived([
         {
-            title: 'Nutzer',
+            title: m.admin_stat_users(),
             value: data.stats.totalUsers,
-            description: 'Registrierte Nutzer',
+            description: m.admin_stat_registered_users(),
             color: '#A8B79E',
             icon: '👥'
         },
         {
-            title: 'Aktive Jobs',
+            title: m.admin_stat_active_jobs(),
             value: data.stats.activeJobs,
-            description: 'Aktuell laufende Jobs',
+            description: m.admin_stat_current_jobs(),
             color: '#8FB0C4',
             icon: '💼'
         },
         {
-            title: 'Angebote',
+            title: m.admin_stat_offers(),
             value: data.stats.totalOffers,
-            description: 'Eingereichte Angebote',
+            description: m.admin_stat_submitted_offers(),
             color: '#62AA97',
             icon: '📋'
         },
         {
-            title: 'Gemeldete Inhalte',
+            title: m.admin_stat_reported_content(),
             value: data.stats.reportedContent,
-            description: 'Markierte Bewertungen',
+            description: m.admin_stat_flagged_reviews(),
             color: '#D6B59C',
             icon: '⚠️'
         }
-    ];
+    ]);
 </script>
 
 <svelte:head>
-    <title>Admin-Dashboard | NextJob</title>
+    <title>{m.admin_page_title()} | NextJob</title>
     <meta
         name="description"
-        content="Administratives Dashboard der NextJob Plattform"
+        content={m.admin_meta_description()}
     />
 </svelte:head>
 
@@ -56,26 +57,25 @@
                     <div class="mb-5 flex items-center gap-2">
                         <span class="h-2 w-2 rounded-full bg-[#62AA97]"></span>
                         <p class="text-xs font-semibold uppercase tracking-[0.18em] text-[#2A2E38]/55">
-                            NextJob / Administration
+                            {m.admin_breadcrumb()}
                         </p>
                     </div>
 
                     <h1 class="text-4xl font-semibold leading-tight tracking-tight sm:text-5xl">
-                        Plattformübersicht<span class="text-[#62AA97]">.</span>
+                        {m.admin_overview_title()}<span class="text-[#62AA97]">.</span>
                     </h1>
 
                     <p class="mt-4 max-w-xl text-sm leading-7 text-[#2A2E38]/65 sm:text-base">
-                        Ein zentraler Überblick über Nutzer, Aufträge und
-                        Aktivitäten auf der NextJob Plattform.
+                        {m.admin_overview_description()}
                     </p>
                 </div>
 
                 <div class="border-l-2 border-[#A8B79E] pl-4">
                     <p class="text-xs uppercase tracking-[0.15em] text-[#2A2E38]/45">
-                        Dashboard
+                        {m.admin_dashboard_label()}
                     </p>
                     <p class="mt-1 text-sm font-semibold">
-                        Verwaltungsbereich
+                        {m.admin_management_area()}
                     </p>
                     <p class="mt-1 text-xs text-[#2A2E38]/50">
                         NextJob Admin
@@ -98,16 +98,16 @@
             <div class="mb-7 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
                 <div>
                     <p class="text-xs font-semibold uppercase tracking-[0.16em] text-[#2A2E38]/45">
-                        01 / Kennzahlen
+                        {m.admin_section_statistics()}
                     </p>
 
                     <h2 class="mt-2 text-2xl font-semibold tracking-tight">
-                        Plattform in Zahlen
+                        {m.admin_statistics_title()}
                     </h2>
                 </div>
 
                 <p class="text-xs text-[#2A2E38]/45">
-                    Aktueller Überblick
+                    {m.admin_current_overview()}
                 </p>
             </div>
 
@@ -156,11 +156,11 @@
 
             <div class="mb-6">
                 <p class="text-xs font-semibold uppercase tracking-[0.16em] text-[#2A2E38]/45">
-                    02 / Verwaltung
+                    {m.admin_section_management()}
                 </p>
 
                 <h2 class="mt-2 text-2xl font-semibold tracking-tight">
-                    Plattform kontrollieren
+                    {m.admin_control_platform()}
                 </h2>
             </div>
 
@@ -176,18 +176,17 @@
 
                             <div>
                                 <p class="text-xs uppercase tracking-[0.15em] text-[#2A2E38]/45">
-                                    Verwaltung
+                                    {m.admin_management_label()}
                                 </p>
 
                                 <h3 class="mt-1 text-xl font-semibold">
-                                    Benutzer & Aufträge
+                                    {m.admin_users_jobs()}
                                 </h3>
                             </div>
                         </div>
 
                         <p class="mt-4 text-sm leading-6 text-[#2A2E38]/65">
-                            Nutzerkonten verwalten, veröffentlichte Aufträge
-                            kontrollieren und Inhalte überprüfen.
+                            {m.admin_management_description()}
                         </p>
                     </div>
 
@@ -196,7 +195,7 @@
                         onclick={() => goto('/admin/verwaltung')}
                         class="flex w-full items-center justify-between gap-5 bg-[#2A2E38] px-6 py-4 text-sm font-semibold text-white transition duration-200 hover:bg-[#62AA97] md:w-auto"
                     >
-                        Verwaltung öffnen
+                        {m.admin_open_management()}
                         <span class="text-lg">↗</span>
                     </button>
 
@@ -209,16 +208,15 @@
 
             <div class="mb-8">
                 <p class="text-xs font-semibold uppercase tracking-[0.16em] text-[#2A2E38]/45">
-                    03 / Plattformaktivität
+                    {m.admin_section_activity()}
                 </p>
 
                 <h2 class="mt-2 text-2xl font-semibold tracking-tight">
-                    Einblicke in die Nutzung
+                    {m.admin_activity_title()}
                 </h2>
 
                 <p class="mt-3 max-w-xl text-sm leading-6 text-[#2A2E38]/60">
-                    Welche Dienstleistungen gesucht werden und welche
-                    Suchbegriffe die Nutzer auf der Plattform verwenden.
+                    {m.admin_activity_description()}
                 </p>
             </div>
 
@@ -230,11 +228,11 @@
                     <div class="mb-7 flex items-start justify-between gap-4">
                         <div>
                             <h3 class="text-lg font-semibold">
-                                Nachfrage nach Kategorien
+                                {m.admin_category_demand()}
                             </h3>
 
                             <p class="mt-2 text-sm text-[#2A2E38]/55">
-                                Offene Jobs nach Dienstleistungsbereich
+                                {m.admin_open_jobs_category()}
                             </p>
                         </div>
 
@@ -263,7 +261,7 @@
                                         </div>
 
                                         <span class="text-xs text-[#2A2E38]/55">
-                                            {category.open_problems} Jobs
+                                            {category.open_problems} {m.admin_jobs_label()}
                                         </span>
                                     </div>
 
@@ -285,7 +283,7 @@
                     {:else}
 
                         <div class="border-b border-[#2A2E38]/10 py-8 text-sm text-[#2A2E38]/50">
-                            Noch keine Kategoriedaten vorhanden.
+                            {m.admin_no_category_data()}
                         </div>
 
                     {/if}
@@ -298,11 +296,11 @@
                     <div class="mb-7 flex items-start justify-between gap-4">
                         <div>
                             <h3 class="text-lg font-semibold">
-                                Häufigste Suchbegriffe
+                                {m.admin_top_searches()}
                             </h3>
 
                             <p class="mt-2 text-sm text-[#2A2E38]/55">
-                                Suchaktivitäten auf der Plattform
+                                {m.admin_search_activity()}
                             </p>
                         </div>
 
@@ -331,7 +329,7 @@
                                     <span class="shrink-0 text-sm text-[#2A2E38]/50">
                                         {search.search_count}
                                         <span class="text-xs">
-                                            Anfragen
+                                            {m.admin_requests_label()}
                                         </span>
                                     </span>
 
@@ -343,7 +341,7 @@
                     {:else}
 
                         <div class="border-b border-[#2A2E38]/10 py-8 text-sm text-[#2A2E38]/50">
-                            Noch keine Suchdaten vorhanden.
+                            {m.admin_no_search_data()}
                         </div>
 
                     {/if}
@@ -358,15 +356,15 @@
 
             <div class="mb-8">
                 <p class="text-xs font-semibold uppercase tracking-[0.16em] text-[#2A2E38]/45">
-                    04 / Entwicklung
+                    {m.admin_section_growth()}
                 </p>
 
                 <h2 class="mt-2 text-2xl font-semibold tracking-tight">
-                    Nutzerwachstum
+                    {m.admin_user_growth()}
                 </h2>
 
                 <p class="mt-3 max-w-xl text-sm leading-6 text-[#2A2E38]/60">
-                    Die Entwicklung der Nutzerregistrierungen im zeitlichen Verlauf.
+                    {m.admin_growth_description()}
                 </p>
             </div>
 
@@ -387,12 +385,12 @@
                     </span>
 
                     <span class="ml-2 text-xs text-[#2A2E38]/45">
-                        Admin-Bereich
+                        {m.admin_footer_area()}
                     </span>
                 </div>
 
                 <p class="text-xs text-[#2A2E38]/45">
-                    Plattformverwaltung · Shkodër
+                    {m.admin_footer_management()}
                 </p>
 
             </div>
