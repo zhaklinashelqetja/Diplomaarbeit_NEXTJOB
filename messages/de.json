@@ -705,7 +705,15 @@
 "admin_manage_delete_job": "Auftrag löschen",
 "admin_manage_no_jobs": "Keine Aufträge gefunden",
 "admin_manage_no_jobs_description": "Überprüfe deine Suche oder kontrolliere, ob die Backend-API Aufträge zurückgibt.",
-"admin_manage_footer": "NEXTJOB · Admin-Verwaltung · Nutzerkonten und Aufträge"
+"admin_manage_footer": "NEXTJOB · Admin-Verwaltung · Nutzerkonten und Aufträge",
+
+"chat_title": "Nachrichten",
+"chat_description": "Bleibe mit anderen Nutzern in Kontakt und verwalte deine Unterhaltungen.",
+"chat_loading": "Unterhaltungen werden geladen ...",
+"chat_empty": "Du hast noch keine Unterhaltungen.",
+"chat_load_error": "Unterhaltungen konnten nicht geladen werden.",
+"chat_server_error": "Der Server ist momentan nicht erreichbar."
+
 
 
 

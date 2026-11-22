@@ -704,7 +704,15 @@
 "admin_manage_delete_job": "Fshi punën",
 "admin_manage_no_jobs": "Nuk u gjet asnjë punë",
 "admin_manage_no_jobs_description": "Kontrollo kërkimin ose verifiko nëse API-ja e backend-it kthen të dhëna për punët.",
-"admin_manage_footer": "NEXTJOB · Administrimi · Llogaritë e përdoruesve dhe punët"
+"admin_manage_footer": "NEXTJOB · Administrimi · Llogaritë e përdoruesve dhe punët",
+
+"chat_title": "Mesazhet",
+"chat_description": "Qëndro në kontakt me përdoruesit e tjerë dhe menaxho bisedat e tua.",
+"chat_loading": "Bisedat po ngarkohen ...",
+"chat_empty": "Nuk ke ende asnjë bisedë.",
+"chat_load_error": "Bisedat nuk mund të ngarkoheshin.",
+"chat_server_error": "Serveri nuk është i disponueshëm për momentin."
+
 
 
 
