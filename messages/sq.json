@@ -457,7 +457,30 @@
   "reset_password_server_error": "Nuk mund të lidhemi me serverin.",
   "reset_password_login": "Te hyrja →",
   "reset_password_loading": "Duke ruajtur...",
-  "reset_password_button": "Ndrysho fjalëkalimin"
+  "reset_password_button": "Ndrysho fjalëkalimin",
+  "verify_email_page_title": "Verifiko emailin",
+  "verify_email_title": "Verifikimi i emailit",
+  "verify_email_loading": "Adresa jote e emailit po verifikohet...",
+  "verify_email_invalid_link": "Lidhja e verifikimit është e pavlefshme.",
+  "verify_email_failed": "Verifikimi dështoi.",
+  "verify_email_success": "Llogaria jote u verifikua me sukses.",
+  "verify_email_server_error": "Nuk mund të lidhemi me serverin.",
+  "verify_email_login": "Te hyrja",
+  "verify_email_back": "← Kthehu",
+
+  "reset_eyebrow": "FJALËKALIM I RI",
+  "reset_visual_eyebrow": "LLOGARIA JOTE. SIGURIA JOTE.",
+  "reset_visual_title1": "Një fillim i ri.",
+  "reset_visual_title2": "Mundësi të reja.",
+  "reset_visual_description": "Vendos një fjalëkalim të ri dhe rifito qasjen në mundësitë lokale në NextJob.",
+  "verify_email_eyebrow": "VERIFIKIMI I EMAILIT",
+  "verify_email_visual_eyebrow": "LIDHJE E SIGURT. MUNDËSI TË REJA.",
+  "verify_email_visual_title1": "Edhe pak.",
+  "verify_email_visual_title2": "Mundësitë të presin.",
+  "verify_email_visual_description": "Po verifikojmë adresën tënde të emailit që të përdorësh NextJob në mënyrë të sigurt dhe të zbulosh mundësi të reja."
+
+
+
 
 
 

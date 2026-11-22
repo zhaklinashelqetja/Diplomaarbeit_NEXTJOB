@@ -459,7 +459,28 @@
   "reset_password_server_error": "Verbindung zum Server nicht möglich.",
   "reset_password_login": "Zum Login →",
   "reset_password_loading": "Wird gespeichert...",
-  "reset_password_button": "Passwort ändern"
+  "reset_password_button": "Passwort ändern",
+  "verify_email_page_title": "E-Mail verifizieren",
+  "verify_email_title": "E-Mail-Verifizierung",
+  "verify_email_loading": "Deine E-Mail-Adresse wird überprüft...",
+  "verify_email_invalid_link": "Der Verifizierungslink ist ungültig.",
+  "verify_email_failed": "Die Verifizierung ist fehlgeschlagen.",
+  "verify_email_success": "Dein Konto wurde erfolgreich verifiziert.",
+  "verify_email_server_error": "Verbindung zum Server nicht möglich.",
+  "verify_email_login": "Zum Login",
+  "verify_email_back": "← Zurück",
+  "reset_eyebrow": "NEUES PASSWORT",
+  "reset_visual_eyebrow": "DEIN KONTO. DEINE SICHERHEIT.",
+  "reset_visual_title1": "Ein neuer Anfang.",
+  "reset_visual_title2": "Neue Chancen.",
+  "reset_visual_description": "Lege ein neues Passwort fest und erhalte wieder Zugang zu deinen lokalen Möglichkeiten auf NextJob.",
+  "verify_email_eyebrow": "E-MAIL-VERIFIZIERUNG",
+  "verify_email_visual_eyebrow": "SICHER VERBUNDEN. BEREIT FÜR MEHR.",
+  "verify_email_visual_title1": "Fast geschafft.",
+  "verify_email_visual_title2": "Deine Chancen warten.",
+  "verify_email_visual_description": "Wir überprüfen deine E-Mail-Adresse, damit du NextJob sicher nutzen und neue Möglichkeiten entdecken kannst."
+
+
 
 
 
