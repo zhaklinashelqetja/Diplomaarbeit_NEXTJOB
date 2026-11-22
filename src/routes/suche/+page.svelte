@@ -14,7 +14,8 @@
         MapPin,
         ArrowUpRight,
         AlertCircle,
-        LoaderCircle
+        LoaderCircle,
+        MessageCircle
     } from '@lucide/svelte';
 
     let problems = $state([]);
@@ -385,6 +386,17 @@
                                             </span>
                                         {/if}
                                     </div>
+
+                                    {#if worker.worker_id != null}
+                                        <a
+                                            href={resolve(`/chat/${worker.worker_id}`)}
+                                            class="chat-worker-button"
+                                            aria-label={`${m.chat_send()} – ${worker.full_name || m.search_worker_singular()}`}
+                                        >
+                                            <MessageCircle size={18} />
+                                            {m.chat_send()}
+                                        </a>
+                                    {/if}
                                 </article>
                             {/each}
                         </div>
@@ -396,7 +408,32 @@
 </div>
 
 
+   
+
+
+
 <style>
+ .chat-worker-button {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        width: 100%;
+        margin-top: 18px;
+        padding: 13px 18px;
+        background: var(--color-charcoal);
+        color: white;
+        font-size: 13px;
+        font-weight: 600;
+        text-decoration: none;
+        transition: background-color 0.2s ease;
+    }
+
+    .chat-worker-button:hover,
+    .chat-worker-button:focus-visible {
+        background: var(--color-fresh);
+    }
+
     .search-page {
         min-height: 100vh;
         background: var(--color-off-white);
