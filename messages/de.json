@@ -571,7 +571,37 @@
   "saved_collection": "Sammlung",
   "saved_budget": "Budget",
   "saved_footer_tagline": "FINDEN · SPEICHERN · VERBINDEN",
-  "worker_category": "Kategorie"
+  "worker_category": "Kategorie",
+  "search_title": "Suche",
+  "search_meta_description": "Finde Jobs und Dienstleister auf NextJob.",
+  "search_discover_label": "ENTDECKEN",
+  "search_heading_first": "Finde, was du",
+  "search_heading_second": "suchst.",
+  "search_intro": "Entdecke lokale Jobs und zuverlässige Dienstleister in deiner Umgebung.",
+  "search_placeholder": "Wonach suchst du?",
+  "search_term_label": "Suchbegriff",
+  "search_button": "Suchen",
+  "search_all": "Alle",
+  "search_jobs": "Jobs",
+  "search_workers": "Dienstleister",
+  "search_result_singular": "Ergebnis",
+  "search_result_plural": "Ergebnisse",
+  "search_loading": "Suchergebnisse werden geladen ...",
+  "search_empty_title": "Keine Ergebnisse gefunden",
+  "search_empty_description": "Versuche einen anderen Suchbegriff oder wähle eine andere Kategorie.",
+  "search_orders_label": "AUFTRÄGE",
+  "search_discover_jobs": "Jobs entdecken",
+  "search_job_singular": "Job",
+  "search_open": "Offen",
+  "search_service": "Dienstleistung",
+  "search_workers_label": "DIENSTLEISTER",
+  "search_experienced_people": "Menschen mit Erfahrung",
+  "search_worker_singular": "Dienstleister",
+  "search_local_worker": "Lokaler Dienstleister",
+  "search_and": "und",
+  "search_load_failed": "{items} konnten nicht geladen werden.",
+  "search_load_error": "Beim Laden der Suchergebnisse ist ein Fehler aufgetreten."
+
 
 
 

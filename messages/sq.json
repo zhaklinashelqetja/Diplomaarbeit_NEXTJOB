@@ -570,7 +570,37 @@
   "saved_collection": "Koleksioni",
   "saved_budget": "Buxheti",
   "saved_footer_tagline": "GJEJ · RUAJ · LIDHU",
-  "worker_category": "Kategoria"
+  "worker_category": "Kategoria",
+  "search_title": "Kërkimi",
+  "search_meta_description": "Gjej punë dhe ofrues shërbimesh në NextJob.",
+  "search_discover_label": "ZBULO",
+  "search_heading_first": "Gjej atë që",
+  "search_heading_second": "kërkon.",
+  "search_intro": "Zbulo punë lokale dhe ofrues të besueshëm shërbimesh në zonën tënde.",
+  "search_placeholder": "Çfarë po kërkon?",
+  "search_term_label": "Fjala e kërkimit",
+  "search_button": "Kërko",
+  "search_all": "Të gjitha",
+  "search_jobs": "Punë",
+  "search_workers": "Ofrues shërbimesh",
+  "search_result_singular": "rezultat",
+  "search_result_plural": "rezultate",
+  "search_loading": "Rezultatet e kërkimit po ngarkohen ...",
+  "search_empty_title": "Nuk u gjet asnjë rezultat",
+  "search_empty_description": "Provo një fjalë tjetër kërkimi ose zgjidh një kategori tjetër.",
+  "search_orders_label": "PUNËT",
+  "search_discover_jobs": "Zbulo punë",
+  "search_job_singular": "Punë",
+  "search_open": "E hapur",
+  "search_service": "Shërbim",
+  "search_workers_label": "OFRUES SHËRBIMESH",
+  "search_experienced_people": "Njerëz me përvojë",
+  "search_worker_singular": "Ofrues shërbimesh",
+  "search_local_worker": "Ofrues lokal shërbimesh",
+  "search_and": "dhe",
+  "search_load_failed": "Nuk u arrit të ngarkoheshin: {items}.",
+  "search_load_error": "Ndodhi një gabim gjatë ngarkimit të rezultateve të kërkimit."
+
 
 
 
