@@ -407,7 +407,24 @@
   "register_visual_eyebrow": "AFTËSI LOKALE. MUNDËSI TË VËRTETA.",
   "register_visual_title1": "Aftësitë e tua.",
   "register_visual_title2": "Mundësitë e tua.",
-  "register_visual_description": "Bëhu pjesë e NextJob, zbulo projekte lokale dhe lidhu me njerëz që kanë nevojë për aftësitë e tua."
+  "register_visual_description": "Bëhu pjesë e NextJob, zbulo projekte lokale dhe lidhu me njerëz që kanë nevojë për aftësitë e tua.",
+  "forgot_title": "Ke harruar fjalëkalimin?",
+  "forgot_description": "Nuk ka problem! Shkruaj adresën tënde të emailit për të rivendosur fjalëkalimin.",
+  "forgot_email_placeholder": "Adresa jote e emailit",
+  "forgot_send": "Dërgo lidhjen për rivendosjen",
+  "forgot_loading": "Duke dërguar...",
+  "forgot_success": "Nëse kjo adresë emaili është e regjistruar, do të marrësh një mesazh me udhëzime të mëtejshme.",
+  "forgot_back": "Kthehu te hyrja",
+  "common_email": "Email",
+  "common_error": "Ndodhi një gabim.",
+  "common_server_error": "Nuk mund të lidhemi me serverin.",
+  "forgot_eyebrow": "RIKTHE LLOGARINË",
+  "forgot_visual_eyebrow": "QASJA JOTE. MUNDËSITË E TUA.",
+  "forgot_visual_title1": "Kthehu te",
+  "forgot_visual_title2": "mundësitë e tua.",
+  "forgot_visual_description": "Rivendos fjalëkalimin dhe zbulo sërish projekte lokale, mundësi të reja dhe kontakte të përshtatshme."
+
+
 
 
 

@@ -409,7 +409,23 @@
   "register_visual_eyebrow": "LOKALE FÄHIGKEITEN. ECHTE CHANCEN.",
   "register_visual_title1": "Deine Fähigkeiten.",
   "register_visual_title2": "Deine Möglichkeiten.",
-  "register_visual_description": "Werde Teil von NextJob, entdecke lokale Projekte und verbinde dich mit Menschen, die deine Fähigkeiten brauchen."
+  "register_visual_description": "Werde Teil von NextJob, entdecke lokale Projekte und verbinde dich mit Menschen, die deine Fähigkeiten brauchen.",
+  "forgot_title": "Passwort vergessen?",
+  "forgot_description": "Kein Problem! Gib deine E-Mail-Adresse ein, um dein Passwort zurückzusetzen.",
+  "forgot_email_placeholder": "Deine E-Mail-Adresse",
+  "forgot_send": "Link zum Zurücksetzen senden",
+  "forgot_loading": "Wird gesendet...",
+  "forgot_success": "Wenn diese E-Mail-Adresse registriert ist, erhältst du eine Nachricht mit weiteren Anweisungen.",
+  "forgot_back": "Zurück zur Anmeldung",
+  "common_email": "E-Mail",
+  "common_error": "Ein Fehler ist aufgetreten.",
+  "common_server_error": "Verbindung zum Server nicht möglich.",
+  "forgot_eyebrow": "KONTO WIEDERHERSTELLEN",
+  "forgot_visual_eyebrow": "DEIN ZUGANG. DEINE MÖGLICHKEITEN.",
+  "forgot_visual_title1": "Zurück zu",
+  "forgot_visual_title2": "deinen Chancen.",
+  "forgot_visual_description": "Setze dein Passwort zurück und entdecke wieder lokale Projekte, neue Möglichkeiten und passende Kontakte."
+
 
 
 
