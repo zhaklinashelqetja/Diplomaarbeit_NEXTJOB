@@ -265,14 +265,13 @@
                                 class="flex"
                             >
 
-                                <div
-                                    class:bg-[#2A2E38]={message.sender_id === currentUserId}
-                                    class:text-white={message.sender_id === currentUserId}
-                                    class:bg-white={message.sender_id !== currentUserId}
-                                    class:text-[#2A2E38]={message.sender_id !== currentUserId}
-                                    class:border-[#2A2E38]/10={message.sender_id !== currentUserId}
-                                    class="max-w-[85%] border border-transparent px-5 py-4 sm:max-w-[65%]"
-                                >
+                               <div
+    class={`max-w-[85%] border px-5 py-4 sm:max-w-[65%] ${
+        message.sender_id === currentUserId
+            ? 'border-transparent bg-[#2A2E38] text-white'
+            : 'border-[#2A2E38]/10 bg-white text-[#2A2E38]'
+    }`}
+>
 
                                     <!-- BENUTZERNACHRICHT BLEIBT UNVERÄNDERT -->
                                     <p class="wrap-break-word whitespace-pre-wrap text-sm leading-7">
@@ -280,8 +279,8 @@
                                     </p>
 
                                     <p
-                                        class:text-white/50={message.sender_id === currentUserId}
-                                        class:text-[#2A2E38]/40={message.sender_id !== currentUserId}
+                                       class:text-gray-400={message.sender_id === currentUserId}
+class:text-gray-500={message.sender_id !== currentUserId}
                                         class="mt-3 text-right text-[11px]"
                                     >
                                         {formatTime(message.sent_at)}
