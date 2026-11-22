@@ -1,3 +1,4 @@
+
 <script>
     import { t } from '$lib/i18n.js';
 
@@ -510,16 +511,6 @@
                             </div>
                         {/if}
 
-                        <!-- DISCOVER JOBS BUTTON -->
-                        <div class="mt-8">
-                            <a
-                                href="/jobnehmer/hauptseite"
-                                class="inline-flex items-center gap-3 bg-[#62AA97] px-5 py-3 text-sm font-semibold text-[#2A2E38] transition hover:bg-[#A8B79E]"
-                            >
-                                {$t('profile_discover_jobs')}
-                                <span>↗</span>
-                            </a>
-                        </div>
                     </div>
                 </div>
 
@@ -536,7 +527,7 @@
             </section>
 
             <!-- MAIN CONTENT -->
-            <div class="mt-10 grid gap-10 lg:grid-cols-[minmax(0,1fr)_300px]">
+            <div class="mt-10">
 
                 <!-- LEFT -->
                 <div class="min-w-0 space-y-10">
@@ -827,58 +818,6 @@
                         </div>
                     </section>
                 </div>
-
-                <!-- SIDEBAR -->
-                <aside class="space-y-8">
-
-                    <!-- NAVIGATION -->
-                    <section class="bg-[#A8B79E] p-6 sm:p-7">
-                        <p class="text-xs font-semibold uppercase tracking-[0.18em] text-[#2A2E38]/60">
-                            NEXTJOB / NAVIGATION
-                        </p>
-
-                        <h2 class="mt-3 text-xl font-semibold tracking-tight">
-                            {$t('profile_my_area')}
-                        </h2>
-
-                        <nav class="mt-6">
-                            <a
-                                href="/jobnehmer/hauptseite"
-                                class="group flex items-center justify-between border-t border-[#2A2E38]/15 py-4 text-sm font-medium transition hover:pl-2"
-                            >
-                                <span>{$t('profile_discover_jobs')}</span>
-                                <span class="transition group-hover:translate-x-1">↗</span>
-                            </a>
-
-                            <a
-                                href="/saved"
-                                class="group flex items-center justify-between border-t border-[#2A2E38]/15 py-4 text-sm font-medium transition hover:pl-2"
-                            >
-                                <span>{$t('worker_saved_jobs')}</span>
-                                <span class="transition group-hover:translate-x-1">↗</span>
-                            </a>
-                        </nav>
-                    </section>
-
-                    <!-- INFORMATION -->
-                    <section class="border border-[#2A2E38]/10 p-6">
-                        <div class="flex items-center justify-between">
-                            <span class="text-xs uppercase tracking-[0.2em] text-[#2A2E38]/45">
-                                NEXTJOB
-                            </span>
-
-                            <span class="text-[#398875]">✳</span>
-                        </div>
-
-                        <p class="mt-5 text-lg font-medium leading-7 tracking-tight">
-                            {$t('worker_role')}
-                        </p>
-
-                        <p class="mt-3 text-sm leading-7 text-[#2A2E38]/55">
-                            {$t('profile_intro')}
-                        </p>
-                    </section>
-                </aside>
             </div>
 
         {:else}

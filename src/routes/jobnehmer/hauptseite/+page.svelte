@@ -615,38 +615,6 @@
                 </a>
             </section>
 
-            <!-- FOLLOWING -->
-            <section class="border border-[#2A2E38]/10 bg-white/60 p-6">
-
-                <div class="flex items-start gap-4">
-                    <div class="flex h-11 w-11 shrink-0 items-center justify-center bg-[#8FB0C4]/30">
-                        <Star size={21} strokeWidth={1.5} />
-                    </div>
-
-                    <div>
-                        <h3 class="font-semibold">
-                            {$t('worker_following')}
-                        </h3>
-
-                        <p class="mt-2 text-xs leading-5 text-[#2A2E38]/50">
-                            {$t('worker_followed_users')}
-                        </p>
-                    </div>
-                </div>
-
-                <p class="mt-5 text-sm leading-7 text-[#2A2E38]/60">
-                    {$t('worker_follow_description')}
-                </p>
-
-                <a
-                    href="/jobnehmer/profil"
-                    class="mt-5 flex items-center justify-between gap-3 border-t border-[#2A2E38]/10 pt-5 text-sm font-semibold text-[#398875] transition hover:text-[#2A2E38]"
-                >
-                    {$t('worker_manage_following')}
-                    <ArrowUpRight size={19} />
-                </a>
-            </section>
-
             <!-- SAVED JOBS -->
             <section class="border border-[#2A2E38]/10 bg-white/60 p-6">
 
@@ -682,34 +650,6 @@
                 >
                     {$t('worker_saved_jobs')}
                     <ArrowUpRight size={19} />
-                </a>
-            </section>
-
-            <!-- CONTRIBUTION -->
-            <section class="bg-[#A8B79E]/35 p-6 sm:p-7">
-
-                <div class="flex items-center justify-between gap-3">
-                    <Sparkles size={22} strokeWidth={1.4} />
-
-                    <span class="text-[10px] tracking-[0.15em]">
-                        05 — NEXTJOB
-                    </span>
-                </div>
-
-                <h3 class="mt-8 text-2xl font-medium tracking-[-0.04em]">
-                    {$t('worker_contribution')}
-                </h3>
-
-                <p class="mt-4 text-sm leading-7 text-[#2A2E38]/60">
-                    {$t('worker_contribution_description')}
-                </p>
-
-                <a
-                    href="/jobnehmer/profil"
-                    class="mt-6 flex items-center justify-between gap-3 bg-[#2A2E38] px-4 py-4 text-sm font-semibold text-white transition hover:bg-[#1e222b]"
-                >
-                    {$t('worker_open_profile')}
-                    <ArrowUpRight size={20} />
                 </a>
             </section>
 
