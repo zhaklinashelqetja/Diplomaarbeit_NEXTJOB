@@ -422,7 +422,28 @@
   "forgot_visual_eyebrow": "QASJA JOTE. MUNDËSITË E TUA.",
   "forgot_visual_title1": "Kthehu te",
   "forgot_visual_title2": "mundësitë e tua.",
-  "forgot_visual_description": "Rivendos fjalëkalimin dhe zbulo sërish projekte lokale, mundësi të reja dhe kontakte të përshtatshme."
+  "forgot_visual_description": "Rivendos fjalëkalimin dhe zbulo sërish projekte lokale, mundësi të reja dhe kontakte të përshtatshme.",
+  "verify_title": "Konfirmo emailin",
+  "verify_description": "Ju lutem, konfirmo adresën tënde të emailit përmes lidhjes që të kemi dërguar.",
+  "verify_spam": "Nuk ke marrë email? Kontrollo edhe dosjen Spam.",
+  "verify_login": "Te hyrja",
+  "verify_resend": "Ridërgo emailin e konfirmimit",
+  "verify_resending": "Duke dërguar...",
+  "verify_resend_success": "Emaili i konfirmimit u ridërgua me sukses.",
+  "verify_login_required": "Ju lutem, hyr fillimisht në llogarinë tënde.",
+  "verify_resend_wait": "Emaili është dërguar së fundmi. Prit të paktën një minutë para se të provosh përsëri.",
+  "verify_already_verified": "Adresa jote e emailit është konfirmuar tashmë.",
+  "verify_already_verified_description": "Llogaria jote është tashmë e verifikuar. Tani mund të përdorësh NextJob.",
+  "verify_resend_failed": "Emaili i konfirmimit nuk mund të dërgohej.",
+  "common_server_error": "Nuk mund të lidhemi me serverin.",
+  "nav_start": "Faqja kryesore",
+  "verify_eyebrow": "KONFIRMO LLOGARINË",
+  "verify_visual_eyebrow": "LIDHJE E SIGURT. MUNDËSI TË REJA.",
+  "verify_visual_title1": "Një klikim.",
+  "verify_visual_title2": "Shumë mundësi.",
+  "verify_visual_description": "Konfirmo adresën tënde të emailit dhe zbulo projekte lokale, kontakte të reja dhe mundësi pranë teje.",
+  "verify_back_home": "Kthehu në faqen kryesore"
+
 
 
 

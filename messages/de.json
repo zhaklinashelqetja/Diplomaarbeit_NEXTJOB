@@ -424,7 +424,28 @@
   "forgot_visual_eyebrow": "DEIN ZUGANG. DEINE MÖGLICHKEITEN.",
   "forgot_visual_title1": "Zurück zu",
   "forgot_visual_title2": "deinen Chancen.",
-  "forgot_visual_description": "Setze dein Passwort zurück und entdecke wieder lokale Projekte, neue Möglichkeiten und passende Kontakte."
+  "forgot_visual_description": "Setze dein Passwort zurück und entdecke wieder lokale Projekte, neue Möglichkeiten und passende Kontakte.",
+  "verify_title": "E-Mail bestätigen",
+  "verify_description": "Bitte bestätige deine E-Mail-Adresse über den Link, den wir dir gesendet haben.",
+  "verify_spam": "Keine E-Mail erhalten? Überprüfe auch deinen Spam-Ordner.",
+  "verify_login": "Zur Anmeldung",
+  "verify_resend": "Bestätigungs-E-Mail erneut senden",
+  "verify_resending": "Wird gesendet...",
+  "verify_resend_success": "Die Bestätigungs-E-Mail wurde erneut gesendet.",
+  "verify_login_required": "Bitte melde dich zuerst an.",
+  "verify_resend_wait": "Es wurde gerade eine E-Mail gesendet. Bitte warte mindestens eine Minute, bevor du es erneut versuchst.",
+  "verify_already_verified": "Deine E-Mail-Adresse ist bereits bestätigt.",
+  "verify_already_verified_description": "Dein Konto ist bereits verifiziert. Du kannst NextJob jetzt verwenden.",
+  "verify_resend_failed": "Die Bestätigungs-E-Mail konnte nicht gesendet werden.",
+  "common_server_error": "Verbindung zum Server nicht möglich.",
+  "nav_start": "Zur Startseite",
+  "verify_eyebrow": "KONTO BESTÄTIGEN",
+  "verify_visual_eyebrow": "SICHER VERBUNDEN. BEREIT FÜR MEHR.",
+  "verify_visual_title1": "Ein Klick.",
+  "verify_visual_title2": "Viele Möglichkeiten.",
+  "verify_visual_description": "Bestätige deine E-Mail-Adresse und entdecke lokale Projekte, neue Kontakte und passende Möglichkeiten in deiner Nähe.",
+  "verify_back_home": "Zurück zur Startseite"
+
 
 
 
