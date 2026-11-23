@@ -1,7 +1,17 @@
-
+import { browser } from '$app/environment';
 import { API_URL } from '$lib/api.js';
 
 export async function load({ fetch }) {
+    if (!browser) {
+        return {
+            user: null,
+            jobs: [],
+            savedJobs: [],
+            pageSize: 6,
+            error: null
+        };
+    }
+
     const token = localStorage.getItem('token');
 
     if (!token) {
@@ -35,11 +45,6 @@ export async function load({ fetch }) {
         }
 
         if (!userResponse.ok) {
-            console.error(
-                'Benutzer konnte nicht geladen werden:',
-                userResponse.status
-            );
-
             return {
                 user: null,
                 jobs: [],
@@ -52,11 +57,11 @@ export async function load({ fetch }) {
         const userData = await userResponse.json();
         const user = userData.user ?? userData;
 
-        // Personalisierte Jobliste laden
+        // Offene Aufträge für Jobnehmer laden
         const feedResponse = await fetch(
-            `${API_URL}/api/workers/me/feed`,
-            { headers }
-        );
+        `${API_URL}/api/problems`,
+        { headers }
+    );
 
         if (feedResponse.status === 401) {
             return {
@@ -65,6 +70,16 @@ export async function load({ fetch }) {
                 savedJobs: [],
                 pageSize: 6,
                 error: 'Die Anmeldung ist nicht mehr gültig. Bitte erneut einloggen.'
+            };
+        }
+
+        if (feedResponse.status === 403) {
+            return {
+                user,
+                jobs: [],
+                savedJobs: [],
+                pageSize: 6,
+                error: 'Du benötigst ein Jobnehmer-Profil, um die Aufträge zu sehen.'
             };
         }
 
@@ -86,10 +101,13 @@ export async function load({ fetch }) {
 
         const feedData = await feedResponse.json();
 
-        // API kann direkt ein Array oder ein Objekt liefern
         const result = Array.isArray(feedData)
             ? feedData
-            : feedData.jobs ?? feedData.items ?? feedData.problems ?? feedData.feed ?? [];
+            : feedData.jobs ??
+              feedData.items ??
+              feedData.problems ??
+              feedData.feed ??
+              [];
 
         const jobs = Array.isArray(result) ? result : [];
 
