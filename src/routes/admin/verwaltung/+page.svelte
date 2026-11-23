@@ -1,4 +1,7 @@
+
 <script>
+    import * as m from '$lib/paraglide/messages.js';
+
     let { data, form } = $props();
 
     let activeTab = $state('users');
@@ -82,7 +85,7 @@
             user.full_name ??
             fullName ??
             user.username ??
-            'Unbekannter Nutzer'
+            m.admin_manage_unknown_user()
         );
     }
 
@@ -116,10 +119,10 @@
             'Nutzer';
 
         const roles = {
-            jobgeber: 'Jobgeber',
-            jobnehmer: 'Jobnehmer',
-            admin: 'Administrator',
-            administrator: 'Administrator'
+            jobgeber: m.admin_manage_role_employer(),
+            jobnehmer: m.admin_manage_role_worker(),
+            admin: m.admin_manage_role_admin(),
+            administrator: m.admin_manage_role_admin()
         };
 
         return roles[String(role).toLowerCase()] ?? role;
@@ -132,10 +135,10 @@
 </script>
 
 <svelte:head>
-    <title>Nutzer- und Auftragsverwaltung | NextJob</title>
+    <title>{m.admin_manage_page_title()} | NextJob</title>
     <meta
         name="description"
-        content="NEXTJOB Admin-Verwaltung für Nutzerkonten und veröffentlichte Aufträge."
+        content={m.admin_manage_meta_description()}
     />
 </svelte:head>
 
@@ -147,16 +150,15 @@
             <p
                 class="text-xs font-bold uppercase tracking-[0.2em] text-[#529b88]"
             >
-                Kontrolle und Sicherheit
+                {m.admin_manage_security()}
             </p>
 
             <h1 class="mt-2 text-3xl font-extrabold sm:text-4xl">
-                Admin-Verwaltung
+                {m.admin_manage_title()}
             </h1>
 
             <p class="mt-3 max-w-2xl text-sm leading-6 text-[#2A2E38]/65 sm:text-base">
-                Verwalte Nutzerkonten, kontrolliere veröffentlichte Aufträge
-                und entferne Inhalte, die gegen die Plattformregeln verstoßen.
+                {m.admin_manage_description()}
             </p>
         </section>
 
@@ -175,7 +177,7 @@
                 class="mb-5 rounded-xl border border-red-200 bg-red-50 p-4 text-sm text-red-800"
                 role="alert"
             >
-                <p class="font-bold">Aktion fehlgeschlagen</p>
+                <p class="font-bold">{m.admin_manage_action_failed()}</p>
                 <p class="mt-1">{form.actionError}</p>
             </div>
         {/if}
@@ -185,7 +187,7 @@
                 class="mb-5 rounded-xl border border-emerald-200 bg-emerald-50 p-4 text-sm text-emerald-800"
                 role="status"
             >
-                <p class="font-bold">Erfolgreich</p>
+                <p class="font-bold">{m.admin_manage_success()}</p>
                 <p class="mt-1">{form.message}</p>
             </div>
         {/if}
@@ -195,33 +197,33 @@
             <article class="rounded-2xl border border-[#2A2E38]/10 bg-white p-5 shadow-sm">
                 <div class="flex items-center justify-between gap-3">
                     <p class="text-sm font-semibold text-[#2A2E38]/60">
-                        Registrierte Nutzer
+                        {m.admin_manage_registered_users()}
                     </p>
                     <span class="text-xl">👥</span>
                 </div>
                 <p class="mt-3 text-3xl font-extrabold">{data.users.length}</p>
                 <p class="mt-1 text-xs text-[#2A2E38]/50">
-                    Geladene Konten
+                    {m.admin_manage_loaded_accounts()}
                 </p>
             </article>
 
             <article class="rounded-2xl border border-[#2A2E38]/10 bg-white p-5 shadow-sm">
                 <div class="flex items-center justify-between gap-3">
                     <p class="text-sm font-semibold text-[#2A2E38]/60">
-                        Veröffentlichte Aufträge
+                        {m.admin_manage_published_jobs()}
                     </p>
                     <span class="text-xl">📋</span>
                 </div>
                 <p class="mt-3 text-3xl font-extrabold">{data.jobs.length}</p>
                 <p class="mt-1 text-xs text-[#2A2E38]/50">
-                    Geladene Aufträge
+                    {m.admin_manage_loaded_jobs()}
                 </p>
             </article>
 
             <article class="rounded-2xl border border-[#2A2E38]/10 bg-white p-5 shadow-sm">
                 <div class="flex items-center justify-between gap-3">
                     <p class="text-sm font-semibold text-[#2A2E38]/60">
-                        Gesperrte Nutzer
+                        {m.admin_manage_blocked_users()}
                     </p>
                     <span class="text-xl">🔒</span>
                 </div>
@@ -229,7 +231,7 @@
                     {data.users.filter((user) => !isUserActive(user)).length}
                 </p>
                 <p class="mt-1 text-xs text-[#2A2E38]/50">
-                    Laut den gelieferten Kontodaten
+                    {m.admin_manage_account_data_note()}
                 </p>
             </article>
         </section>
@@ -246,7 +248,7 @@
                     }`}
                     onclick={() => (activeTab = 'users')}
                 >
-                    Nutzerverwaltung
+                    {m.admin_manage_users_tab()}
                     <span class="ml-1 opacity-75">({data.users.length})</span>
                 </button>
 
@@ -259,7 +261,7 @@
                     }`}
                     onclick={() => (activeTab = 'jobs')}
                 >
-                    Auftragsverwaltung
+                    {m.admin_manage_jobs_tab()}
                     <span class="ml-1 opacity-75">({data.jobs.length})</span>
                 </button>
             </div>
@@ -272,10 +274,10 @@
                     >
                         <div>
                             <h2 class="text-xl font-extrabold">
-                                Nutzerkonten verwalten
+                                {m.admin_manage_user_accounts()}
                             </h2>
                             <p class="mt-1 text-sm text-[#2A2E38]/60">
-                                Konten suchen, sperren, entsperren oder löschen.
+                                {m.admin_manage_users_description()}
                             </p>
                         </div>
 
@@ -284,13 +286,13 @@
                                 for="user-search"
                                 class="mb-2 block text-xs font-bold uppercase tracking-wide text-[#2A2E38]/55"
                             >
-                                Nutzer suchen
+                                {m.admin_manage_search_user()}
                             </label>
 
                             <input
                                 id="user-search"
                                 bind:value={searchUsers}
-                                placeholder="Name oder E-Mail eingeben ..."
+                                placeholder={m.admin_manage_user_placeholder()}
                                 class="w-full rounded-xl border border-[#2A2E38]/15 bg-[#F5F1EE] px-4 py-3 text-sm outline-none transition focus:border-[#62AA97] focus:ring-2 focus:ring-[#62AA97]/20"
                             />
                         </div>
@@ -318,7 +320,7 @@
                                                 </h3>
 
                                                 <p class="mt-1 break-all text-sm text-[#2A2E38]/60">
-                                                    {user.email ?? 'Keine E-Mail angegeben'}
+                                                    {user.email ?? m.admin_manage_no_email()}
                                                 </p>
 
                                                 <div
@@ -338,8 +340,8 @@
                                                         }`}
                                                     >
                                                         {isUserActive(user)
-                                                            ? 'Aktiv'
-                                                            : 'Gesperrt'}
+                                                            ? m.admin_manage_active()
+                                                            : m.admin_manage_blocked()}
                                                     </span>
 
                                                     <span class="text-xs text-[#2A2E38]/45">
@@ -359,8 +361,8 @@
                                                     if (
                                                         !confirm(
                                                             isUserActive(user)
-                                                                ? `Möchtest du ${userName(user)} wirklich sperren?`
-                                                                : `Möchtest du ${userName(user)} wieder aktivieren?`
+                                                                ? m.admin_manage_confirm_block({ name: userName(user) })
+                                                                : m.admin_manage_confirm_unblock({ name: userName(user) })
                                                         )
                                                     ) {
                                                         event.preventDefault();
@@ -388,8 +390,8 @@
                                                     }`}
                                                 >
                                                     {isUserActive(user)
-                                                        ? 'Sperren'
-                                                        : 'Entsperren'}
+                                                        ? m.admin_manage_block()
+                                                        : m.admin_manage_unblock()}
                                                 </button>
                                             </form>
 
@@ -399,7 +401,7 @@
                                                 onsubmit={(event) => {
                                                     if (
                                                         !confirm(
-                                                            `Möchtest du das Konto von ${userName(user)} wirklich dauerhaft löschen? Diese Aktion kann nicht rückgängig gemacht werden.`
+                                                            m.admin_manage_confirm_delete_user({ name: userName(user) })
                                                         )
                                                     ) {
                                                         event.preventDefault();
@@ -417,7 +419,7 @@
                                                     disabled={!userId(user)}
                                                     class="rounded-lg bg-red-600 px-4 py-2.5 text-sm font-bold text-white transition hover:bg-red-700 disabled:cursor-not-allowed disabled:opacity-40"
                                                 >
-                                                    Löschen
+                                                    {m.admin_manage_delete()}
                                                 </button>
                                             </form>
                                         </div>
@@ -429,11 +431,10 @@
                         <div class="rounded-xl bg-[#F5F1EE] px-4 py-12 text-center">
                             <p class="text-3xl">👥</p>
                             <h3 class="mt-3 font-bold">
-                                Keine Nutzer gefunden
+                                {m.admin_manage_no_users()}
                             </h3>
                             <p class="mt-1 text-sm text-[#2A2E38]/55">
-                                Überprüfe deine Suche oder lade die Nutzerdaten
-                                über die Backend-API.
+                                {m.admin_manage_no_users_description()}
                             </p>
                         </div>
                     {/if}
@@ -448,10 +449,10 @@
                     >
                         <div>
                             <h2 class="text-xl font-extrabold">
-                                Aufträge verwalten
+                                {m.admin_manage_jobs_title()}
                             </h2>
                             <p class="mt-1 text-sm text-[#2A2E38]/60">
-                                Aufträge überprüfen, aktualisieren oder löschen.
+                                {m.admin_manage_jobs_description()}
                             </p>
                         </div>
 
@@ -460,13 +461,13 @@
                                 for="job-search"
                                 class="mb-2 block text-xs font-bold uppercase tracking-wide text-[#2A2E38]/55"
                             >
-                                Auftrag suchen
+                                {m.admin_manage_search_job()}
                             </label>
 
                             <input
                                 id="job-search"
                                 bind:value={searchJobs}
-                                placeholder="Titel, Kategorie oder Ort ..."
+                                placeholder={m.admin_manage_job_placeholder()}
                                 class="w-full rounded-xl border border-[#2A2E38]/15 bg-[#F5F1EE] px-4 py-3 text-sm outline-none transition focus:border-[#62AA97] focus:ring-2 focus:ring-[#62AA97]/20"
                             />
                         </div>
@@ -486,7 +487,7 @@
                                         >
                                             {job.category_name ??
                                                 job.category ??
-                                                'Keine Kategorie'}
+                                                m.admin_manage_no_category()}
                                         </span>
 
                                         <span class="text-xs text-[#2A2E38]/50">
@@ -501,7 +502,7 @@
                                         onsubmit={(event) => {
                                             if (
                                                 !confirm(
-                                                    'Möchtest du die Änderungen an diesem Auftrag speichern?'
+                                                    m.admin_manage_confirm_save()
                                                 )
                                             ) {
                                                 event.preventDefault();
@@ -519,7 +520,7 @@
                                                 class="mb-2 block text-sm font-bold"
                                                 for={`title-${jobId(job)}`}
                                             >
-                                                Auftragstitel
+                                                {m.admin_manage_job_title()}
                                             </label>
 
                                             <input
@@ -536,7 +537,7 @@
                                                 class="mb-2 block text-sm font-bold"
                                                 for={`description-${jobId(job)}`}
                                             >
-                                                Beschreibung
+                                                {m.admin_manage_job_description()}
                                             </label>
 
                                             <textarea
@@ -554,13 +555,13 @@
                                                     class="mb-2 block text-sm font-bold"
                                                     for={`location-${jobId(job)}`}
                                                 >
-                                                    Standort
+                                                    {m.admin_manage_location()}
                                                 </label>
 
                                                 <input
                                                     id={`location-${jobId(job)}`}
                                                     readonly
-                                                    value={job.location ?? job.city ?? 'Nicht angegeben'}
+                                                    value={job.location ?? job.city ?? m.admin_manage_not_specified()}
                                                     class="w-full rounded-xl border border-[#2A2E38]/10 bg-[#F5F1EE] px-4 py-3 text-sm text-[#2A2E38]/65"
                                                 />
                                             </div>
@@ -570,7 +571,7 @@
                                                     class="mb-2 block text-sm font-bold"
                                                     for={`status-${jobId(job)}`}
                                                 >
-                                                    Auftragsstatus
+                                                    {m.admin_manage_job_status()}
                                                 </label>
 
                                                 <select
@@ -584,12 +585,12 @@
                                                             selected={(job.status ?? 'open') === status}
                                                         >
                                                             {({
-                                                                open: 'Offen',
-                                                                in_progress: 'In Bearbeitung',
-                                                                completed: 'Abgeschlossen',
-                                                                closed: 'Geschlossen',
-                                                                pending: 'Ausstehend',
-                                                                rejected: 'Abgelehnt'
+                                                                open: m.admin_manage_status_open(),
+                                                                in_progress: m.admin_manage_status_progress(),
+                                                                completed: m.admin_manage_status_completed(),
+                                                                closed: m.admin_manage_status_closed(),
+                                                                pending: m.admin_manage_status_pending(),
+                                                                rejected: m.admin_manage_status_rejected()
                                                             })[status]}
                                                         </option>
                                                     {/each}
@@ -605,7 +606,7 @@
                                                 disabled={!jobId(job)}
                                                 class="rounded-lg bg-[#2A2E38] px-4 py-2.5 text-sm font-bold text-white transition hover:bg-[#414653] disabled:opacity-40"
                                             >
-                                                Änderungen speichern
+                                                {m.admin_manage_save_changes()}
                                             </button>
                                         </div>
                                     </form>
@@ -617,7 +618,9 @@
                                         onsubmit={(event) => {
                                             if (
                                                 !confirm(
-                                                    `Möchtest du den Auftrag "${job.title ?? job.name ?? 'Ohne Titel'}" wirklich dauerhaft löschen?`
+                                                    m.admin_manage_confirm_delete_job({
+                                                        title: job.title ?? job.name ?? m.admin_manage_untitled()
+                                                    })
                                                 )
                                             ) {
                                                 event.preventDefault();
@@ -635,7 +638,7 @@
                                             disabled={!jobId(job)}
                                             class="rounded-lg border border-red-200 px-4 py-2.5 text-sm font-bold text-red-700 transition hover:bg-red-50 disabled:opacity-40"
                                         >
-                                            Auftrag löschen
+                                            {m.admin_manage_delete_job()}
                                         </button>
                                     </form>
                                 </article>
@@ -645,11 +648,10 @@
                         <div class="rounded-xl bg-[#F5F1EE] px-4 py-12 text-center">
                             <p class="text-3xl">📋</p>
                             <h3 class="mt-3 font-bold">
-                                Keine Aufträge gefunden
+                                {m.admin_manage_no_jobs()}
                             </h3>
                             <p class="mt-1 text-sm text-[#2A2E38]/55">
-                                Überprüfe deine Suche oder kontrolliere, ob
-                                die Backend-API Aufträge zurückgibt.
+                                {m.admin_manage_no_jobs_description()}
                             </p>
                         </div>
                     {/if}
@@ -660,7 +662,7 @@
         <footer
             class="mt-8 border-t border-[#2A2E38]/10 pt-5 text-xs text-[#2A2E38]/50"
         >
-            NEXTJOB · Admin-Verwaltung · Nutzerkonten und Aufträge
+            {m.admin_manage_footer()}
         </footer>
     </main>
 </div>

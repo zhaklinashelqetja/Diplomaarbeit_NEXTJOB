@@ -5,6 +5,7 @@
     import { goto } from '$app/navigation';
     import { resolve } from '$app/paths';
     import { API_URL } from '$lib/api.js';
+    import * as m from '$lib/paraglide/messages.js';
 
     import {
         Search,
@@ -13,7 +14,8 @@
         MapPin,
         ArrowUpRight,
         AlertCircle,
-        LoaderCircle
+        LoaderCircle,
+        MessageCircle
     } from '@lucide/svelte';
 
     let problems = $state([]);
@@ -141,7 +143,7 @@
                     const data = await responses[0].value.json();
                     problems = Array.isArray(data) ? data : [];
                 } else {
-                    failed.push('Jobs');
+                    failed.push(m.search_jobs());
                 }
 
                 if (
@@ -151,15 +153,17 @@
                     const data = await responses[1].value.json();
                     workers = Array.isArray(data) ? data : [];
                 } else {
-                    failed.push('Dienstleister');
+                    failed.push(m.search_workers());
                 }
 
                 if (failed.length) {
-                    error = `${failed.join(' und ')} konnten nicht geladen werden.`;
+                    error = m.search_load_failed({
+                        items: failed.join(` ${m.search_and()} `)
+                    });
                 }
             } catch (err) {
                 if (err.name !== 'AbortError') {
-                    error = 'Beim Laden der Suchergebnisse ist ein Fehler aufgetreten.';
+                    error = m.search_load_error();
                 }
             } finally {
                 if (!controller.signal.aborted) {
@@ -175,10 +179,10 @@
 </script>
 
 <svelte:head>
-    <title>Suche | NextJob</title>
+    <title>{m.search_title()} | NextJob</title>
     <meta
         name="description"
-        content="Finde Jobs und Dienstleister auf NextJob."
+        content={m.search_meta_description()}
     />
 </svelte:head>
 
@@ -186,16 +190,15 @@
     <div class="page-container">
 
         <header class="page-header">
-            <span class="eyebrow">NEXTJOB / ENTDECKEN</span>
+            <span class="eyebrow">NEXTJOB / {m.search_discover_label()}</span>
 
             <h1>
-                Finde, was du
-                <span>suchst.</span>
+                {m.search_heading_first()}
+                <span>{m.search_heading_second()}</span>
             </h1>
 
             <p>
-                Entdecke lokale Jobs und zuverlässige
-                Dienstleister in deiner Umgebung.
+                {m.search_intro()}
             </p>
         </header>
 
@@ -205,12 +208,12 @@
             <input
                 type="search"
                 bind:value={searchInput}
-                placeholder="Wonach suchst du?"
-                aria-label="Suchbegriff"
+                placeholder={m.search_placeholder()}
+                aria-label={m.search_term_label()}
             />
 
             <button type="submit">
-                Suchen
+                {m.search_button()}
                 <ArrowUpRight size={19} />
             </button>
         </form>
@@ -222,7 +225,7 @@
                     class:active={selectedCategory === 'all'}
                     onclick={() => changeCategory('all')}
                 >
-                    Alle
+                    {m.search_all()}
                 </button>
 
                 <button
@@ -231,7 +234,7 @@
                     onclick={() => changeCategory('jobs')}
                 >
                     <BriefcaseBusiness size={17} />
-                    Jobs
+                    {m.search_jobs()}
                 </button>
 
                 <button
@@ -240,14 +243,16 @@
                     onclick={() => changeCategory('users')}
                 >
                     <UserRound size={17} />
-                    Dienstleister
+                    {m.search_workers()}
                 </button>
             </div>
 
             {#if !loading}
                 <span class="result-count">
                     {totalResults}
-                    {totalResults === 1 ? 'Ergebnis' : 'Ergebnisse'}
+                    {totalResults === 1
+                        ? m.search_result_singular()
+                        : m.search_result_plural()}
                 </span>
             {/if}
         </div>
@@ -255,7 +260,7 @@
         {#if loading}
             <div class="state-message">
                 <LoaderCircle size={30} class="loading-icon" />
-                <p>Suchergebnisse werden geladen ...</p>
+                <p>{m.search_loading()}</p>
             </div>
         {:else}
             {#if error}
@@ -269,11 +274,10 @@
                 <div class="empty-state">
                     <Search size={35} strokeWidth={1.4} />
 
-                    <h2>Keine Ergebnisse gefunden</h2>
+                    <h2>{m.search_empty_title()}</h2>
 
                     <p>
-                        Versuche einen anderen Suchbegriff
-                        oder wähle eine andere Kategorie.
+                        {m.search_empty_description()}
                     </p>
                 </div>
             {:else}
@@ -281,8 +285,8 @@
                     <section class="results-section">
                         <div class="section-heading">
                             <div>
-                                <span class="section-label">AUFTRÄGE</span>
-                                <h2>Jobs entdecken</h2>
+                                <span class="section-label">{m.search_orders_label()}</span>
+                                <h2>{m.search_discover_jobs()}</h2>
                             </div>
 
                             <span class="section-count">
@@ -296,12 +300,12 @@
                                     <div class="card-top">
                                         <span class="card-type">
                                             <BriefcaseBusiness size={15} />
-                                            Job
+                                            {m.search_job_singular()}
                                         </span>
 
                                         {#if job.status === 'open'}
                                             <span class="status">
-                                                Offen
+                                                {m.search_open()}
                                             </span>
                                         {/if}
                                     </div>
@@ -309,7 +313,7 @@
                                     <h3>{job.title}</h3>
 
                                     <p class="card-description">
-                                        {job.category || 'Dienstleistung'}
+                                        {job.category || m.search_service()}
                                     </p>
 
                                     <div class="card-footer">
@@ -335,8 +339,8 @@
                     <section class="results-section">
                         <div class="section-heading">
                             <div>
-                                <span class="section-label">DIENSTLEISTER</span>
-                                <h2>Menschen mit Erfahrung</h2>
+                                <span class="section-label">{m.search_workers_label()}</span>
+                                <h2>{m.search_experienced_people()}</h2>
                             </div>
 
                             <span class="section-count">
@@ -357,17 +361,17 @@
                                         <div>
                                             <span class="card-type">
                                                 <UserRound size={14} />
-                                                Dienstleister
+                                                {m.search_worker_singular()}
                                             </span>
 
                                             <h3>
-                                                {worker.full_name || 'Dienstleister'}
+                                                {worker.full_name || m.search_worker_singular()}
                                             </h3>
                                         </div>
                                     </div>
 
                                     <p class="card-description">
-                                        {worker.headline || 'Lokaler Dienstleister'}
+                                        {worker.headline || m.search_local_worker()}
                                     </p>
 
                                     <div class="card-footer">
@@ -382,6 +386,17 @@
                                             </span>
                                         {/if}
                                     </div>
+
+                                    {#if worker.worker_id != null}
+                                        <a
+                                            href={resolve(`/chat/${worker.worker_id}`)}
+                                            class="chat-worker-button"
+                                            aria-label={`${m.chat_send()} – ${worker.full_name || m.search_worker_singular()}`}
+                                        >
+                                            <MessageCircle size={18} />
+                                            {m.chat_send()}
+                                        </a>
+                                    {/if}
                                 </article>
                             {/each}
                         </div>
@@ -392,7 +407,33 @@
     </div>
 </div>
 
+
+   
+
+
+
 <style>
+ .chat-worker-button {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        width: 100%;
+        margin-top: 18px;
+        padding: 13px 18px;
+        background: var(--color-charcoal);
+        color: white;
+        font-size: 13px;
+        font-weight: 600;
+        text-decoration: none;
+        transition: background-color 0.2s ease;
+    }
+
+    .chat-worker-button:hover,
+    .chat-worker-button:focus-visible {
+        background: var(--color-fresh);
+    }
+
     .search-page {
         min-height: 100vh;
         background: var(--color-off-white);

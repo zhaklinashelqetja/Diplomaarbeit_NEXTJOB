@@ -1,6 +1,6 @@
 
 <script>
-    import { t } from '$lib/i18n.js';
+    import * as m from '$lib/paraglide/messages.js';
     import {
         Search,
         X,
@@ -33,6 +33,18 @@
         'Gardener',
         'Cleaner'
     ];
+
+    const categoryLabels = {
+        Alle: m.worker_category_all,
+        Plumber: m.worker_category_Plumber,
+        Electrician: m.worker_category_Electrician,
+        Painter: m.worker_category_Painter,
+        Carpenter: m.worker_category_Carpenter,
+        Mason: m.worker_category_Mason,
+        Roofer: m.worker_category_Roofer,
+        Gardener: m.worker_category_Gardener,
+        Cleaner: m.worker_category_Cleaner
+    };
 
     const pageSize = $derived(data.pageSize ?? 6);
 
@@ -207,10 +219,10 @@
 </script>
 
 <svelte:head>
-    <title>{$t('worker_page_title')} | NextJob</title>
+    <title>{m.worker_page_title()} | NextJob</title>
     <meta
         name="description"
-        content={$t('worker_meta_description')}
+        content={m.worker_meta_description()}
     />
 </svelte:head>
 
@@ -224,19 +236,19 @@
 
             <p class="flex items-center gap-2 text-xs font-bold uppercase tracking-[0.15em] text-[#398875]">
                 <span class="h-2 w-2 rounded-full bg-[#62AA97]"></span>
-                {$t('worker_for_you')}
+                {m.worker_for_you()}
             </p>
 
             <div class="my-10">
                 <h1 class="max-w-4xl break-words text-5xl font-medium leading-[0.98] tracking-[-0.06em] sm:text-6xl lg:text-8xl">
-                    {$t('worker_welcome')}
+                    {m.worker_welcome()}
                     <span class="text-[#398875]">
                         {data.user?.first_name ?? ''}
                     </span><span class="text-[#62AA97]">.</span>
                 </h1>
 
                 <p class="mt-6 max-w-2xl text-sm leading-7 text-[#2A2E38]/60 sm:text-base sm:leading-8">
-                    {$t('worker_intro')}
+                    {m.worker_intro()}
                 </p>
             </div>
 
@@ -262,7 +274,7 @@
 
             <div class="my-8">
                 <p class="mb-3 text-xs uppercase tracking-[0.15em] text-white/50">
-                    {$t('worker_matching_jobs')}
+                    {m.worker_matching_jobs()}
                 </p>
 
                 <div class="flex items-end gap-4">
@@ -271,14 +283,14 @@
                     </span>
 
                     <span class="mb-2 text-sm text-white/60">
-                        {filteredJobs.length === 1 ? 'Job' : 'Jobs'}
+                        {filteredJobs.length === 1 ? m.worker_job_singular() : m.worker_job_plural()}
                     </span>
                 </div>
             </div>
 
             <div class="flex items-center gap-2 border-t border-white/15 pt-5 text-xs text-white/60">
                 <span class="h-2 w-2 rounded-full bg-[#62AA97]"></span>
-                {$t('worker_recommendations')}
+                {m.worker_recommendations()}
             </div>
         </div>
     </section>
@@ -296,16 +308,16 @@
         <div class="flex flex-wrap items-end justify-between gap-5">
             <div>
                 <p class="text-xs font-bold uppercase tracking-[0.15em] text-[#398875]">
-                    02 — {$t('worker_search')}
+                    02 — {m.worker_search()}
                 </p>
 
                 <h2 class="mt-4 text-3xl font-medium tracking-[-0.045em] sm:text-5xl">
-                    {$t('worker_matching_jobs')}
+                    {m.worker_matching_jobs()}
                 </h2>
             </div>
 
             <span class="border border-[#2A2E38]/10 bg-[#A8B79E]/25 px-4 py-2 text-sm">
-                {filteredJobs.length} {filteredJobs.length === 1 ? 'Job' : 'Jobs'}
+                {filteredJobs.length} {filteredJobs.length === 1 ? m.worker_job_singular() : m.worker_job_plural()}
             </span>
         </div>
 
@@ -319,7 +331,7 @@
                 type="search"
                 value={search}
                 oninput={(event) => updateSearch(event.currentTarget.value)}
-                placeholder={$t('worker_search_placeholder')}
+                placeholder={m.worker_search_placeholder()}
                 autocomplete="off"
                 class="w-full min-w-0 border-none bg-transparent text-[#2A2E38] outline-none placeholder:text-[#2A2E38]/40"
             />
@@ -328,7 +340,7 @@
                 <button
                     type="button"
                     onclick={() => updateSearch('')}
-                    aria-label={$t('worker_clear_search')}
+                    aria-label={m.worker_clear_search()}
                     class="flex shrink-0 items-center justify-center text-[#2A2E38]/50 transition hover:text-[#2A2E38]"
                 >
                     <X size={19} />
@@ -337,7 +349,7 @@
         </div>
 
         <p class="mt-3 text-xs leading-6 text-[#2A2E38]/50">
-            {$t('worker_search_hint')}
+            {m.worker_search_hint()}
         </p>
 
         <!-- CATEGORIES -->
@@ -345,11 +357,11 @@
 
             <div class="mb-5 flex items-center justify-between gap-3">
                 <p class="text-xs font-bold uppercase tracking-[0.15em] text-[#398875]">
-                    {$t('worker_page_title')}
+                    {m.worker_page_title()}
                 </p>
 
                 <span class="text-xs text-[#2A2E38]/40">
-                    {categories.length} categories
+                    {categories.length} {m.worker_categories_label()}
                 </span>
             </div>
 
@@ -365,7 +377,7 @@
                                 : 'border-[#2A2E38]/10 bg-transparent text-[#2A2E38] hover:border-[#62AA97]'
                         }`}
                     >
-                        {$t(`worker_category_${category === 'Alle' ? 'all' : category}`)}
+                        {categoryLabels[category]?.() ?? category}
                     </button>
                 {/each}
             </div>
@@ -386,11 +398,11 @@
                     </p>
 
                     <h2 class="mt-4 text-3xl font-medium tracking-[-0.045em] sm:text-5xl">
-                        {$t('worker_matching_jobs')}
+                        {m.worker_matching_jobs()}
                     </h2>
 
                     <p class="mt-3 text-sm leading-7 text-[#2A2E38]/50">
-                        {$t('worker_recommendations')}
+                        {m.worker_recommendations()}
                     </p>
                 </div>
 
@@ -400,7 +412,7 @@
                     </span>
 
                     <span class="text-xs text-[#2A2E38]/50">
-                        {filteredJobs.length === 1 ? 'Job' : 'Jobs'}
+                        {filteredJobs.length === 1 ? m.worker_job_singular() : m.worker_job_plural()}
                     </span>
                 </div>
             </div>
@@ -424,12 +436,12 @@
                                 {#if job.urgency === 'high' || job.urgency === 'emergency'}
                                     <span class="flex items-center gap-2 bg-[#62AA97]/15 px-3 py-2 text-xs font-semibold text-[#398875]">
                                         <span class="h-1.5 w-1.5 rounded-full bg-[#62AA97]"></span>
-                                        {$t('worker_urgent')}
+                                        {m.worker_urgent()}
                                     </span>
                                 {:else}
                                     <span class="flex items-center gap-2 bg-[#8FB0C4]/20 px-3 py-2 text-xs font-medium text-[#2A2E38]">
                                         <span class="h-1.5 w-1.5 rounded-full bg-[#8FB0C4]"></span>
-                                        {$t('worker_open')}
+                                        {m.worker_open()}
                                     </span>
                                 {/if}
                             </div>
@@ -441,12 +453,12 @@
 
                             <!-- TITLE -->
                             <h3 class="break-words text-2xl font-medium leading-snug tracking-[-0.04em]">
-                                {job.title ?? $t('worker_no_title')}
+                                {job.title ?? m.worker_no_title()}
                             </h3>
 
                             <!-- DESCRIPTION -->
                             <p class="mt-4 line-clamp-4 break-words text-sm leading-7 text-[#2A2E38]/60">
-                                {job.description ?? $t('worker_no_description')}
+                                {job.description ?? m.worker_no_description()}
                             </p>
 
                             <!-- DETAILS -->
@@ -480,7 +492,7 @@
                                     href={`/jobs/${job.problem_id ?? job.id}`}
                                     class="flex items-center justify-between gap-3 text-sm font-semibold text-[#2A2E38] transition hover:text-[#398875]"
                                 >
-                                    {$t('worker_view_job')}
+                                    {m.worker_view_job()}
                                     <ArrowUpRight size={20} strokeWidth={1.5} />
                                 </a>
                             </div>
@@ -493,7 +505,7 @@
                 {#if totalPages > 1}
                     <nav
                         class="mt-10 flex flex-wrap items-center justify-center gap-2"
-                        aria-label={$t('worker_pagination')}
+                        aria-label={m.worker_pagination()}
                     >
 
                         <button
@@ -503,7 +515,7 @@
                             class="flex items-center gap-2 border border-[#2A2E38]/10 px-4 py-3 text-sm transition hover:border-[#62AA97] disabled:cursor-not-allowed disabled:opacity-30"
                         >
                             <ArrowLeft size={18} />
-                            {$t('worker_previous')}
+                            {m.worker_previous()}
                         </button>
 
                         <div class="flex flex-wrap gap-2">
@@ -511,7 +523,7 @@
                                 <button
                                     type="button"
                                     onclick={() => goToPage(page)}
-                                    aria-label={`${$t('worker_page')} ${page}`}
+                                    aria-label={`${m.worker_page()} ${page}`}
                                     aria-current={currentPage === page ? 'page' : undefined}
                                     class={`min-h-10 min-w-10 border px-3 text-sm transition ${
                                         currentPage === page
@@ -530,13 +542,13 @@
                             disabled={currentPage === totalPages}
                             class="flex items-center gap-2 border border-[#2A2E38]/10 px-4 py-3 text-sm transition hover:border-[#62AA97] disabled:cursor-not-allowed disabled:opacity-30"
                         >
-                            {$t('worker_next')}
+                            {m.worker_next()}
                             <ArrowRight size={18} />
                         </button>
                     </nav>
 
                     <p class="mt-4 text-center text-xs text-[#2A2E38]/50">
-                        {$t('worker_page')} {currentPage} {$t('worker_of')} {totalPages}
+                        {m.worker_page()} {currentPage} {m.worker_of()} {totalPages}
                     </p>
                 {/if}
 
@@ -555,14 +567,14 @@
 
                     <h3 class="mt-5 text-2xl font-medium tracking-[-0.04em]">
                         {search.trim() || selectedCategory !== 'Alle'
-                            ? $t('worker_no_results')
-                            : $t('worker_no_jobs')}
+                            ? m.worker_no_results()
+                            : m.worker_no_jobs()}
                     </h3>
 
                     <p class="mx-auto mt-3 max-w-md text-sm leading-7 text-[#2A2E38]/50">
                         {search.trim() || selectedCategory !== 'Alle'
-                            ? $t('worker_try_again')
-                            : $t('worker_check_later')}
+                            ? m.worker_try_again()
+                            : m.worker_check_later()}
                     </p>
 
                     {#if search.trim() || selectedCategory !== 'Alle'}
@@ -571,7 +583,7 @@
                             onclick={resetFilters}
                             class="mt-6 inline-flex items-center gap-3 bg-[#62AA97] px-5 py-3 text-sm font-semibold text-white transition hover:bg-[#398875]"
                         >
-                            {$t('worker_reset')}
+                            {m.worker_reset()}
                             <ArrowRight size={18} />
                         </button>
                     {/if}
@@ -587,7 +599,7 @@
 
                 <div class="flex items-center justify-between gap-3">
                     <p class="text-xs font-bold uppercase tracking-[0.15em] text-[#A8B79E]">
-                        04 — {$t('worker_role')}
+                        04 — {m.worker_role()}
                     </p>
 
                     <ArrowUpRight size={23} strokeWidth={1.4} />
@@ -603,14 +615,14 @@
                 </h3>
 
                 <p class="mt-2 text-sm text-white/50">
-                    {$t('worker_role')}
+                    {m.worker_role()}
                 </p>
 
                 <a
                     href="/jobnehmer/profil"
                     class="mt-6 flex items-center justify-between gap-3 bg-[#A8B79E] px-4 py-4 text-sm font-semibold text-[#2A2E38] transition hover:bg-[#c0cbb8]"
                 >
-                    {$t('worker_view_profile')}
+                    {m.worker_view_profile()}
                     <ArrowRight size={18} />
                 </a>
             </section>
@@ -625,11 +637,11 @@
 
                     <div>
                         <h3 class="font-semibold">
-                            {$t('worker_saved_jobs')}
+                            {m.worker_saved_jobs()}
                         </h3>
 
                         <p class="mt-2 text-xs leading-5 text-[#2A2E38]/50">
-                            {$t('worker_saved_description')}
+                            {m.worker_saved_description()}
                         </p>
                     </div>
                 </div>
@@ -640,7 +652,7 @@
                     </span>
 
                     <span class="mb-1 text-xs text-[#2A2E38]/50">
-                        {$t('worker_saved_jobs')}
+                        {m.worker_saved_jobs()}
                     </span>
                 </div>
 
@@ -648,7 +660,7 @@
                     href="/jobnehmer/saved"
                     class="mt-5 flex items-center justify-between gap-3 border-t border-[#2A2E38]/10 pt-5 text-sm font-semibold text-[#398875] transition hover:text-[#2A2E38]"
                 >
-                    {$t('worker_saved_jobs')}
+                    {m.worker_saved_jobs()}
                     <ArrowUpRight size={19} />
                 </a>
             </section>
@@ -665,8 +677,8 @@
             </p>
 
             <h2 class="mt-5 text-4xl font-medium leading-tight tracking-[-0.06em] sm:text-5xl lg:text-6xl">
-                Local skills.<br />
-                Local opportunities.
+                {m.worker_footer_skills()}<br />
+                {m.worker_footer_opportunities()}
             </h2>
         </div>
 
