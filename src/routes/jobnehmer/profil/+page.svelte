@@ -1,9 +1,8 @@
-
 <script>
     import { t } from '$lib/i18n.js';
+    import { API_URL } from '$lib/api.js';
 
     let { data } = $props();
-
     let user = $derived(data.user);
 
     let firstName = $derived(user?.first_name ?? '');
@@ -29,17 +28,16 @@
 
         if (Array.isArray(value)) {
             return value
-                .map((skill) =>
-                    typeof skill === 'string' ? skill : skill?.name
+                .map(skill =>
+                    typeof skill === 'string'
+                        ? skill
+                        : skill?.name ?? skill?.category_name
                 )
                 .filter(Boolean);
         }
 
         if (typeof value === 'string' && value.trim()) {
-            return value
-                .split(',')
-                .map((skill) => skill.trim())
-                .filter(Boolean);
+            return value.split(',').map(s => s.trim()).filter(Boolean);
         }
 
         return [];
@@ -83,90 +81,173 @@
         user?.following_count ?? user?.follow_count ?? following.length
     );
 
-    // INITIALIZATION
+    // DATABASE DATA
+    let categoriesList = $state([]);
+    let neighborhoodsList = $state([]);
+    let selectedCategoryIds = $state([]);
     let initializedUserKey = $state('');
 
+    // HELPERS
+    function normalizeText(value) {
+        return String(value ?? '')
+            .normalize('NFD')
+            .replace(/[\u0300-\u036f]/g, '')
+            .trim()
+            .toLowerCase();
+    }
+
+    function extractList(data) {
+        if (Array.isArray(data)) return data;
+
+        if (Array.isArray(data?.categories)) return data.categories;
+        if (Array.isArray(data?.neighborhoods)) return data.neighborhoods;
+        if (Array.isArray(data?.data)) return data.data;
+        if (Array.isArray(data?.items)) return data.items;
+
+        return [];
+    }
+
+    function getCategoryName(category) {
+        return category?.name
+            ?? category?.category_name
+            ?? category?.title
+            ?? '';
+    }
+
+    function getCategoryId(category) {
+        return category?.category_id
+            ?? category?.id
+            ?? category?.id_category;
+    }
+
+    function getNeighborhoodName(item) {
+        return item?.name
+            ?? item?.neighborhood_name
+            ?? item?.title
+            ?? '';
+    }
+
+    function getNeighborhoodId(item) {
+        return item?.neighborhood_id
+            ?? item?.id
+            ?? item?.id_neighborhood;
+    }
+
+    async function apiRequest(path, options = {}) {
+        const token = localStorage.getItem('token');
+
+        if (!token) {
+            throw new Error('Bitte melde dich erneut an.');
+        }
+
+        const response = await fetch(`${API_URL}/api${path}`, {
+            ...options,
+            headers: {
+                Authorization: `Bearer ${token}`,
+                ...(options.headers || {})
+            }
+        });
+
+        const result = await response.json().catch(() => ({}));
+
+        if (!response.ok) {
+            throw new Error(
+                result.message ||
+                result.error ||
+                'Speichern fehlgeschlagen.'
+            );
+        }
+
+        return result;
+    }
+
+    // INITIALIZATION
     $effect(() => {
         if (!user) return;
 
         const userKey = String(user.id ?? user.email ?? 'default');
 
-        // Initialize only when the user changes
         if (initializedUserKey === userKey) return;
 
         initializedUserKey = userKey;
 
-        const storageKey = `nextjob_profile_${userKey}`;
+        (async () => {
+            try {
+                const [catResponse, neighborhoodResponse] =
+                    await Promise.all([
+                        fetch(`${API_URL}/api/categories`),
+                        fetch(`${API_URL}/api/neighborhoods`)
+                    ]);
 
-        let saved = {};
+                if (catResponse.ok) {
+                    const catData = await catResponse.json();
+                    categoriesList = extractList(catData);
+                }
 
-        try {
-            saved = JSON.parse(localStorage.getItem(storageKey) || '{}');
-        } catch (error) {
-            console.error('Profil konnte nicht geladen werden:', error);
-        }
+                if (neighborhoodResponse.ok) {
+                    const neighborhoodData =
+                        await neighborhoodResponse.json();
 
-        displayedBio = saved.bio ?? bio;
+                    neighborhoodsList = extractList(neighborhoodData);
+                }
+            } catch (error) {
+                console.error(
+                    'Kategorien oder Standorte konnten nicht geladen werden:',
+                    error
+                );
+            }
 
-        displayedSkills = Array.isArray(saved.skills)
-            ? saved.skills
-            : skills;
+            displayedBio = bio;
+            displayedSkills = skills;
+            displayedPhone = user.phone ?? '';
 
-        displayedPhone = saved.phone ?? (user.phone ?? '');
+            displayedLocation =
+                location ||
+                user.neighborhood_name ||
+                user.neighborhood ||
+                '';
 
-        displayedLocation = saved.location ?? location;
+            profileImage =
+                user.avatar_path ||
+                user.profile_image ||
+                user.profile_picture ||
+                user.avatar ||
+                user.image ||
+                '';
 
-        bioDraft = displayedBio;
-        skillsDraft = displayedSkills.join(', ');
-        phoneDraft = displayedPhone;
-        locationDraft = displayedLocation;
-
-        profileImage =
-            saved.profileImage ??
-            user.profile_image ??
-            user.profile_picture ??
-            user.avatar ??
-            user.image ??
-            '';
+            bioDraft = displayedBio;
+            skillsDraft = displayedSkills.join(', ');
+            phoneDraft = displayedPhone;
+            locationDraft = displayedLocation;
+        })();
     });
 
-    // SAVE PROFILE LOCALLY
-    function persistProfile() {
-        if (!user) return;
-
-        const userKey = String(user.id ?? user.email ?? 'default');
-        const storageKey = `nextjob_profile_${userKey}`;
-
-        const profileData = {
-            bio: displayedBio,
-            skills: displayedSkills,
-            phone: displayedPhone,
-            location: displayedLocation,
-            profileImage
-        };
+    // BIO
+    async function saveBio() {
+        const value = bioDraft.trim();
 
         try {
-            localStorage.setItem(storageKey, JSON.stringify(profileData));
-        } catch (error) {
-            console.error('Profil konnte nicht lokal gespeichert werden:', error);
+            await apiRequest('/workers/me', {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ bio: value })
+            });
 
+            displayedBio = value;
+            editingBio = false;
+        } catch (error) {
             alert(
-                'Das Profil konnte nicht gespeichert werden. ' +
-                'Möglicherweise ist der Speicherplatz zu groß.'
+                error.message ||
+                'Die Beschreibung konnte nicht gespeichert werden.'
             );
         }
     }
 
-    // BIO
     function startEditingBio() {
         bioDraft = displayedBio;
         editingBio = true;
-    }
-
-    function saveBio() {
-        displayedBio = bioDraft.trim();
-        editingBio = false;
-        persistProfile();
     }
 
     function cancelBio() {
@@ -174,25 +255,87 @@
         editingBio = false;
     }
 
-    // SKILLS
+    // SKILLS: DATABASE CATEGORY IDs
     function startEditingSkills() {
-        skillsDraft = displayedSkills.join(', ');
+        selectedCategoryIds = displayedSkills
+            .map(skill => {
+                if (typeof skill === 'object') {
+                    return Number(getCategoryId(skill));
+                }
+
+                const category = categoriesList.find(item =>
+                    normalizeText(getCategoryName(item)) ===
+                    normalizeText(skill)
+                );
+
+                return category
+                    ? Number(getCategoryId(category))
+                    : null;
+            })
+            .filter(id => id != null);
+
         editingSkills = true;
     }
 
-    function saveSkills() {
-        displayedSkills = skillsDraft
-            .split(',')
-            .map((skill) => skill.trim())
-            .filter(Boolean);
+    async function saveSkills() {
+        if (!categoriesList.length) {
+            alert(
+                'Die Kategorien aus der Datenbank konnten nicht geladen werden. Bitte lade die Seite erneut.'
+            );
+            return;
+        }
 
-        editingSkills = false;
-        persistProfile();
+        if (!selectedCategoryIds.length) {
+            alert('Bitte wähle mindestens eine Kategorie aus.');
+            return;
+        }
+
+        try {
+            await apiRequest('/workers/me/categories', {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    category_ids: selectedCategoryIds.map(Number)
+                })
+            });
+
+            displayedSkills = categoriesList.filter(category =>
+                selectedCategoryIds.includes(
+                    Number(getCategoryId(category))
+                )
+            );
+
+            skillsDraft = displayedSkills
+                .map(getCategoryName)
+                .join(', ');
+
+            editingSkills = false;
+
+        } catch (error) {
+            alert(
+                error.message ||
+                'Skills konnten nicht in der Datenbank gespeichert werden.'
+            );
+        }
     }
 
     function cancelSkills() {
-        skillsDraft = displayedSkills.join(', ');
+        selectedCategoryIds = [];
         editingSkills = false;
+    }
+
+    function toggleSkill(categoryId) {
+        const id = Number(categoryId);
+
+        if (selectedCategoryIds.includes(id)) {
+            selectedCategoryIds = selectedCategoryIds.filter(
+                selectedId => selectedId !== id
+            );
+        } else {
+            selectedCategoryIds = [...selectedCategoryIds, id];
+        }
     }
 
     // CONTACT
@@ -202,12 +345,58 @@
         editingContact = true;
     }
 
-    function saveContact() {
-        displayedPhone = phoneDraft.trim();
-        displayedLocation = locationDraft.trim();
+    async function saveContact() {
+        const phone = phoneDraft.trim();
+        const place = locationDraft.trim();
 
-        editingContact = false;
-        persistProfile();
+        const neighborhood = neighborhoodsList.find(item =>
+            normalizeText(getNeighborhoodName(item)) ===
+            normalizeText(place)
+        );
+
+        if (place && !neighborhood) {
+            const available = neighborhoodsList
+                .map(getNeighborhoodName)
+                .filter(Boolean);
+
+            alert(
+                `Standort nicht gefunden.\n\nVerfügbare Standorte: ${available.join(', ')}`
+            );
+
+            return;
+        }
+
+        const payload = { phone };
+
+        if (neighborhood) {
+            payload.neighborhood_id = Number(
+                getNeighborhoodId(neighborhood)
+            );
+        }
+
+        try {
+            await apiRequest('/users/me', {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(payload)
+            });
+
+            displayedPhone = phone;
+
+            displayedLocation = neighborhood
+                ? getNeighborhoodName(neighborhood)
+                : '';
+
+            editingContact = false;
+
+        } catch (error) {
+            alert(
+                error.message ||
+                'Kontaktinformationen konnten nicht gespeichert werden.'
+            );
+        }
     }
 
     function cancelContact() {
@@ -221,7 +410,7 @@
         imageInput?.click();
     }
 
-    function handleImageChange(event) {
+    async function handleImageChange(event) {
         const file = event.currentTarget.files?.[0];
 
         if (!file) return;
@@ -231,18 +420,32 @@
             return;
         }
 
-        const reader = new FileReader();
+        const formData = new FormData();
+        formData.append('avatar', file);
 
-        reader.onload = () => {
-            profileImage = reader.result;
-            persistProfile();
-        };
+        try {
+            const result = await apiRequest('/users/me/avatar', {
+                method: 'POST',
+                body: formData
+            });
 
-        reader.onerror = () => {
-            alert('Das Bild konnte nicht geladen werden.');
-        };
+            profileImage = result.avatar_path || '';
 
-        reader.readAsDataURL(file);
+            if (
+                profileImage &&
+                !profileImage.startsWith('http')
+            ) {
+                profileImage = `${API_URL}${profileImage}`;
+            }
+
+        } catch (error) {
+            alert(
+                error.message ||
+                'Das Profilbild konnte nicht gespeichert werden.'
+            );
+        } finally {
+            event.currentTarget.value = '';
+        }
     }
 </script>
 
@@ -626,16 +829,44 @@
 
                         <div class="mt-5 border-t border-[#2A2E38]/15 pt-6">
                             {#if editingSkills}
-                                <div class="space-y-4">
-                                    <textarea
-                                        bind:value={skillsDraft}
-                                        rows="3"
-                                        placeholder="z. B. Maler, Elektriker, Reparaturen, Gartenarbeit..."
-                                        class="w-full resize-y border border-[#2A2E38]/15 bg-white p-4 text-sm leading-7 outline-none transition focus:border-[#62AA97]"
-                                    ></textarea>
+                                <div class="space-y-5">
+
+                                    {#if categoriesList.length > 0}
+                                        <div class="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+                                            {#each categoriesList as category, index (`category-${getCategoryId(category) ?? index}`)}
+                                                <button
+                                                    type="button"
+                                                    onclick={() => toggleSkill(getCategoryId(category))}
+                                                    class={`flex items-center justify-between gap-3 border p-4 text-left text-sm transition ${
+                                                        selectedCategoryIds.includes(Number(getCategoryId(category)))
+                                                            ? 'border-[#62AA97] bg-[#A8B79E]/25'
+                                                            : 'border-[#2A2E38]/10 bg-white hover:border-[#62AA97]'
+                                                    }`}
+                                                >
+                                                    <span class="font-medium">
+                                                        {getCategoryName(category)}
+                                                    </span>
+
+                                                    <span class={`flex h-5 w-5 shrink-0 items-center justify-center border ${
+                                                        selectedCategoryIds.includes(Number(getCategoryId(category)))
+                                                            ? 'border-[#398875] bg-[#62AA97] text-[#2A2E38]'
+                                                            : 'border-[#2A2E38]/25'
+                                                    }`}>
+                                                        {#if selectedCategoryIds.includes(Number(getCategoryId(category)))}
+                                                            ✓
+                                                        {/if}
+                                                    </span>
+                                                </button>
+                                            {/each}
+                                        </div>
+                                    {:else}
+                                        <p class="text-sm text-red-600">
+                                            Kategorien konnten nicht geladen werden.
+                                        </p>
+                                    {/if}
 
                                     <p class="text-xs leading-5 text-[#2A2E38]/50">
-                                        Trenne deine Fähigkeiten mit Kommas.
+                                        Wähle alle Kategorien aus, die zu deinen Fähigkeiten passen.
                                     </p>
 
                                     <div class="flex flex-wrap gap-3">
@@ -656,14 +887,17 @@
                                         </button>
                                     </div>
                                 </div>
+
                             {:else}
                                 {#if displayedSkills.length > 0}
                                     <div class="flex flex-wrap gap-3">
-                                        {#each displayedSkills as skill, index (`${skill}-${index}`)}
+                                        {#each displayedSkills as skill, index (`${getCategoryName(skill) || skill}-${index}`)}
                                             <span
                                                 class="border border-[#2A2E38]/10 bg-white px-4 py-3 text-sm font-medium transition hover:border-[#62AA97] hover:bg-[#A8B79E]/20"
                                             >
-                                                {skill}
+                                                {typeof skill === 'object'
+                                                    ? getCategoryName(skill)
+                                                    : skill}
                                             </span>
                                         {/each}
                                     </div>

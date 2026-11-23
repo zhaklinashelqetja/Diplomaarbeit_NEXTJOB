@@ -1,7 +1,11 @@
-
 import { API_URL } from '$lib/api.js';
+import { browser } from '$app/environment';
 
 export async function load({ fetch }) {
+    if (!browser) {
+        return { user: null, error: null };
+    }
+
     const token = localStorage.getItem('token');
 
     if (!token) {
@@ -29,10 +33,9 @@ export async function load({ fetch }) {
         }
 
         const userData = await response.json();
-        const user = userData.user ?? userData;
 
         return {
-            user,
+            user: userData.user ?? userData,
             error: null
         };
     } catch (error) {
