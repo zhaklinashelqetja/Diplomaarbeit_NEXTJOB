@@ -305,59 +305,12 @@
     <!-- SEARCH -->
     <section class="mx-auto mb-16 max-w-7xl">
 
-        <div class="flex flex-wrap items-end justify-between gap-5">
-            <div>
-                <p class="text-xs font-bold uppercase tracking-[0.15em] text-[#398875]">
-                    02 — {m.worker_search()}
-                </p>
-
-                <h2 class="mt-4 text-3xl font-medium tracking-[-0.045em] sm:text-5xl">
-                    {m.worker_matching_jobs()}
-                </h2>
-            </div>
-
-            <span class="border border-[#2A2E38]/10 bg-[#A8B79E]/25 px-4 py-2 text-sm">
-                {filteredJobs.length} {filteredJobs.length === 1 ? m.worker_job_singular() : m.worker_job_plural()}
-            </span>
-        </div>
-
-        <!-- SEARCH FIELD -->
-        <div class="mt-8 flex items-center gap-4 border border-[#2A2E38]/10 bg-white/70 px-5 py-4 transition focus-within:border-[#62AA97]">
-
-            <Search size={21} strokeWidth={1.5} class="shrink-0 text-[#2A2E38]/40" />
-
-            <input
-                id="job-search"
-                type="search"
-                value={search}
-                oninput={(event) => updateSearch(event.currentTarget.value)}
-                placeholder={m.worker_search_placeholder()}
-                autocomplete="off"
-                class="w-full min-w-0 border-none bg-transparent text-[#2A2E38] outline-none placeholder:text-[#2A2E38]/40"
-            />
-
-            {#if search}
-                <button
-                    type="button"
-                    onclick={() => updateSearch('')}
-                    aria-label={m.worker_clear_search()}
-                    class="flex shrink-0 items-center justify-center text-[#2A2E38]/50 transition hover:text-[#2A2E38]"
-                >
-                    <X size={19} />
-                </button>
-            {/if}
-        </div>
-
-        <p class="mt-3 text-xs leading-6 text-[#2A2E38]/50">
-            {m.worker_search_hint()}
-        </p>
-
         <!-- CATEGORIES -->
-        <div class="mt-8 border-t border-[#2A2E38]/10 pt-6">
+        <div class="mt-8 border-[#2A2E38]/10 pt-6">
 
             <div class="mb-5 flex items-center justify-between gap-3">
                 <p class="text-xs font-bold uppercase tracking-[0.15em] text-[#398875]">
-                    {m.worker_page_title()}
+                    02 — {m.worker_page_title()}
                 </p>
 
                 <span class="text-xs text-[#2A2E38]/40">

@@ -1,3 +1,4 @@
+
 import { browser } from '$app/environment';
 import { API_URL } from '$lib/api.js';
 
@@ -57,11 +58,11 @@ export async function load({ fetch }) {
         const userData = await userResponse.json();
         const user = userData.user ?? userData;
 
-        // Offene Aufträge für Jobnehmer laden
+        // Personalisierte Aufträge laden
         const feedResponse = await fetch(
-        `${API_URL}/api/problems`,
-        { headers }
-    );
+            `${API_URL}/api/workers/me/feed`,
+            { headers }
+        );
 
         if (feedResponse.status === 401) {
             return {
@@ -83,33 +84,62 @@ export async function load({ fetch }) {
             };
         }
 
-        if (!feedResponse.ok) {
-            console.error(
-                'Feed konnte nicht geladen werden:',
-                feedResponse.status,
-                feedResponse.statusText
-            );
+        let jobs = [];
 
-            return {
-                user,
-                jobs: [],
-                savedJobs: [],
-                pageSize: 6,
-                error: 'Die Aufträge konnten nicht geladen werden.'
-            };
+        // Personalisierter Feed erfolgreich laden
+        if (feedResponse.ok) {
+            const feedData = await feedResponse.json();
+
+            const result = Array.isArray(feedData)
+                ? feedData
+                : feedData.jobs ??
+                  feedData.items ??
+                  feedData.problems ??
+                  feedData.feed ??
+                  [];
+
+            jobs = Array.isArray(result) ? result : [];
         }
 
-        const feedData = await feedResponse.json();
+        // Fallback: Allgemeine Aufträge laden, wenn der Feed leer ist
+        if (jobs.length === 0) {
+            const fallbackResponse = await fetch(
+                `${API_URL}/api/problems`,
+                { headers }
+            );
 
-        const result = Array.isArray(feedData)
-            ? feedData
-            : feedData.jobs ??
-              feedData.items ??
-              feedData.problems ??
-              feedData.feed ??
-              [];
+            if (fallbackResponse.status === 401) {
+                return {
+                    user,
+                    jobs: [],
+                    savedJobs: [],
+                    pageSize: 6,
+                    error: 'Die Anmeldung ist nicht mehr gültig. Bitte erneut einloggen.'
+                };
+            }
 
-        const jobs = Array.isArray(result) ? result : [];
+            if (!fallbackResponse.ok) {
+                return {
+                    user,
+                    jobs: [],
+                    savedJobs: [],
+                    pageSize: 6,
+                    error: 'Die Aufträge konnten nicht geladen werden.'
+                };
+            }
+
+            const fallbackData = await fallbackResponse.json();
+
+            const result = Array.isArray(fallbackData)
+                ? fallbackData
+                : fallbackData.jobs ??
+                  fallbackData.items ??
+                  fallbackData.problems ??
+                  fallbackData.feed ??
+                  [];
+
+            jobs = Array.isArray(result) ? result : [];
+        }
 
         return {
             user,
