@@ -1,8 +1,9 @@
 from flask import Blueprint, current_app, g, jsonify, request
 from werkzeug.security import check_password_hash, generate_password_hash
 
-from auth import (consume_link_token, create_token, issue_link_token,
-                  login_required, recently_issued)
+from auth import (clear_auth_cookie, consume_link_token, create_token,
+                  issue_link_token, login_required, recently_issued,
+                  set_auth_cookie)
 from db import execute, fetch_one
 from mailer import send_password_reset, send_verification
 
@@ -52,11 +53,13 @@ def register():
                              current_app.config["VERIFY_TOKEN_HOURS"])
     send_verification(email, d["first_name"], token)
 
-    return jsonify({"user_id": user_id,
-                    "token": create_token(user_id, 0),
+    auth_token = create_token(user_id, 0)
+    resp = jsonify({"user_id": user_id,
+                    "token": auth_token,
                     "is_verified": False,
                     "account_type": d["account_type"],
-                    "is_worker": d["account_type"] == "jobnehmer"}), 201
+                    "is_worker": d["account_type"] == "jobnehmer"})
+    return set_auth_cookie(resp, auth_token), 201
 
 
 @bp.post("/login")
@@ -72,11 +75,19 @@ def login():
     if not user["is_active"]:
         return jsonify({"error": "Account is deactivated"}), 403
     # Unverified users may log in - they are only blocked from posting.
-    return jsonify({"user_id": user["user_id"],
+    auth_token = create_token(user["user_id"], user["token_version"])
+    resp = jsonify({"user_id": user["user_id"],
                     "is_verified": bool(user["is_verified"]),
                     "account_type": user["account_type"],
-                    "token": create_token(user["user_id"],
-                                          user["token_version"])})
+                    "token": auth_token})
+    return set_auth_cookie(resp, auth_token)
+
+
+@bp.post("/logout")
+def logout():
+    """Deletes the cookie. Works without login, so an expired
+    session can always be cleared."""
+    return clear_auth_cookie(jsonify({"logged_out": True}))
 
 
 @bp.get("/me")
