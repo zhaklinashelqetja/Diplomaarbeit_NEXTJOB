@@ -3,6 +3,7 @@
 Flow:
   1. POST /api/auth/login -> server returns a signed token
   2. Client sends it on every request:  Authorization: Bearer <token>
+     (or the httpOnly "token" cookie that login also sets)
   3. Decorators below decode the token and load the current user
      into flask.g.user, or reject with 401/403.
 
@@ -35,12 +36,32 @@ def create_token(user_id, token_version=0):
                       algorithm="HS256")
 
 
+def set_auth_cookie(resp, token):
+    """Same JWT as an httpOnly cookie: JavaScript cannot read it."""
+    resp.set_cookie("token", token,
+                    max_age=current_app.config["TOKEN_HOURS"] * 3600,
+                    httponly=True, secure=True, samesite="Lax", path="/")
+    return resp
+
+
+def clear_auth_cookie(resp):
+    resp.delete_cookie("token", path="/", httponly=True, secure=True,
+                       samesite="Lax")
+    return resp
+
+
 def _load_user_from_token():
+    # 1. Authorization: Bearer header (token from localStorage)
+    # 2. otherwise the httpOnly "token" cookie set at login
     header = request.headers.get("Authorization", "")
-    if not header.startswith("Bearer "):
-        return None, "Missing Bearer token"
+    if header.startswith("Bearer "):
+        raw = header[7:]
+    else:
+        raw = request.cookies.get("token")
+    if not raw:
+        return None, "Missing token"
     try:
-        payload = jwt.decode(header[7:], current_app.config["SECRET_KEY"],
+        payload = jwt.decode(raw, current_app.config["SECRET_KEY"],
                              algorithms=["HS256"])
     except jwt.ExpiredSignatureError:
         return None, "Token expired"
