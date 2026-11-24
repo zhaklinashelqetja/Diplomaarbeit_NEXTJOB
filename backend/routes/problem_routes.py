@@ -3,6 +3,7 @@ from flask import Blueprint, g, jsonify, request
 from auth import login_required, optional_auth, verified_required, worker_required
 from db import call_proc, execute, fetch_all, fetch_one
 from routes.user_routes import save_image
+from translations import localize_row, localize_rows
 
 bp = Blueprint("problems", __name__, url_prefix="/api/problems")
 
@@ -12,8 +13,8 @@ def problem_card(extra_columns=""):
     exists only once. extra_columns adds columns, e.g. "r.score, "."""
     return (
         "SELECT " + extra_columns +
-        "       p.problem_id, p.title, p.budget, p.urgency, p.status, "
-        "       p.created_at, p.category_id, c.name AS category, "
+        "       p.problem_id, p.title, p.title_translations, p.budget, p.urgency, p.status, "
+        "       p.created_at, p.category_id, c.name AS category, c.name_translations AS category_translations, "
         "       p.neighborhood_id, n.name AS neighborhood, "
         "       (SELECT COUNT(*) FROM offers o "
         "        WHERE o.problem_id = p.problem_id) AS offer_count, "
@@ -70,14 +71,14 @@ def list_problems():
         execute("INSERT INTO search_logs (user_id, keyword, category_filter, "
                 "neighborhood_filter) VALUES (%s,%s,%s,%s)",
                 (g.user["user_id"] if g.user else None, q, category, neighborhood))
-    return jsonify(rows)
+    return jsonify(localize_rows(rows, ("title", "category")))
 
 
 @bp.get("/<int:problem_id>")
 @optional_auth
 def problem_detail(problem_id):
     p = fetch_one(
-        "SELECT p.*, c.name AS category, n.name AS neighborhood, "
+        "SELECT p.*, c.name AS category, c.name_translations AS category_translations, n.name AS neighborhood, "
         "       CONCAT(u.first_name,' ',u.last_name) AS customer_name "
         "FROM problems p "
         "JOIN categories c    ON c.category_id     = p.category_id "
@@ -95,7 +96,7 @@ def problem_detail(problem_id):
         "ORDER BY sort_order", (problem_id,))
     execute("INSERT INTO problem_views (problem_id, user_id) VALUES (%s,%s)",
             (problem_id, me))   # view statistics
-    return jsonify(p)
+    return jsonify(localize_row(p, ("title", "description", "category")))
 
 
 @bp.post("")
@@ -157,6 +158,9 @@ def update_problem(problem_id):
     if not updates:
         return jsonify({"error": "Nothing to update"}), 400
     sets = ", ".join(f"{k}=%s" for k in updates)
+    for field in ("title", "description"):
+        if field in updates:
+            sets += f", {field}_translations=NULL"
     execute(f"UPDATE problems SET {sets} WHERE problem_id=%s",
             (*updates.values(), problem_id))
     return jsonify({"updated": list(updates)})
@@ -178,9 +182,9 @@ def cancel_problem(problem_id):
 @bp.get("/mine")
 @login_required
 def my_problems():
-    return jsonify(fetch_all(
+    return jsonify(localize_rows(fetch_all(
         problem_card() + "WHERE p.customer_id=%s ORDER BY p.created_at DESC",
-        (g.user["user_id"],)))
+        (g.user["user_id"],)), ('title', 'category')))
 
 
 # ---------- offers on a problem ----------
@@ -191,14 +195,14 @@ def list_offers(problem_id):
     _, err = owned_problem_or_404(problem_id)
     if err:
         return err
-    return jsonify(fetch_all(
-        "SELECT o.offer_id, o.price, o.message, o.status, o.initiated_by, "
+    return jsonify(localize_rows(fetch_all(
+        "SELECT o.offer_id, o.price, o.message, o.message_translations, o.status, o.initiated_by, "
         "       o.created_at, o.worker_id, ws.full_name AS worker, "
         "       ws.neighborhood, ws.avg_rating, ws.review_count, "
         "       ws.completed_jobs, ws.avg_response_hours "
         "FROM offers o "
         "JOIN v_worker_search ws ON ws.worker_id = o.worker_id "
-        "WHERE o.problem_id=%s ORDER BY o.created_at", (problem_id,)))
+        "WHERE o.problem_id=%s ORDER BY o.created_at", (problem_id,)), ('message',)))
 
 
 @bp.post("/<int:problem_id>/offers")

@@ -68,9 +68,9 @@ def withdraw_offer(offer_id):
 def conversations():
     """One row per chat partner with the newest message."""
     uid = g.user["user_id"]
-    return jsonify(fetch_all(
+    return jsonify(localize_rows(fetch_all(
         "SELECT partner_id, CONCAT(u.first_name,' ',u.last_name) AS partner, "
-        "       m.content AS last_message, m.sent_at, "
+        "       m.content AS last_message, m.content_translations AS last_message_translations, m.sent_at, "
         "       (SELECT COUNT(*) FROM messages "
         "        WHERE sender_id = partner_id AND receiver_id = %s "
         "        AND is_read = FALSE) AS unread "
@@ -82,7 +82,7 @@ def conversations():
         ") t "
         "JOIN messages m ON m.message_id = t.last_id "
         "JOIN users u ON u.user_id = t.partner_id "
-        "ORDER BY m.sent_at DESC", (uid, uid, uid, uid)))
+        "ORDER BY m.sent_at DESC", (uid, uid, uid, uid)), ('last_message',)))
 
 
 @bp.get("/messages/<int:partner_id>")
@@ -91,11 +91,11 @@ def thread(partner_id):
     uid = g.user["user_id"]
     execute("UPDATE messages SET is_read=TRUE "
             "WHERE sender_id=%s AND receiver_id=%s", (partner_id, uid))
-    return jsonify(fetch_all(
-        "SELECT message_id, sender_id, content, problem_id, sent_at "
+    return jsonify(localize_rows(fetch_all(
+        "SELECT message_id, sender_id, content, content_translations, problem_id, sent_at "
         "FROM messages WHERE (sender_id=%s AND receiver_id=%s) "
         "   OR (sender_id=%s AND receiver_id=%s) "
-        "ORDER BY sent_at", (uid, partner_id, partner_id, uid)))
+        "ORDER BY sent_at", (uid, partner_id, partner_id, uid)), ('content',)))
 
 
 @bp.post("/messages/<int:partner_id>")
@@ -126,12 +126,12 @@ def send_message(partner_id):
 @login_required
 def notifications():
     unread_only = request.args.get("unread") == "1"
-    sql = ("SELECT notification_id, type, message, is_read, created_at "
+    sql = ("SELECT notification_id, type, message, message_translations, is_read, created_at "
            "FROM notifications WHERE user_id=%s")
     if unread_only:
         sql += " AND is_read=FALSE"
     sql += " ORDER BY created_at DESC LIMIT 50"
-    return jsonify(fetch_all(sql, (g.user["user_id"],)))
+    return jsonify(localize_rows(fetch_all(sql, (g.user["user_id"],)), ("message",)))
 
 
 @bp.put("/notifications/read")
@@ -185,9 +185,10 @@ def jobs_per_month():
 @admin_required
 def detect_fakes():
     call_proc("sp_detect_fake_reviews", ())
-    return jsonify(fetch_all(
-        "SELECT review_id, worker_id, customer_id, flag_reason, created_at "
-        "FROM reviews WHERE is_flagged=TRUE"))
+    rows = fetch_all(
+        "SELECT review_id, worker_id, customer_id, flag_reason, flag_reason_translations, created_at "
+        "FROM reviews WHERE is_flagged=TRUE")
+    return jsonify(localize_rows(rows, ("flag_reason",)))
 
 
 @bp.put("/admin/users/<int:user_id>/deactivate")
