@@ -20,6 +20,7 @@ from routes.problem_routes import bp as problem_bp
 from routes.misc_routes import bp as misc_bp
 from routes.analysis_routes import bp as analysis_bp
 from routes.chat_routes import bp as chat_bp
+from routes.leaderboard_routes import bp as leaderboard_bp
 
 
 def create_app():
@@ -35,6 +36,7 @@ def create_app():
     app.register_blueprint(misc_bp)
     app.register_blueprint(analysis_bp)
     app.register_blueprint(chat_bp)
+    app.register_blueprint(leaderboard_bp)
 
     app.teardown_appcontext(db.close_db)
 
