@@ -1,8 +1,13 @@
 
 <script>
     import * as m from '$lib/paraglide/messages.js';
+    import { API_URL, localizedUrl } from '$lib/api.js';
+    import { invalidateAll, goto } from '$app/navigation';
 
-    let { data, form } = $props();
+    let { data } = $props();
+
+    let form = $state(null);
+    let busy = $state(false);
 
     let activeTab = $state('users');
     let searchUsers = $state('');
@@ -91,6 +96,9 @@
 
     // Nutzerstatus ermitteln
     function isUserActive(user) {
+        if (user.is_active === 0 || user.is_active === '0') return false;
+        if (user.is_active === 1 || user.is_active === '1') return true;
+
         if (typeof user.is_active === 'boolean') {
             return user.is_active;
         }
@@ -132,6 +140,123 @@
     function confirmAction(message) {
         return window.confirm(message);
     }
+
+    async function adminAction(endpoint, method, body, successMessage) {
+        if (busy) return;
+
+        form = null;
+        busy = true;
+
+        try {
+            const token = localStorage.getItem('token');
+
+            if (!token) {
+                await goto('/auth/login');
+                return;
+            }
+
+            const response = await fetch(
+                localizedUrl(`${API_URL}${endpoint}`),
+                {
+                    method,
+                    credentials: 'include',
+                    headers: {
+                        Accept: 'application/json',
+                        Authorization: `Bearer ${token}`,
+                        ...(body ? { 'Content-Type': 'application/json' } : {})
+                    },
+                    ...(body ? { body: JSON.stringify(body) } : {})
+                }
+            );
+
+            if (response.status === 401) {
+                localStorage.removeItem('token');
+                await goto('/auth/login');
+                return;
+            }
+
+            if (!response.ok) {
+                throw new Error(
+                    m.admin_manage_api_error({ status: response.status })
+                );
+            }
+
+            await invalidateAll();
+
+            form = {
+                success: true,
+                message: successMessage
+            };
+        } catch (error) {
+            form = {
+                actionError: error.message
+            };
+        } finally {
+            busy = false;
+        }
+    }
+
+    async function toggleUser(user) {
+        const id = userId(user);
+
+        if (!id) return;
+
+        const active = isUserActive(user);
+
+        if (!confirmAction(
+            active
+                ? m.admin_manage_confirm_block({ name: userName(user) })
+                : m.admin_manage_confirm_unblock({ name: userName(user) })
+        )) return;
+
+        await adminAction(
+            `/api/admin/users/${encodeURIComponent(id)}/status`,
+            'PATCH',
+            { is_active: !active },
+            m.admin_manage_user_status_changed()
+        );
+    }
+
+    async function updateJob(event, job) {
+        event.preventDefault();
+
+        const id = jobId(job);
+
+        if (!id || !confirmAction(m.admin_manage_confirm_save())) return;
+
+        const values = new FormData(event.currentTarget);
+
+        await adminAction(
+            `/api/admin/problems/${encodeURIComponent(id)}`,
+            'PUT',
+            {
+                title: values.get('title'),
+                description: values.get('description'),
+                status: values.get('status')
+            },
+            m.admin_manage_job_updated()
+        );
+    }
+
+    async function deleteJob(job) {
+        const id = jobId(job);
+
+        if (!id) return;
+
+        if (!confirmAction(
+            m.admin_manage_confirm_delete_job({
+                title: job.title ?? job.name ?? m.admin_manage_untitled()
+            })
+        )) return;
+
+        await adminAction(
+            `/api/admin/problems/${encodeURIComponent(id)}`,
+            'DELETE',
+            null,
+            m.admin_manage_job_deleted()
+        );
+    }
+
 </script>
 
 <svelte:head>
@@ -354,35 +479,10 @@
                                         <div
                                             class="flex flex-wrap gap-2 lg:justify-end"
                                         >
-                                            <form
-                                                method="POST"
-                                                action="?/toggleUser"
-                                                onsubmit={(event) => {
-                                                    if (
-                                                        !confirm(
-                                                            isUserActive(user)
-                                                                ? m.admin_manage_confirm_block({ name: userName(user) })
-                                                                : m.admin_manage_confirm_unblock({ name: userName(user) })
-                                                        )
-                                                    ) {
-                                                        event.preventDefault();
-                                                    }
-                                                }}
-                                            >
-                                                <input
-                                                    type="hidden"
-                                                    name="userId"
-                                                    value={userId(user) ?? ''}
-                                                />
-                                                <input
-                                                    type="hidden"
-                                                    name="isActive"
-                                                    value={String(isUserActive(user))}
-                                                />
-
-                                                <button
-                                                    type="submit"
-                                                    disabled={!userId(user)}
+                                            <button
+                                                    type="button"
+ onclick={() => toggleUser(user)}
+                                                    disabled={busy || !userId(user)}
                                                     class={`rounded-lg px-4 py-2.5 text-sm font-bold transition disabled:cursor-not-allowed disabled:opacity-40 ${
                                                         isUserActive(user)
                                                             ? 'bg-amber-100 text-amber-900 hover:bg-amber-200'
@@ -393,35 +493,8 @@
                                                         ? m.admin_manage_block()
                                                         : m.admin_manage_unblock()}
                                                 </button>
-                                            </form>
 
-                                            <form
-                                                method="POST"
-                                                action="?/deleteUser"
-                                                onsubmit={(event) => {
-                                                    if (
-                                                        !confirm(
-                                                            m.admin_manage_confirm_delete_user({ name: userName(user) })
-                                                        )
-                                                    ) {
-                                                        event.preventDefault();
-                                                    }
-                                                }}
-                                            >
-                                                <input
-                                                    type="hidden"
-                                                    name="userId"
-                                                    value={userId(user) ?? ''}
-                                                />
-
-                                                <button
-                                                    type="submit"
-                                                    disabled={!userId(user)}
-                                                    class="rounded-lg bg-red-600 px-4 py-2.5 text-sm font-bold text-white transition hover:bg-red-700 disabled:cursor-not-allowed disabled:opacity-40"
-                                                >
-                                                    {m.admin_manage_delete()}
-                                                </button>
-                                            </form>
+                                            
                                         </div>
                                     </div>
                                 </article>
@@ -495,21 +568,8 @@
                                         </span>
                                     </div>
 
-                                    <form
-                                        method="POST"
-                                        action="?/updateJob"
-                                        class="space-y-4"
-                                        onsubmit={(event) => {
-                                            if (
-                                                !confirm(
-                                                    m.admin_manage_confirm_save()
-                                                )
-                                            ) {
-                                                event.preventDefault();
-                                            }
-                                        }}
-                                    >
-                                        <input
+                                    <form class="space-y-4" onsubmit={(event) => updateJob(event, job)}>
+<input
                                             type="hidden"
                                             name="jobId"
                                             value={jobId(job) ?? ''}
@@ -603,7 +663,7 @@
                                         >
                                             <button
                                                 type="submit"
-                                                disabled={!jobId(job)}
+                                                disabled={busy || !jobId(job)}
                                                 class="rounded-lg bg-[#2A2E38] px-4 py-2.5 text-sm font-bold text-white transition hover:bg-[#414653] disabled:opacity-40"
                                             >
                                                 {m.admin_manage_save_changes()}
@@ -611,36 +671,14 @@
                                         </div>
                                     </form>
 
-                                    <form
-                                        method="POST"
-                                        action="?/deleteJob"
-                                        class="mt-2 flex justify-end"
-                                        onsubmit={(event) => {
-                                            if (
-                                                !confirm(
-                                                    m.admin_manage_confirm_delete_job({
-                                                        title: job.title ?? job.name ?? m.admin_manage_untitled()
-                                                    })
-                                                )
-                                            ) {
-                                                event.preventDefault();
-                                            }
-                                        }}
-                                    >
-                                        <input
-                                            type="hidden"
-                                            name="jobId"
-                                            value={jobId(job) ?? ''}
-                                        />
-
-                                        <button
-                                            type="submit"
-                                            disabled={!jobId(job)}
+                                    <div class="mt-2 flex justify-end"><button
+                                            type="button"
+ onclick={() => deleteJob(job)}
+                                            disabled={busy || !jobId(job)}
                                             class="rounded-lg border border-red-200 px-4 py-2.5 text-sm font-bold text-red-700 transition hover:bg-red-50 disabled:opacity-40"
                                         >
                                             {m.admin_manage_delete_job()}
-                                        </button>
-                                    </form>
+                                        </button></div>
                                 </article>
                             {/each}
                         </div>

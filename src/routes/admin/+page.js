@@ -28,12 +28,13 @@ export async function load({ fetch }) {
     const token = localStorage.getItem('token');
 
     if (!token) {
-        throw redirect(302, '/login');
+        throw redirect(302, '/auth/login');
     }
 
     try {
         // Angemeldeten Benutzer überprüfen
         const authResponse = await fetch(`${API_URL}/api/auth/me`, {
+            credentials: 'include',
             headers: {
                 Authorization: `Bearer ${token}`
             }
@@ -41,7 +42,7 @@ export async function load({ fetch }) {
 
         if (!authResponse.ok) {
             localStorage.removeItem('token');
-            throw redirect(302, '/login');
+            throw redirect(302, '/auth/login');
         }
 
         const authData = await authResponse.json();
@@ -57,6 +58,7 @@ export async function load({ fetch }) {
 
         // Statistiken abrufen
         const response = await fetch(localizedUrl(`${API_URL}/api/admin/stats`), {
+            credentials: 'include',
             headers: {
                 Authorization: `Bearer ${token}`
             }
