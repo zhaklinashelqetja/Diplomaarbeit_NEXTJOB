@@ -62,10 +62,15 @@
         profileOpen = false;
     }
 
-    function handleLogout() {
-        logout();
+    async function handleLogout() {
+        const success = await logout();
+
+        if (!success) {
+            console.error('Server logout failed.');
+        }
+
         closeMenu();
-        goto(resolve('/'));
+        await goto(resolve('/'));
     }
 
     function isActive(path) {
