@@ -1,4 +1,6 @@
 <script>
+    import * as m from '$lib/paraglide/messages.js';
+    import { getLocale } from '$lib/paraglide/runtime.js';
     let { data = [] } = $props();
 
     const chartWidth = 700;
@@ -8,20 +10,18 @@
     const top = 20;
     const bottom = 48;
 
-    const monthNames = [
-        'Jan.',
-        'Feb.',
-        'März',
-        'Apr.',
-        'Mai',
-        'Juni',
-        'Juli',
-        'Aug.',
-        'Sep.',
-        'Okt.',
-        'Nov.',
-        'Dez.'
-    ];
+    const localeMap = {
+        de: 'de-AT',
+        sq: 'sq-AL',
+        en: 'en-GB'
+    };
+
+    function getMonthName(monthIndex) {
+        return new Intl.DateTimeFormat(
+            localeMap[getLocale()] ?? 'de-AT',
+            { month: 'short', timeZone: 'UTC' }
+        ).format(new Date(Date.UTC(2000, monthIndex, 1)));
+    }
 
     let months = $derived(data ?? []);
 
@@ -39,7 +39,7 @@
             return monthString;
         }
 
-        return `${monthNames[monthIndex]} ${year}`;
+        return `${getMonthName(monthIndex)} ${year}`;
     }
 
     function formatShortMonth(monthString) {
@@ -52,7 +52,7 @@
             return monthString;
         }
 
-        return monthNames[monthIndex];
+        return getMonthName(monthIndex);
     }
 
     function getX(index) {
@@ -84,10 +84,10 @@
 <section class="rounded-2xl border border-[#2A2E38]/10 bg-white p-6 shadow-sm">
     <div class="mb-5">
         <h2 class="text-lg font-bold text-[#2A2E38]">
-            Neue Nutzer pro Monat
+            {m.admin_chart_title()}
         </h2>
         <p class="mt-1 text-sm text-[#2A2E38]/60">
-            Entwicklung der monatlichen Registrierungen
+            {m.admin_chart_description()}
         </p>
     </div>
 
@@ -97,7 +97,7 @@
                 viewBox={`0 0 ${chartWidth} ${chartHeight}`}
                 class="w-full min-w-[500px]"
                 role="img"
-                aria-label="Diagramm mit neuen Nutzern pro Monat"
+                aria-label={m.admin_chart_aria()}
             >
                 {#each [0, 1, 2, 3, 4] as step}
                     {@const y = top + step * (chartHeight - top - bottom) / 4}
@@ -143,7 +143,7 @@
                         stroke-width="2"
                     >
                         <title>
-                            {formatMonth(month.month)}: {month.new_users} neue Nutzer
+                            {formatMonth(month.month)}: {m.admin_chart_new_users({ count: month.new_users })}
                         </title>
                     </circle>
 
@@ -175,7 +175,7 @@
     {:else}
         <div class="rounded-xl bg-[#F5F1EE] px-4 py-8 text-center">
             <p class="text-sm text-[#2A2E38]/60">
-                Noch keine Registrierungsdaten vorhanden.
+                {m.admin_chart_empty()}
             </p>
         </div>
     {/if}

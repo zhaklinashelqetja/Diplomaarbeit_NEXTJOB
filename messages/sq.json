@@ -792,5 +792,10 @@
   "admin_manage_user_status_changed": "Statusi i përdoruesit u ndryshua.",
   "admin_manage_user_deleted": "Përdoruesi u fshi.",
   "admin_manage_job_updated": "Puna u përditësua.",
-  "admin_manage_job_deleted": "Puna u fshi."
+  "admin_manage_job_deleted": "Puna u fshi.",
+  "admin_chart_title": "Përdorues të rinj në muaj",
+  "admin_chart_description": "Zhvillimi i regjistrimeve mujore",
+  "admin_chart_aria": "Grafiku i përdoruesve të rinj në muaj",
+  "admin_chart_new_users": "{count} përdorues të rinj",
+  "admin_chart_empty": "Ende nuk ka të dhëna për regjistrimet."
 }

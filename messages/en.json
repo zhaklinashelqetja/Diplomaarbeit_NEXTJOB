@@ -794,5 +794,10 @@
   "admin_manage_user_status_changed": "User status has been changed.",
   "admin_manage_user_deleted": "User has been deleted.",
   "admin_manage_job_updated": "Job has been updated.",
-  "admin_manage_job_deleted": "Job has been deleted."
+  "admin_manage_job_deleted": "Job has been deleted.",
+  "admin_chart_title": "New users per month",
+  "admin_chart_description": "Monthly registration trends",
+  "admin_chart_aria": "Chart of new users per month",
+  "admin_chart_new_users": "{count} new users",
+  "admin_chart_empty": "No registration data available yet."
 }
