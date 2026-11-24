@@ -253,12 +253,12 @@
 
                 {#if accountType === 'jobnehmer'}
                     <a
-                        href={resolve('/jobnehmer/profil')}
+                        href={resolve('/jobnehmer/hauptseite')}
                         class="nav-icon-link"
-                        class:active={isActive('/jobnehmer/profil')}
+                        class:active={isActive('/jobnehmer/hauptseite')}
                     >
                         <UserRound size={21} strokeWidth={1.7} />
-                        <span>{m.nav_my_profile()}</span>
+                        <span>{m.nav_my_area()}</span>
                     </a>
                 {/if}
 
@@ -519,12 +519,12 @@
             {#if $isLoggedIn}
                 {#if accountType === 'jobnehmer'}
                     <a
-                        href={resolve('/jobnehmer/profil')}
+                        href={resolve('/jobnehmer/hauptseite')}
                         onclick={closeMenu}
                         class="mobile-link"
                     >
                         <UserRound size={19} />
-                        {m.nav_my_profile()}
+                        {m.nav_my_area()}
                     </a>
                 {/if}
 
