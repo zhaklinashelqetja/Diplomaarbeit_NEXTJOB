@@ -782,5 +782,15 @@
   "profile_add_bio": "Kliko këtu për të shkruar diçka për veten.",
   "profile_categories_failed": "Kategoritë nuk mund të ngarkoheshin.",
   "profile_choose_skills": "Zgjidh të gjitha kategoritë që përputhen me aftësitë e tua.",
-  "profile_footer_profile": "Profili"
+  "profile_footer_profile": "Profili",
+  "admin_manage_role_user": "Përdorues",
+  "admin_manage_api_error": "Gabim API {status}",
+  "admin_manage_users_load_failed": "Përdoruesit nuk mund të ngarkoheshin: {error}",
+  "admin_manage_jobs_load_failed": "Punët nuk mund të ngarkoheshin: {error}",
+  "admin_manage_user_id_missing": "Mungon ID-ja e përdoruesit.",
+  "admin_manage_job_id_missing": "Mungon ID-ja e punës.",
+  "admin_manage_user_status_changed": "Statusi i përdoruesit u ndryshua.",
+  "admin_manage_user_deleted": "Përdoruesi u fshi.",
+  "admin_manage_job_updated": "Puna u përditësua.",
+  "admin_manage_job_deleted": "Puna u fshi."
 }

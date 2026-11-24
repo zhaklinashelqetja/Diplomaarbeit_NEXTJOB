@@ -1,3 +1,4 @@
+import * as m from '$lib/paraglide/messages.js';
 
 import { API_URL } from '$lib/api.js';
 import { redirect, fail } from '@sveltejs/kit';
@@ -47,7 +48,7 @@ async function apiRequest(fetch, endpoint, token, options = {}) {
 			payload?.message ||
 				payload?.error ||
 				(typeof payload === 'string' ? payload : '') ||
-				`API Fehler ${response.status}`
+				m.admin_manage_api_error({ status: response.status })
 		);
 	}
 
@@ -107,13 +108,13 @@ export async function load({ fetch, cookies }) {
 
 	if (usersResult.status === 'rejected') {
 		errors.push(
-			`Benutzer konnten nicht geladen werden: ${usersResult.reason?.message}`
+			m.admin_manage_users_load_failed({ error: usersResult.reason?.message })
 		);
 	}
 
 	if (jobsResult.status === 'rejected') {
 		errors.push(
-			`Jobs konnten nicht geladen werden: ${jobsResult.reason?.message}`
+			m.admin_manage_jobs_load_failed({ error: jobsResult.reason?.message })
 		);
 	}
 
@@ -133,7 +134,7 @@ export const actions = {
 		const isActive = formData.get('isActive') === 'true';
 
 		if (!id) {
-			return fail(400, { actionError: 'Benutzer-ID fehlt.' });
+			return fail(400, { actionError: m.admin_manage_user_id_missing() });
 		}
 
 		try {
@@ -142,7 +143,7 @@ export const actions = {
 				body: JSON.stringify({ is_active: !isActive })
 			});
 
-			return { success: 'Benutzerstatus wurde geändert.' };
+			return { success: m.admin_manage_user_status_changed() };
 		} catch (error) {
 			return fail(500, { actionError: error.message });
 		}
@@ -155,7 +156,7 @@ export const actions = {
 		const id = formData.get('id');
 
 		if (!id) {
-			return fail(400, { actionError: 'Benutzer-ID fehlt.' });
+			return fail(400, { actionError: m.admin_manage_user_id_missing() });
 		}
 
 		try {
@@ -163,7 +164,7 @@ export const actions = {
 				method: 'DELETE'
 			});
 
-			return { success: 'Benutzer wurde gelöscht.' };
+			return { success: m.admin_manage_user_deleted() };
 		} catch (error) {
 			return fail(500, { actionError: error.message });
 		}
@@ -176,7 +177,7 @@ export const actions = {
 		const id = formData.get('id');
 
 		if (!id) {
-			return fail(400, { actionError: 'Job-ID fehlt.' });
+			return fail(400, { actionError: m.admin_manage_job_id_missing() });
 		}
 
 		try {
@@ -189,7 +190,7 @@ export const actions = {
 				})
 			});
 
-			return { success: 'Job wurde aktualisiert.' };
+			return { success: m.admin_manage_job_updated() };
 		} catch (error) {
 			return fail(500, { actionError: error.message });
 		}
@@ -202,7 +203,7 @@ export const actions = {
 		const id = formData.get('id');
 
 		if (!id) {
-			return fail(400, { actionError: 'Job-ID fehlt.' });
+			return fail(400, { actionError: m.admin_manage_job_id_missing() });
 		}
 
 		try {
@@ -210,7 +211,7 @@ export const actions = {
 				method: 'DELETE'
 			});
 
-			return { success: 'Job wurde gelöscht.' };
+			return { success: m.admin_manage_job_deleted() };
 		} catch (error) {
 			return fail(500, { actionError: error.message });
 		}

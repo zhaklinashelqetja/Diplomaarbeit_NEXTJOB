@@ -116,7 +116,7 @@
             user.role ??
             user.user_type ??
             user.account_type ??
-            'Nutzer';
+            m.admin_manage_role_user();
 
         const roles = {
             jobgeber: m.admin_manage_role_employer(),

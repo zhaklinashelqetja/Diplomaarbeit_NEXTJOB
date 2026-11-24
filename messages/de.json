@@ -784,5 +784,15 @@
   "profile_add_bio": "Hier klicken, um etwas über dich zu schreiben.",
   "profile_categories_failed": "Kategorien konnten nicht geladen werden.",
   "profile_choose_skills": "Wähle alle Kategorien aus, die zu deinen Fähigkeiten passen.",
-  "profile_footer_profile": "Profil"
+  "profile_footer_profile": "Profil",
+  "admin_manage_role_user": "Nutzer",
+  "admin_manage_api_error": "API Fehler {status}",
+  "admin_manage_users_load_failed": "Benutzer konnten nicht geladen werden: {error}",
+  "admin_manage_jobs_load_failed": "Jobs konnten nicht geladen werden: {error}",
+  "admin_manage_user_id_missing": "Benutzer-ID fehlt.",
+  "admin_manage_job_id_missing": "Job-ID fehlt.",
+  "admin_manage_user_status_changed": "Benutzerstatus wurde geändert.",
+  "admin_manage_user_deleted": "Benutzer wurde gelöscht.",
+  "admin_manage_job_updated": "Job wurde aktualisiert.",
+  "admin_manage_job_deleted": "Job wurde gelöscht."
 }
