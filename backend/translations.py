@@ -33,6 +33,8 @@ def parse_translations(value):
 def translate_field(original, translations, locale=None):
     locale = locale or get_locale()
     translations = parse_translations(translations)
+    if not translations and isinstance(original, str):
+        translations = FLAG_REASON_TRANSLATIONS.get(original, {})
 
     return translations.get(locale) or original
 
@@ -66,3 +68,28 @@ def localize_rows(rows, fields, locale=None):
         localize_row(row, fields, locale)
         for row in rows
     ]
+
+FLAG_REASON_TRANSLATIONS = {
+    "Duplicate text": {
+        "de": "Identischer Bewertungstext",
+        "sq": "Tekst i përsëritur",
+        "en": "Duplicate text"
+    },
+    "Many reviews same worker": {
+        "de": "Viele Bewertungen desselben Dienstleisters",
+        "sq": "Shumë vlerësime për të njëjtin punonjës",
+        "en": "Many reviews same worker"
+    },
+    "Review burst": {
+        "de": "Viele Bewertungen in kurzer Zeit",
+        "sq": "Shumë vlerësime në një kohë të shkurtër",
+        "en": "Review burst"
+    }
+}
+
+
+def localize_flag_reason(reason, locale=None):
+    locale = locale or get_locale()
+    return FLAG_REASON_TRANSLATIONS.get(
+        reason, {}
+    ).get(locale, reason)

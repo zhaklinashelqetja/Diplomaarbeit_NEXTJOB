@@ -381,7 +381,7 @@
                                     }`}
                                 >
                                     <p class="wrap-break-word whitespace-pre-wrap text-sm leading-7">
-                                        {message.content}
+                                        {message.content_localized ?? message.content}
                                     </p>
 
                                     <p

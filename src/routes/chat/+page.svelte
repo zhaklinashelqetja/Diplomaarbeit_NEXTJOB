@@ -214,7 +214,7 @@
 
                                 <!-- ORIGINALNACHRICHT BLEIBT UNVERÄNDERT -->
                                 <p class="mt-2 truncate text-sm leading-6 text-[#2A2E38]/55">
-                                    {conversation.last_message}
+                                    {conversation.last_message_localized ?? conversation.last_message}
                                 </p>
 
                             </div>
