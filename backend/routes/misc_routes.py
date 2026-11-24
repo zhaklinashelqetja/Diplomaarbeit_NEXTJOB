@@ -174,7 +174,12 @@ def admin_stats():
         **totals,
         "jobs_per_month":      fetch_all("SELECT * FROM v_jobs_per_month"),
         "neighborhood_demand": fetch_all("SELECT * FROM v_neighborhood_demand"),
-        "category_demand":     fetch_all("SELECT * FROM v_category_demand"),
+        "category_demand": localize_rows(fetch_all(
+            "SELECT v.*, c.name_translations "
+            "FROM v_category_demand v "
+            "JOIN categories c ON c.category_id = v.category_id "
+            "ORDER BY v.open_problems DESC"
+        ), ("name",)),
         "top_searches":        fetch_all("SELECT * FROM v_top_searches LIMIT 20"),
         "registration_growth": fetch_all("SELECT * FROM v_registration_growth"),
         "top_problems":        fetch_all("SELECT * FROM v_problem_statistics "
