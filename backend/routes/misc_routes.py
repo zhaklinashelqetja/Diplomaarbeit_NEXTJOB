@@ -114,9 +114,19 @@ def send_message(partner_id):
         "INSERT INTO messages (sender_id, receiver_id, content, problem_id) "
         "VALUES (%s,%s,%s,%s)",
         (g.user["user_id"], partner_id, content, d.get("problem_id")))
-    execute("INSERT INTO notifications (user_id, type, message) "
-            "VALUES (%s,'message',%s)",
-            (partner_id, f"New message from {g.user['first_name']}"))
+    sender_name = g.user["first_name"]
+    execute(
+        "INSERT INTO notifications "
+        "(user_id, type, message, message_translations) "
+        "VALUES (%s,'message',%s,JSON_OBJECT('de',%s,'sq',%s,'en',%s))",
+        (
+            partner_id,
+            f"New message from {sender_name}",
+            f"Neue Nachricht von {sender_name}",
+            f"Mesazh i ri nga {sender_name}",
+            f"New message from {sender_name}"
+        )
+    )
     return jsonify({"message_id": msg_id}), 201
 
 
