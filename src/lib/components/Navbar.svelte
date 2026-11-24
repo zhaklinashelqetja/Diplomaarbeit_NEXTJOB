@@ -1,5 +1,6 @@
 <script>
     import { goto } from '$app/navigation';
+    import { API_URL } from '$lib/api.js';
     import { resolve } from '$app/paths';
     import { page } from '$app/state';
     import * as m from '$lib/paraglide/messages.js';
@@ -9,7 +10,7 @@
     import {
         House, BriefcaseBusiness, MessageCircle, Bell,
         UserRound, Menu, X, ChevronDown, ArrowUpRight,
-        LogOut, Search
+        LogOut, Search, Info
     } from '@lucide/svelte';
 
     let menuOpen = $state(false);
@@ -28,6 +29,7 @@
     );
 
     let profileName = $derived(
+        `${$currentUser?.first_name ?? ''} ${$currentUser?.last_name ?? ''}`.trim() ||
         $currentUser?.name ||
         $currentUser?.username ||
         $currentUser?.email?.split('@')[0] ||
@@ -37,6 +39,23 @@
     let profileInitial = $derived(
         profileName.charAt(0).toUpperCase()
     );
+
+    let profileAvatar = $derived.by(() => {
+        const image = $currentUser?.avatar_path ||
+            $currentUser?.profile_image ||
+            $currentUser?.profile_picture ||
+            $currentUser?.avatar || '';
+
+        if (!image) return '';
+
+        try {
+            return new URL(image, API_URL).href;
+        } catch {
+            return '';
+        }
+    });
+
+    let failedAvatar = $state('');
 
     function closeMenu() {
         menuOpen = false;
@@ -196,6 +215,16 @@
 
         <!-- Desktop Navigation -->
         <div class="desktop-navigation">
+            <a
+                href={resolve('/landing')}
+                class="nav-icon-link how-link"
+                class:active={isActive('/landing')}
+                onclick={closeMenu}
+            >
+                <Info size={21} strokeWidth={1.7} />
+                <span>{m.nav_how_nextjob_works()}</span>
+            </a>
+
             {#if $isLoggedIn}
                 <a
                     href={resolve('/')}
@@ -219,12 +248,12 @@
 
                 {#if accountType === 'jobnehmer'}
                     <a
-                        href={resolve('/jobnehmer/hauptseite')}
+                        href={resolve('/jobnehmer/profil')}
                         class="nav-icon-link"
-                        class:active={isActive('/jobnehmer/hauptseite')}
+                        class:active={isActive('/jobnehmer/profil')}
                     >
                         <UserRound size={21} strokeWidth={1.7} />
-                        <span>{m.nav_my_area()}</span>
+                        <span>{m.nav_my_profile()}</span>
                     </a>
                 {/if}
 
@@ -268,7 +297,7 @@
         <div class="desktop-actions">
 
             <!-- Sprachwechsel -->
-            <div class="language-switch" aria-label="Sprache / Gjuha">
+            <div class="language-switch" aria-label={m.nav_language_label()}>
                 <button
                     type="button"
                     class:active={selectedLocale === 'de'}
@@ -311,7 +340,15 @@
                         aria-label={m.nav_profile_menu()}
                     >
                         <span class="avatar">
-                            {profileInitial}
+                            {#if profileAvatar && failedAvatar !== profileAvatar}
+                                <img
+                                    src={profileAvatar}
+                                    alt=""
+                                    onerror={() => failedAvatar = profileAvatar}
+                                />
+                            {:else}
+                                {profileInitial}
+                            {/if}
                         </span>
 
                         <ChevronDown size={15} strokeWidth={1.7} />
@@ -330,12 +367,12 @@
 
                             {#if accountType === 'jobnehmer'}
                                 <a
-                                    href={resolve('/jobnehmer/hauptseite')}
+                                    href={resolve('/jobnehmer/profil')}
                                     onclick={closeMenu}
                                     class="dropdown-link"
                                 >
                                     <UserRound size={17} />
-                                    {m.nav_my_area()}
+                                    {m.nav_my_profile()}
                                 </a>
                             {/if}
 
@@ -390,7 +427,7 @@
 
             <!-- Sprachwechsel Mobile -->
             <div class="mobile-language-row">
-                <span>Sprache / Gjuha</span>
+                <span>{m.nav_language_label()}</span>
 
                 <div class="language-switch">
                     <button
@@ -429,8 +466,16 @@
             {#if $isLoggedIn}
                 <div class="mobile-profile">
                     <span class="avatar">
-                        {profileInitial}
-                    </span>
+                            {#if profileAvatar && failedAvatar !== profileAvatar}
+                                <img
+                                    src={profileAvatar}
+                                    alt=""
+                                    onerror={() => failedAvatar = profileAvatar}
+                                />
+                            {:else}
+                                {profileInitial}
+                            {/if}
+                        </span>
 
                     <div class="mobile-profile-text">
                         <strong>{profileName}</strong>
@@ -457,15 +502,24 @@
                 {m.nav_jobs_services()}
             </a>
 
+            <a
+                href={resolve('/landing')}
+                onclick={closeMenu}
+                class="mobile-link"
+            >
+                <Info size={19} />
+                {m.nav_how_nextjob_works()}
+            </a>
+
             {#if $isLoggedIn}
                 {#if accountType === 'jobnehmer'}
                     <a
-                        href={resolve('/jobnehmer/hauptseite')}
+                        href={resolve('/jobnehmer/profil')}
                         onclick={closeMenu}
                         class="mobile-link"
                     >
                         <UserRound size={19} />
-                        {m.nav_my_area()}
+                        {m.nav_my_profile()}
                     </a>
                 {/if}
 
@@ -592,11 +646,7 @@
         border: 1px solid
             color-mix(in srgb, var(--color-charcoal) 13%, transparent);
         border-radius: 7px;
-        background: color-mix(
-            in srgb,
-            var(--color-sage) 13%,
-            var(--color-off-white)
-        );
+        background: transparent;
         transition: border-color 0.2s, background 0.2s;
     }
 
@@ -1106,7 +1156,7 @@
         }
     }
 
-    @media (max-width: 950px) {
+    @media (max-width: 767px) {
         .desktop-navigation,
         .desktop-actions {
             display: none;
@@ -1149,6 +1199,125 @@
 
         .search-panel {
             min-width: 0;
+        }
+    }
+
+    .nav-search {
+        border-radius: 24px;
+        min-height: 42px;
+        padding-inline: 15px 6px;
+    }
+
+    .nav-search:hover {
+        border-color: var(--color-sage);
+    }
+
+    .nav-search:focus-within {
+        background: rgba(255, 255, 255, 0.35);
+        box-shadow: 0 0 0 3px rgba(98, 170, 151, 0.08);
+    }
+
+    .search-submit {
+        border-radius: 50%;
+        background: rgba(168, 183, 158, 0.25);
+        color: var(--color-charcoal);
+    }
+
+    .avatar {
+        border-radius: 50%;
+        overflow: hidden;
+    }
+
+    .avatar img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .how-link {
+        max-width: 115px;
+        text-align: center;
+        line-height: 1.25;
+    }
+
+    @media (max-width: 767px) {
+        .desktop-navigation,
+        .desktop-actions {
+            display: none;
+        }
+
+        .mobile-toggle {
+            display: flex;
+        }
+
+        .mobile-navigation {
+            display: flex;
+            flex-direction: column;
+        }
+    }
+
+    @media (min-width: 951px) and (max-width: 1350px) {
+        .nav-container {
+            padding-inline: 24px;
+            gap: 8px;
+        }
+
+        .nav-icon-link {
+            min-width: 52px;
+            padding-inline: 5px;
+            font-size: 10px;
+        }
+
+        .desktop-navigation,
+        .desktop-actions {
+            gap: 5px;
+        }
+
+        .search-wrapper {
+            min-width: 100px;
+            flex: 1 1 180px;
+        }
+
+        .how-link {
+            max-width: 90px;
+        }
+    }
+
+    @media (min-width: 768px) {
+        .desktop-navigation,
+        .desktop-actions {
+            display: flex;
+            gap: 5px;
+        }
+
+        .mobile-toggle,
+        .mobile-navigation {
+            display: none;
+        }
+
+        .nav-container {
+            flex-wrap: nowrap;
+            padding-inline: 24px;
+            gap: 10px;
+        }
+
+        .nav-icon-link {
+            min-width: 48px;
+            padding-inline: 5px;
+            font-size: 10px;
+        }
+
+        .search-wrapper {
+            flex: 1 1 180px;
+            min-width: 90px;
+        }
+
+        .brand-name {
+            font-size: 19px;
+        }
+
+        .how-link {
+            max-width: 90px;
         }
     }
 </style>

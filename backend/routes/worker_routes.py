@@ -3,6 +3,8 @@ from flask import Blueprint, g, jsonify, request
 from auth import login_required, worker_required
 from db import call_proc, execute, fetch_all, fetch_one, replace_list
 from routes.problem_routes import problem_card
+from translations import localize_row, localize_rows
+from translation_service import translate_text
 
 bp = Blueprint("workers", __name__, url_prefix="/api/workers")
 
@@ -23,7 +25,7 @@ def search_workers():
     if sort not in SORTABLE:
         sort = "avg_rating"
 
-    sql, params = "SELECT * FROM v_worker_search WHERE 1=1", []
+    sql, params = "SELECT ws.*, (SELECT wp.headline_translations FROM worker_profiles wp WHERE wp.user_id=ws.worker_id) AS headline_translations FROM v_worker_search ws WHERE 1=1", []
     if category:
         sql += (" AND worker_id IN (SELECT user_id FROM worker_categories "
                 "WHERE category_id=%s)")
@@ -35,19 +37,19 @@ def search_workers():
     sql += (f" ORDER BY {sort} IS NULL, {sort} {order} "
             f"LIMIT %s OFFSET %s")
     params += [per_page, (page - 1) * per_page]
-    return jsonify(fetch_all(sql, tuple(params)))
+    return jsonify(localize_rows(fetch_all(sql, tuple(params)), ("headline",)))
 
 
 @bp.get("/<int:worker_id>")
 def worker_profile(worker_id):
     profile = fetch_one(
-        "SELECT ws.*, wp.bio FROM v_worker_search ws "
+        "SELECT ws.*, wp.bio, wp.headline_translations, wp.bio_translations FROM v_worker_search ws "
         "JOIN worker_profiles wp ON wp.user_id = ws.worker_id "
         "WHERE ws.worker_id=%s", (worker_id,))
     if profile is None:
         return jsonify({"error": "Worker not found"}), 404
     profile["categories"] = fetch_all(
-        "SELECT c.category_id, c.name FROM worker_categories wc "
+        "SELECT c.category_id, c.name, c.name_translations FROM worker_categories wc "
         "JOIN categories c ON c.category_id = wc.category_id "
         "WHERE wc.user_id=%s ORDER BY c.name", (worker_id,))
     profile["service_areas"] = fetch_all(
@@ -55,12 +57,14 @@ def worker_profile(worker_id):
         "JOIN neighborhoods n ON n.neighborhood_id = a.neighborhood_id "
         "WHERE a.user_id=%s ORDER BY n.name", (worker_id,))
     profile["reviews"] = fetch_all(
-        "SELECT r.rating, r.review_text, r.created_at, "
+        "SELECT r.rating, r.review_text, r.review_text_translations, r.created_at, "
         "       CONCAT(u.first_name,' ',LEFT(u.last_name,1),'.') AS customer "
         "FROM reviews r JOIN users u ON u.user_id = r.customer_id "
         "WHERE r.worker_id=%s AND r.is_flagged=FALSE "
         "ORDER BY r.created_at DESC LIMIT 20", (worker_id,))
-    return jsonify(profile)
+    profile["categories"] = localize_rows(profile["categories"], ("name",))
+    profile["reviews"] = localize_rows(profile["reviews"], ("review_text",))
+    return jsonify(localize_row(profile, ("headline", "bio")))
 
 
 @bp.post("/me")
@@ -76,6 +80,13 @@ def become_worker():
         "years_experience) VALUES (%s,%s,%s,%s)",
         (g.user["user_id"], d.get("headline"), d.get("bio"),
          d.get("years_experience", 0)))
+    execute(
+        "UPDATE worker_profiles SET headline_translations=%s, "
+        "bio_translations=%s WHERE user_id=%s "
+        "AND headline <=> %s AND bio <=> %s",
+        (translate_text(d.get("headline")),
+         translate_text(d.get("bio")), g.user["user_id"],
+         d.get("headline"), d.get("bio")))
     return jsonify({"worker_id": g.user["user_id"]}), 201
 
 
@@ -87,9 +98,13 @@ def update_worker():
     updates = {k: d[k] for k in allowed if k in d}
     if not updates:
         return jsonify({"error": "Nothing to update"}), 400
-    sets = ", ".join(f"{k}=%s" for k in updates)
+    values = dict(updates)
+    for field in ("headline", "bio"):
+        if field in updates:
+            values[f"{field}_translations"] = translate_text(updates[field])
+    sets = ", ".join(f"{k}=%s" for k in values)
     execute(f"UPDATE worker_profiles SET {sets} WHERE user_id=%s",
-            (*updates.values(), g.user["user_id"]))
+            (*values.values(), g.user["user_id"]))
     return jsonify({"updated": list(updates)})
 
 
@@ -137,24 +152,24 @@ def for_you_feed():
     the Python algorithm will overwrite the same table later),
     then return them as problem cards with their score."""
     call_proc("sp_generate_recommendations", (g.user["user_id"],))
-    return jsonify(fetch_all(
+    return jsonify(localize_rows(fetch_all(
         problem_card("r.score, ") +
         "JOIN recommendations r ON r.problem_id = p.problem_id "
         "WHERE r.worker_id=%s AND p.status='open' "
-        "ORDER BY r.score DESC, p.created_at DESC", (g.user["user_id"],)))
+        "ORDER BY r.score DESC, p.created_at DESC", (g.user["user_id"],)), ('title', 'category')))
 
 
 @bp.get("/me/offers")
 @worker_required
 def my_offers():
-    return jsonify(fetch_all(
+    return jsonify(localize_rows(fetch_all(
         "SELECT o.offer_id, o.price, o.status, o.created_at, "
-        "       p.problem_id, p.title, p.status AS problem_status, "
+        "       p.problem_id, p.title, p.title_translations, p.status AS problem_status, "
         "       n.name AS neighborhood "
         "FROM offers o JOIN problems p ON p.problem_id = o.problem_id "
         "JOIN neighborhoods n ON n.neighborhood_id = p.neighborhood_id "
         "WHERE o.worker_id=%s ORDER BY o.created_at DESC",
-        (g.user["user_id"],)))
+        (g.user["user_id"],)), ('title',)))
 
 
 @bp.get("/me/jobs")
@@ -162,15 +177,15 @@ def my_offers():
 def my_jobs():
     """Jobs assigned to me (accepted work) — with phone + address,
     because now I need them."""
-    return jsonify(fetch_all(
-        "SELECT p.problem_id, p.title, p.status, p.contact_phone, p.address, "
+    return jsonify(localize_rows(fetch_all(
+        "SELECT p.problem_id, p.title, p.title_translations, p.status, p.contact_phone, p.address, "
         "       n.name AS neighborhood, o.price "
         "FROM problems p "
         "JOIN neighborhoods n ON n.neighborhood_id = p.neighborhood_id "
         "JOIN offers o ON o.problem_id = p.problem_id "
         "     AND o.worker_id = p.assigned_worker_id AND o.status='accepted' "
         "WHERE p.assigned_worker_id=%s "
-        "ORDER BY p.updated_at DESC", (g.user["user_id"],)))
+        "ORDER BY p.updated_at DESC", (g.user["user_id"],)), ('title',)))
 
 
 # ---------- saved problems (worker bookmarks) ----------
@@ -178,11 +193,11 @@ def my_jobs():
 @bp.get("/me/saved-problems")
 @worker_required
 def list_saved_problems():
-    return jsonify(fetch_all(
+    return jsonify(localize_rows(fetch_all(
         problem_card("sp.saved_at, ") +
         "JOIN saved_problems sp ON sp.problem_id = p.problem_id "
         "WHERE sp.worker_id=%s ORDER BY sp.saved_at DESC",
-        (g.user["user_id"],)))
+        (g.user["user_id"],)), ('title', 'category')))
 
 
 @bp.post("/me/saved-problems/<int:problem_id>")

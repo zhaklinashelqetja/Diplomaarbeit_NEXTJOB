@@ -429,7 +429,14 @@ def gather(ex, user):
 def answer(question, data):
     payload = json.dumps(data, default=str, ensure_ascii=False)[:14000]
     return call_groq(
-        [{"role": "system", "content": ANSWER_PROMPT},
+        [{"role": "system", "content": ANSWER_PROMPT.replace(
+             "Përgjigju GJITHMONË në shqip",
+             "Always answer in " + {
+                 "de": "German",
+                 "sq": "Albanian",
+                 "en": "English"
+             }[get_locale()]
+         )},
          {"role": "user",
           "content": f"PYETJA:\n{question}\n\nTË DHËNAT:\n{payload}"}],
         effort="medium", max_tokens=2000)
@@ -484,7 +491,11 @@ def chat():
                 "criteria=%s q=%r", user["user_id"], ex["intents"],
                 ex["category"], ex["neighborhood"], ex["criteria"], question)
             if ex["intents"] == ["off_topic"]:
-                reply = OFF_TOPIC_REPLY
+                reply = {
+                    "de": "Ich beantworte nur Fragen zu NextJob.",
+                    "sq": OFF_TOPIC_REPLY,
+                    "en": "I only answer questions about NextJob."
+                }[get_locale()]
             else:
                 reply = answer(question, gather(ex, user)).strip() or \
                     "Më fal, s'munda ta formuloj përgjigjen. Provo përsëri."
@@ -502,3 +513,5 @@ def chat():
     except Exception as e:
         current_app.logger.exception("CHAT failed")
         return jsonify({"error": str(e)}), 500
+
+from translations import get_locale

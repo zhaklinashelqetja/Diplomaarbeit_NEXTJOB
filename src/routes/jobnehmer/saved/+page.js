@@ -1,5 +1,5 @@
 
-import { API_URL } from '$lib/api.js';
+import { API_URL, localizedUrl } from '$lib/api.js';
 
 export async function load({ fetch }) {
     const token = localStorage.getItem('token');
@@ -18,7 +18,7 @@ export async function load({ fetch }) {
 
     try {
         // Benutzerprofil laden
-        const userResponse = await fetch(`${API_URL}/api/auth/me`, {
+        const userResponse = await fetch(localizedUrl(`${API_URL}/api/auth/me`), {
             headers
         });
 
@@ -38,7 +38,7 @@ export async function load({ fetch }) {
 
         // Gespeicherte Jobs laden
         const savedResponse = await fetch(
-            `${API_URL}/api/workers/me/saved-problems`,
+            localizedUrl(`${API_URL}/api/workers/me/saved-problems`),
             { headers }
         );
 

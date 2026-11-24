@@ -1,5 +1,6 @@
 
 <script>
+    import * as m from '$lib/paraglide/messages.js';
     import { ArrowUpRight, MapPin, Trophy, Star } from '@lucide/svelte';
 
     let { data } = $props();
@@ -20,7 +21,7 @@
         return (
             `${user.first_name ?? ''} ${user.last_name ?? ''}`.trim() ||
             user.name ||
-            'Nutzer'
+            m.leaderboard_user()
         );
     }
 
@@ -48,10 +49,10 @@
 </script>
 
 <svelte:head>
-    <title>Leaderboard | NEXTJOB</title>
+    <title>{m.leaderboard_seo_title()}</title>
     <meta
         name="description"
-        content="Entdecke die aktivsten und bestbewerteten Nutzer auf NEXTJOB."
+        content={m.leaderboard_seo_description()}
     />
 </svelte:head>
 
@@ -71,33 +72,33 @@
                 <div class="relative">
                     <p class="mb-8 flex items-center gap-3 text-xs font-bold uppercase tracking-[3px] text-[#A8B79E]">
                         <span class="h-2 w-2 rounded-full bg-[#A8B79E]"></span>
-                        NEXTJOB COMMUNITY
+                        {m.leaderboard_community()}
                     </p>
 
                     <h1 class="text-5xl font-black leading-[0.95] tracking-[-2px] sm:text-6xl lg:text-7xl">
                         {#if activeTab === 'workers'}
-                            Top
+                            {m.leaderboard_top()}
                             <br />
-                            <span class="text-[#A8B79E]">Workers.</span>
+                            <span class="text-[#A8B79E]">{m.leaderboard_hero_workers()}</span>
                         {:else}
-                            Top
+                            {m.leaderboard_top()}
                             <br />
-                            <span class="text-[#A8B79E]">Employers.</span>
+                            <span class="text-[#A8B79E]">{m.leaderboard_hero_employers()}</span>
                         {/if}
                     </h1>
 
                     <p class="mt-7 max-w-md text-sm leading-7 text-[#D5D8DF] sm:text-base">
-                        Die Menschen, die durch ihre Arbeit, ihr Engagement und ihre Qualität unsere Community stärken.
+                        {m.leaderboard_hero_description()}
                     </p>
                 </div>
 
                 <div class="relative mt-10 flex items-end justify-between border-t border-white/10 pt-5">
                     <div>
                         <p class="text-xs uppercase tracking-[2px] text-[#A8B79E]">
-                            {activeTab === 'workers' ? 'Jobnehmer' : 'Jobgeber'}
+                            {activeTab === 'workers' ? m.leaderboard_workers() : m.leaderboard_employers()}
                         </p>
                         <p class="mt-2 text-sm text-white/70">
-                            {currentList.length} Mitglieder
+                            {m.leaderboard_members({ count: currentList.length })}
                         </p>
                     </div>
 
@@ -113,7 +114,7 @@
                 <div class="relative flex h-full flex-col justify-between">
                     <div class="flex items-start justify-between">
                         <span class="text-xs font-bold uppercase tracking-[2px] text-[#647565]">
-                            Ranking
+                            {m.leaderboard_ranking()}
                         </span>
 
                         <span class="text-sm text-[#647565]">01 — 03</span>
@@ -151,10 +152,10 @@
 
                         <div class="text-center">
                             <h2 class="text-2xl font-black tracking-tight sm:text-3xl">
-                                Recognition<br />through performance.
+                                {m.leaderboard_recognition()}<br />{m.leaderboard_performance()}
                             </h2>
                             <p class="mt-3 text-sm text-[#647565]">
-                                Qualität verdient Sichtbarkeit.
+                                {m.leaderboard_quality()}
                             </p>
                         </div>
                     </div>
@@ -178,17 +179,17 @@
         <div class="mb-10 flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
             <div>
                 <p class="mb-4 text-xs font-bold uppercase tracking-[3px] text-[#7C8D78]">
-                    <span class="mr-2">02 /</span> Community Ranking
+                    <span class="mr-2">02 /</span> {m.leaderboard_community_ranking()}
                 </p>
 
                 <h2 class="text-4xl font-black leading-tight tracking-[-1.5px] sm:text-5xl">
-                    The best in<br />
-                    <span class="text-[#7C8D78]">their field.</span>
+                    {m.leaderboard_best()}<br />
+                    <span class="text-[#7C8D78]">{m.leaderboard_field()}</span>
                 </h2>
             </div>
 
             <p class="max-w-sm text-sm leading-7 text-[#747985] md:pb-2">
-                Ein Überblick über die Mitglieder mit den besten Bewertungen und den meisten Punkten.
+                {m.leaderboard_description()}
             </p>
         </div>
 
@@ -203,7 +204,7 @@
                 }`}
             >
                 <span>01</span>
-                Jobnehmer
+                {m.leaderboard_workers()}
                 <ArrowUpRight size={17} class="transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
             </button>
 
@@ -216,7 +217,7 @@
                 }`}
             >
                 <span>02</span>
-                Jobgeber
+                {m.leaderboard_employers()}
                 <ArrowUpRight size={17} class="transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
             </button>
         </div>
@@ -225,9 +226,9 @@
         {#if !data.leaderboardAvailable}
             <div class="border-y border-[#DCD6D0] py-20 text-center">
                 <Trophy size={42} strokeWidth={1} class="mx-auto mb-5 text-[#7C8D78]" />
-                <h3 class="text-2xl font-bold">Leaderboard nicht verfügbar</h3>
+                <h3 class="text-2xl font-bold">{m.leaderboard_unavailable()}</h3>
                 <p class="mt-3 text-sm text-[#747985]">
-                    Die Rangliste konnte momentan nicht geladen werden.
+                    {m.leaderboard_error()}
                 </p>
             </div>
 
@@ -235,9 +236,9 @@
         {:else if currentList.length === 0}
             <div class="border-y border-[#DCD6D0] py-20 text-center">
                 <Trophy size={42} strokeWidth={1} class="mx-auto mb-5 text-[#7C8D78]" />
-                <h3 class="text-2xl font-bold">Noch keine Rankings</h3>
+                <h3 class="text-2xl font-bold">{m.leaderboard_empty()}</h3>
                 <p class="mt-3 text-sm text-[#747985]">
-                    Sobald Mitglieder Bewertungen und Aktivität sammeln, werden sie hier angezeigt.
+                    {m.leaderboard_empty_description()}
                 </p>
             </div>
 
@@ -258,7 +259,7 @@
 
                             <div class="mb-7 flex items-center justify-between">
                                 <span class="text-xs font-bold uppercase tracking-[2px] text-[#747985]">
-                                    Rank / 0{i + 1}
+                                    {m.leaderboard_rank()} / 0{i + 1}
                                 </span>
 
                                 {#if i === 0}
@@ -305,7 +306,7 @@
                             <div class="mt-8 flex items-center justify-between border-t border-[#2A2E38]/10 pt-5">
                                 <div>
                                     <p class="mb-2 text-xs uppercase tracking-[1.5px] text-[#747985]">
-                                        Bewertung
+                                        {m.leaderboard_rating()}
                                     </p>
 
                                     <div class="flex items-center gap-2">
@@ -319,7 +320,7 @@
 
                                 <div class="text-right">
                                     <p class="mb-2 text-xs uppercase tracking-[1.5px] text-[#747985]">
-                                        Punkte
+                                        {m.leaderboard_points()}
                                     </p>
 
                                     <span class="text-3xl font-black tracking-tight text-[#7C8D78]">
@@ -330,7 +331,7 @@
 
                             <div class="mt-6 flex items-center justify-between border-t border-[#2A2E38]/10 pt-4">
                                 <span class="text-xs font-bold uppercase tracking-[2px]">
-                                    {i === 0 ? 'Top Performer' : `Position ${i + 1}`}
+                                    {i === 0 ? m.leaderboard_top_performer() : m.leaderboard_position({ position: i + 1 })}
                                 </span>
 
                                 <span class="text-xs text-[#747985]">
@@ -349,19 +350,19 @@
                     <!-- HEADER -->
                     <div class="grid grid-cols-[50px_1fr_100px] gap-4 border-b border-[#DCD6D0] py-5 sm:grid-cols-[70px_1fr_150px_130px]">
                         <span class="text-xs font-bold uppercase tracking-[2px] text-[#858995]">
-                            Rank
+                            {m.leaderboard_rank()}
                         </span>
 
                         <span class="text-xs font-bold uppercase tracking-[2px] text-[#858995]">
-                            Mitglied
+                            {m.leaderboard_member()}
                         </span>
 
                         <span class="hidden text-xs font-bold uppercase tracking-[2px] text-[#858995] sm:block">
-                            Bewertung
+                            {m.leaderboard_rating()}
                         </span>
 
                         <span class="text-right text-xs font-bold uppercase tracking-[2px] text-[#858995]">
-                            Punkte
+                            {m.leaderboard_points()}
                         </span>
                     </div>
 
@@ -427,7 +428,7 @@
                                     </span>
 
                                     <p class="text-[10px] uppercase tracking-[1.5px] text-[#858995]">
-                                        Punkte
+                                        {m.leaderboard_points()}
                                     </p>
                                 </div>
 
@@ -442,11 +443,11 @@
         <!-- FOOTER -->
         <div class="mt-12 flex flex-col justify-between gap-4 border-t border-[#DCD6D0] pt-6 sm:flex-row sm:items-center">
             <p class="text-xs uppercase tracking-[2px] text-[#858995]">
-                NEXTJOB / Community
+                {m.leaderboard_footer_community()}
             </p>
 
             <p class="text-xs text-[#858995]">
-                Engagement. Qualität. Vertrauen.
+                {m.leaderboard_footer_slogan()}
             </p>
         </div>
     </section>

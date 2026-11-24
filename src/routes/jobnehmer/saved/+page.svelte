@@ -1,5 +1,6 @@
 
 <script>
+    import { formatNumber } from '$lib/l10n.js';
     import * as m from '$lib/paraglide/messages.js';
 
     let { data } = $props();
@@ -147,12 +148,12 @@
 
                             <!-- TITLE -->
                             <h2 class="mt-6 break-words text-xl font-semibold leading-snug tracking-tight transition group-hover:text-[#398875]">
-                                {job.title ?? m.worker_no_title()}
+                                {(job.title_localized ?? job.title) ?? m.worker_no_title()}
                             </h2>
 
                             <!-- DESCRIPTION -->
                             <p class="mt-3 line-clamp-3 break-words text-sm leading-7 text-[#2A2E38]/60">
-                                {job.description ??
+                                {(job.description_localized ?? job.description) ??
                                     m.worker_no_description()}
                             </p>
 
@@ -171,7 +172,7 @@
                                             </p>
 
                                             <p class="mt-1 break-words text-sm font-medium">
-                                                {getCategory(job)}
+                                                {job.category_localized ?? getCategory(job)}
                                             </p>
                                         </div>
                                     </div>
@@ -207,7 +208,7 @@
                                             </p>
 
                                             <p class="mt-1 break-words text-sm font-semibold">
-                                                {job.budget}
+                                                {formatNumber(job.budget)}
                                             </p>
                                         </div>
                                     </div>

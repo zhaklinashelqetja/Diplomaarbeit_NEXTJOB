@@ -1,6 +1,6 @@
 
 import { browser } from '$app/environment';
-import { API_URL } from '$lib/api.js';
+import { API_URL, localizedUrl } from '$lib/api.js';
 
 export async function load({ fetch }) {
     if (!browser) {
@@ -31,7 +31,7 @@ export async function load({ fetch }) {
 
     try {
         // Aktuellen Benutzer laden
-        const userResponse = await fetch(`${API_URL}/api/auth/me`, {
+        const userResponse = await fetch(localizedUrl(`${API_URL}/api/auth/me`), {
             headers
         });
 
@@ -60,7 +60,7 @@ export async function load({ fetch }) {
 
         // Personalisierte Aufträge laden
         const feedResponse = await fetch(
-            `${API_URL}/api/workers/me/feed`,
+            localizedUrl(`${API_URL}/api/workers/me/feed`),
             { headers }
         );
 
@@ -104,7 +104,7 @@ export async function load({ fetch }) {
         // Fallback: Allgemeine Aufträge laden, wenn der Feed leer ist
         if (jobs.length === 0) {
             const fallbackResponse = await fetch(
-                `${API_URL}/api/problems`,
+                localizedUrl(`${API_URL}/api/problems`),
                 { headers }
             );
 

@@ -1,5 +1,6 @@
 
 <script>
+    import * as m from '$lib/paraglide/messages.js';
     import {
         ArrowUpRight, ArrowRight, Search, BriefcaseBusiness, Users,
         MessageCircle, Star, ShieldCheck, MapPin, ChevronDown,
@@ -8,7 +9,96 @@
     } from '@lucide/svelte';
 
     let { data } = $props();
-    let categories = $derived(data.categories);
+    let categoryTranslations = $derived({
+        sanitaer: {
+            name: m.landing_sanitaer_name(),
+            description: m.landing_sanitaer_description(),
+            examples: [
+                m.landing_sanitaer_example1(),
+                m.landing_sanitaer_example2(),
+                m.landing_sanitaer_example3()
+            ]
+        },
+        elektrotechnik: {
+            name: m.landing_elektrotechnik_name(),
+            description: m.landing_elektrotechnik_description(),
+            examples: [
+                m.landing_elektrotechnik_example1(),
+                m.landing_elektrotechnik_example2(),
+                m.landing_elektrotechnik_example3()
+            ]
+        },
+        malerarbeiten: {
+            name: m.landing_malerarbeiten_name(),
+            description: m.landing_malerarbeiten_description(),
+            examples: [
+                m.landing_malerarbeiten_example1(),
+                m.landing_malerarbeiten_example2(),
+                m.landing_malerarbeiten_example3()
+            ]
+        },
+        bau: {
+            name: m.landing_bau_name(),
+            description: m.landing_bau_description(),
+            examples: [
+                m.landing_bau_example1(),
+                m.landing_bau_example2(),
+                m.landing_bau_example3()
+            ]
+        },
+        holzarbeiten: {
+            name: m.landing_holzarbeiten_name(),
+            description: m.landing_holzarbeiten_description(),
+            examples: [
+                m.landing_holzarbeiten_example1(),
+                m.landing_holzarbeiten_example2(),
+                m.landing_holzarbeiten_example3()
+            ]
+        },
+        garten: {
+            name: m.landing_garten_name(),
+            description: m.landing_garten_description(),
+            examples: [
+                m.landing_garten_example1(),
+                m.landing_garten_example2(),
+                m.landing_garten_example3()
+            ]
+        },
+        reinigung: {
+            name: m.landing_reinigung_name(),
+            description: m.landing_reinigung_description(),
+            examples: [
+                m.landing_reinigung_example1(),
+                m.landing_reinigung_example2(),
+                m.landing_reinigung_example3()
+            ]
+        },
+        design: {
+            name: m.landing_design_name(),
+            description: m.landing_design_description(),
+            examples: [
+                m.landing_design_example1(),
+                m.landing_design_example2(),
+                m.landing_design_example3()
+            ]
+        },
+        digital: {
+            name: m.landing_digital_name(),
+            description: m.landing_digital_description(),
+            examples: [
+                m.landing_digital_example1(),
+                m.landing_digital_example2(),
+                m.landing_digital_example3()
+            ]
+        }
+    });
+
+    let categories = $derived(
+        data.categories.map(category => ({
+            ...category,
+            ...categoryTranslations[category.slug]
+        }))
+    );
 
     const categoryIcons = [
         Wrench, Zap, Paintbrush, Construction, Hammer,
@@ -29,45 +119,45 @@
 
     let openFaq = $state(null);
 
-    const faqs = [
+    let faqs = $derived([
         {
-            question: 'Was ist NEXTJOB?',
-            answer: 'NEXTJOB ist eine digitale Plattform, die Jobgeber und Jobnehmer miteinander verbindet. Jobgeber können Aufgaben und Projekte veröffentlichen, während Jobnehmer passende Jobs suchen und Angebote senden können.'
+            question: m.landing_faq1_question(),
+            answer: m.landing_faq1_answer()
         },
         {
-            question: 'Wie kann ich einen Job auf NEXTJOB veröffentlichen?',
-            answer: 'Nach der Registrierung kannst du einen Job erstellen. Dabei gibst du einen Titel, eine Beschreibung, eine Kategorie, den Standort und weitere wichtige Informationen an. Anschließend kannst du den Job veröffentlichen.'
+            question: m.landing_faq2_question(),
+            answer: m.landing_faq2_answer()
         },
         {
-            question: 'Wie finde ich passende Jobs?',
-            answer: 'Jobnehmer können die Jobsuche verwenden, um verfügbare Jobs zu durchsuchen. Mithilfe von Suchbegriffen und Filtern können sie passende Tätigkeiten entdecken und die Details der einzelnen Jobs ansehen.'
+            question: m.landing_faq3_question(),
+            answer: m.landing_faq3_answer()
         },
         {
-            question: 'Welche Dienstleistungen kann ich anbieten?',
-            answer: 'Auf NEXTJOB können unterschiedliche Dienstleistungen angeboten werden, beispielsweise Bauarbeiten, Reinigung, Gartenpflege, Reparaturen, Grafikdesign, Marketing und digitale Dienstleistungen.'
+            question: m.landing_faq4_question(),
+            answer: m.landing_faq4_answer()
         },
         {
-            question: 'Wie kann ich ein Angebot senden?',
-            answer: 'Wenn du einen passenden Job gefunden hast, kannst du die Jobdetails ansehen und ein Angebot für die gewünschte Arbeit senden. Der Jobgeber kann die Angebote anschließend vergleichen.'
+            question: m.landing_faq5_question(),
+            answer: m.landing_faq5_answer()
         },
         {
-            question: 'Kann ich mein Profil bearbeiten?',
-            answer: 'Ja. Nutzer können ihre Profile verwalten und relevante Informationen, persönliche Angaben, Fähigkeiten und Erfahrungen ergänzen, damit andere Nutzer mehr über sie erfahren.'
+            question: m.landing_faq6_question(),
+            answer: m.landing_faq6_answer()
         },
         {
-            question: 'Kann ich NEXTJOB auf meinem Handy verwenden?',
-            answer: 'NEXTJOB ist für verschiedene Bildschirmgrößen ausgelegt. Die Plattform kann auf Desktop-Computern, Tablets und Smartphones verwendet werden.'
+            question: m.landing_faq7_question(),
+            answer: m.landing_faq7_answer()
         }
-    ];
+    ]);
 </script>
 
 <svelte:head>
-    <title>{data.seo.title}</title>
-    <meta name="description" content={data.seo.description} />
-    <meta name="keywords" content={data.seo.keywords} />
+    <title>{m.landing_seo_title()}</title>
+    <meta name="description" content={m.landing_seo_description()} />
+    <meta name="keywords" content={m.landing_seo_keywords()} />
     <meta name="robots" content="index, follow" />
-    <meta property="og:title" content={data.seo.title} />
-    <meta property="og:description" content={data.seo.description} />
+    <meta property="og:title" content={m.landing_seo_title()} />
+    <meta property="og:description" content={m.landing_seo_description()} />
     <meta property="og:type" content="website" />
 </svelte:head>
 
@@ -78,34 +168,32 @@
         <div>
             <div class="flex items-center gap-2.5 text-[11px] font-bold tracking-[2px] text-[#66766A]">
                 <span class="h-2 w-2 bg-[#62AA97]"></span>
-                DIE PLATTFORM FÜR LOKALE DIENSTLEISTUNGEN
+                {m.landing_badge()}
             </div>
 
             <h1 class="my-7 text-5xl font-extrabold leading-[0.99] tracking-[-3px] md:text-7xl lg:text-[85px] lg:tracking-[-5px]">
-                Gute Arbeit.
-                <span class="block text-[#62AA97]">Die richtigen</span>
-                Menschen.
+                {m.home_hero_title1()}
+                <span class="block text-[#62AA97]">{m.landing_hero_right()}</span>
+                {m.landing_hero_people()}
             </h1>
 
             <p class="max-w-[550px] text-base leading-8 text-[#656871]">
-                Finde passende Fachkräfte für deine Projekte oder entdecke
-                neue Möglichkeiten, deine Fähigkeiten anzubieten.
-                NEXTJOB verbindet Menschen und Dienstleistungen an einem Ort.
+                {m.landing_hero_description()}
             </p>
 
             <div class="mt-8 flex flex-wrap gap-3.5">
                 <a href="/jobs" class="inline-flex items-center justify-center gap-3 bg-[#2A2E38] px-5 py-4 text-[13px] font-semibold text-white transition hover:bg-[#62AA97]">
-                    Jobs entdecken <ArrowUpRight size={18}/>
+                    {m.search_discover_jobs()} <ArrowUpRight size={18}/>
                 </a>
 
                 <a href="/register" class="inline-flex items-center justify-center gap-3 border border-[#2A2E38] px-5 py-4 text-[13px] font-semibold text-[#2A2E38] transition hover:bg-[#2A2E38] hover:text-white">
-                    Job veröffentlichen <ArrowRight size={18}/>
+                    {m.landing_publish_job()} <ArrowRight size={18}/>
                 </a>
             </div>
 
             <div class="mt-8 flex items-center gap-2.5 text-xs text-[#85868B]">
                 <MapPin size={16}/>
-                Lokale Dienstleistungen. Digitale Vermittlung.
+                {m.landing_local_tagline()}
             </div>
         </div>
 
@@ -119,8 +207,8 @@
                     <BriefcaseBusiness size={20}/>
                 </div>
                 <div>
-                    <strong class="text-[13px]">Neue Möglichkeiten</strong>
-                    <p class="mt-1 text-[11px] text-[#85868B]">Jobs entdecken und Angebote senden</p>
+                    <strong class="text-[13px]">{m.landing_opportunities()}</strong>
+                    <p class="mt-1 text-[11px] text-[#85868B]">{m.landing_discover_offers()}</p>
                 </div>
             </div>
 
@@ -129,44 +217,39 @@
                     <Users size={20}/>
                 </div>
                 <div>
-                    <strong class="text-[13px]">Menschen verbinden</strong>
-                    <p class="mt-1 text-[11px] text-[#85868B]">Jobgeber & Jobnehmer</p>
+                    <strong class="text-[13px]">{m.landing_connect_people()}</strong>
+                    <p class="mt-1 text-[11px] text-[#85868B]">{m.landing_roles()}</p>
                 </div>
             </div>
 
             <div class="absolute -bottom-9 left-0 text-[10px] tracking-[2px] text-[#777982]">
-                <span class="text-[#62AA97]">01 /</span> LOKALE DIENSTLEISTUNGEN
+                <span class="text-[#62AA97]">01 /</span> {m.landing_local_services()}
             </div>
         </div>
     </section>
 
     <!-- INTRO -->
     <section class="bg-[#E9E6E1] px-6 py-20 md:px-[6%]">
-        <div class="text-[11px] font-bold tracking-[2px] text-[#66766A]">01 — ÜBER NEXTJOB</div>
+        <div class="text-[11px] font-bold tracking-[2px] text-[#66766A]">{m.landing_about_label()}</div>
 
         <div class="mt-10 grid gap-10 lg:grid-cols-2 lg:gap-[10%]">
             <h2 class="text-4xl leading-tight tracking-[-2px] md:text-5xl">
-                Dienstleistungen finden.
-                <span class="block text-[#62AA97]">Arbeit vermitteln.</span>
-                Einfach verbinden.
+                {m.landing_intro_title1()}
+                <span class="block text-[#62AA97]">{m.landing_intro_title2()}</span>
+                {m.landing_intro_title3()}
             </h2>
 
             <div>
                 <p class="mb-5 text-[15px] leading-8 text-[#656871]">
-                    Die Suche nach geeigneten Personen für bestimmte Aufgaben
-                    kann zeitaufwendig sein. NEXTJOB bietet eine digitale
-                    Möglichkeit, Jobs zu veröffentlichen, Dienstleistungen
-                    anzubieten und passende Angebote zu finden.
+                    {m.landing_intro_text1()}
                 </p>
 
                 <p class="mb-5 text-[15px] leading-8 text-[#656871]">
-                    Von handwerklichen Arbeiten und Reparaturen bis hin zu
-                    kreativen und digitalen Projekten – NEXTJOB bringt
-                    verschiedene Dienstleistungen auf einer Plattform zusammen.
+                    {m.landing_intro_text2()}
                 </p>
 
                 <a href="#how-it-works" class="inline-flex items-center gap-2 border-b border-[#62AA97] pb-2 text-[13px] font-bold transition hover:text-[#62AA97]">
-                    Die Plattform kennenlernen <ArrowRight size={18}/>
+                    {m.landing_learn_platform()} <ArrowRight size={18}/>
                 </a>
             </div>
         </div>
@@ -174,21 +257,21 @@
 
     <!-- HOW IT WORKS -->
     <section id="how-it-works" class="px-6 py-20 md:px-[6%]">
-        <div class="text-[11px] font-bold tracking-[2px] text-[#66766A]">02 — DER ABLAUF</div>
+        <div class="text-[11px] font-bold tracking-[2px] text-[#66766A]">{m.landing_how_label()}</div>
 
         <div class="mb-12 mt-9">
-            <h2 class="text-4xl font-bold tracking-[-2px] md:text-5xl">Wie funktioniert NEXTJOB?</h2>
+            <h2 class="text-4xl font-bold tracking-[-2px] md:text-5xl">{m.landing_how_title()}</h2>
             <p class="mt-4 max-w-[550px] text-sm leading-7 text-[#777982]">
-                Vier Schritte, um Jobgeber und Jobnehmer miteinander zu verbinden.
+                {m.landing_how_description()}
             </p>
         </div>
 
         <div class="grid grid-cols-1 border-y border-[#2A2E38]/20 md:grid-cols-2 lg:grid-cols-4">
             {#each [
-                {number:'01',icon:Users,title:'Account erstellen',text:'Registriere dich auf NEXTJOB und erstelle dein persönliches Profil, um die Plattform zu verwenden.'},
-                {number:'02',icon:Search,title:'Jobs entdecken',text:'Suche nach verfügbaren Jobs, entdecke unterschiedliche Kategorien und finde Aufgaben, die zu deinen Fähigkeiten passen.'},
-                {number:'03',icon:BriefcaseBusiness,title:'Jobs veröffentlichen',text:'Jobgeber können ihre Aufgaben beschreiben, wichtige Details hinzufügen und Jobs für andere Nutzer sichtbar machen.'},
-                {number:'04',icon:MessageCircle,title:'Kontakt aufnehmen',text:'Angebote senden, Informationen austauschen und die Zusammenarbeit rund um einen Job organisieren.'}
+                {number:'01',icon:Users,title:m.landing_step1_title(),text:m.landing_step1_text()},
+                {number:'02',icon:Search,title:m.search_discover_jobs(),text:m.landing_step2_text()},
+                {number:'03',icon:BriefcaseBusiness,title:m.landing_step3_title(),text:m.landing_step3_text()},
+                {number:'04',icon:MessageCircle,title:m.landing_step4_title(),text:m.landing_step4_text()}
             ] as step,i}
                 <article class="border-b border-[#2A2E38]/15 p-7 md:border-r md:nth-[2]:border-r-0 lg:border-b-0 lg:border-r lg:nth-[2]:border-r lg:last:border-r-0">
                     <div class="text-xs font-bold text-[#62AA97]">{step.number}</div>
@@ -204,18 +287,18 @@
 
     <!-- CATEGORIES -->
     <section id="categories" class="bg-[#E9E6E1] px-6 py-20 md:px-[6%]">
-        <div class="text-[11px] font-bold tracking-[2px] text-[#66766A]">03 — DIENSTLEISTUNGEN</div>
+        <div class="text-[11px] font-bold tracking-[2px] text-[#66766A]">{m.landing_categories_label()}</div>
 
         <div class="mb-12 mt-9 flex flex-col items-start justify-between gap-6 lg:flex-row lg:items-end">
             <div>
-                <h2 class="text-4xl font-bold tracking-[-2px] md:text-5xl">Welche Arbeiten findest du auf NEXTJOB?</h2>
+                <h2 class="text-4xl font-bold tracking-[-2px] md:text-5xl">{m.landing_categories_title()}</h2>
                 <p class="mt-4 max-w-[550px] text-sm leading-7 text-[#777982]">
-                    Entdecke unterschiedliche Dienstleistungen, Projekte und Aufgaben in verschiedenen Arbeitsbereichen.
+                    {m.landing_categories_text()}
                 </p>
             </div>
 
             <a href="/jobs" class="inline-flex items-center gap-2 border-b border-[#62AA97] pb-2 text-[13px] font-bold transition hover:text-[#62AA97]">
-                Jobs durchsuchen <ArrowRight size={18}/>
+                {m.landing_browse_jobs()} <ArrowRight size={18}/>
             </a>
         </div>
 
@@ -252,7 +335,7 @@
                         </div>
 
                         <a href="/jobs" class="flex items-center justify-between border-t border-[#2A2E38]/10 pt-4 text-xs font-bold transition hover:text-[#62AA97]">
-                            Jobs entdecken <ArrowUpRight size={17}/>
+                            {m.search_discover_jobs()} <ArrowUpRight size={17}/>
                         </a>
                     </div>
                 </article>
@@ -265,33 +348,30 @@
         <div class="relative min-h-[400px] bg-cover bg-center lg:min-h-[680px]"
             style="background-image: url('https://images.unsplash.com/photo-1581092160562-40aa08e78837?auto=format&fit=crop&w=1200&q=85')">
             <div class="absolute bottom-6 left-6 right-6 bg-[#2A2E38]/90 p-6 text-white">
-                <span class="text-[11px] tracking-[2px] text-[#A8B79E]">FÜR JOBGEBER</span>
-                <p class="mb-0 text-xl">Die passende Unterstützung für dein Projekt.</p>
+                <span class="text-[11px] tracking-[2px] text-[#A8B79E]">{m.landing_for_employers()}</span>
+                <p class="mb-0 text-xl">{m.landing_employer_image()}</p>
             </div>
         </div>
 
         <div>
-            <div class="text-[11px] font-bold tracking-[2px] text-[#A8B79E]">04 — JOBGEBER</div>
+            <div class="text-[11px] font-bold tracking-[2px] text-[#A8B79E]">{m.landing_employer_label()}</div>
 
             <h2 class="my-8 text-4xl font-bold leading-tight tracking-[-2px] md:text-5xl">
-                Deine Aufgabe.
-                <span class="block text-[#62AA97]">Dein Auftrag.</span>
+                {m.landing_employer_title1()}
+                <span class="block text-[#62AA97]">{m.landing_employer_title2()}</span>
             </h2>
 
             <p class="mb-9 text-sm leading-8 text-[#C0C2C8]">
-                Du benötigst Unterstützung für eine bestimmte Arbeit?
-                Mit NEXTJOB kannst du deinen Job beschreiben und
-                Informationen bereitstellen, damit Jobnehmer deine
-                Aufgabe besser verstehen.
+                {m.landing_employer_text()}
             </p>
 
             <div class="mb-9">
                 {#each [
-                    {title:'Registrieren und anmelden',text:'Erstelle ein Konto, um Jobs veröffentlichen zu können.'},
-                    {title:'Jobbeschreibung erstellen',text:'Gib einen Titel, die Kategorie, den Standort, das Budget und eine ausführliche Beschreibung an.'},
-                    {title:'Job veröffentlichen',text:'Veröffentliche deine Aufgabe, damit interessierte Jobnehmer sie entdecken können.'},
-                    {title:'Angebote vergleichen',text:'Prüfe die eingegangenen Angebote und Profile der Jobnehmer.'},
-                    {title:'Zusammenarbeit planen',text:'Kläre weitere Details mit einem passenden Jobnehmer.'}
+                    {title:m.landing_employer_step1(),text:m.landing_employer_step1_text()},
+                    {title:m.landing_employer_step2(),text:m.landing_employer_step2_text()},
+                    {title:m.landing_publish_job(),text:m.landing_employer_step3_text()},
+                    {title:m.landing_employer_step4(),text:m.landing_employer_step4_text()},
+                    {title:m.landing_employer_step5(),text:m.landing_employer_step5_text()}
                 ] as instruction,i}
                     <div class="flex gap-5 border-b border-white/10 py-5">
                         <span class="pt-1 text-xs font-bold text-[#62AA97]">0{i+1}</span>
@@ -304,7 +384,7 @@
             </div>
 
             <a href="/register" class="inline-flex items-center gap-3 bg-[#2A2E38] px-5 py-4 text-[13px] font-semibold text-white transition hover:bg-[#62AA97]">
-                Jetzt Job veröffentlichen <ArrowUpRight size={18}/>
+                {m.landing_publish_now()} <ArrowUpRight size={18}/>
             </a>
         </div>
     </section>
@@ -312,26 +392,24 @@
     <!-- JOBNEHMER -->
     <section id="jobnehmer" class="grid gap-12 px-6 py-20 md:px-[6%] lg:grid-cols-2 lg:gap-[8%] lg:py-24">
         <div>
-            <div class="text-[11px] font-bold tracking-[2px] text-[#66766A]">05 — JOBNEHMER</div>
+            <div class="text-[11px] font-bold tracking-[2px] text-[#66766A]">{m.landing_worker_label()}</div>
 
             <h2 class="my-8 text-4xl font-bold leading-tight tracking-[-2px] md:text-5xl">
-                Deine Fähigkeiten.
-                <span class="block text-[#62AA97]">Neue Möglichkeiten.</span>
+                {m.home_pros_title1()}
+                <span class="block text-[#62AA97]">{m.landing_worker_title2()}</span>
             </h2>
 
             <p class="mb-9 text-sm leading-8 text-[#777982]">
-                Du bietest Dienstleistungen an und suchst neue Aufgaben?
-                Auf NEXTJOB kannst du dein Profil präsentieren, verfügbare
-                Jobs entdecken und passende Angebote senden.
+                {m.landing_worker_text()}
             </p>
 
             <div class="mb-9">
                 {#each [
-                    {title:'Profil erstellen',text:'Ergänze persönliche Informationen und beschreibe deine Dienstleistungen.'},
-                    {title:'Erfahrung zeigen',text:'Stelle deine Fähigkeiten, Erfahrungen und Arbeitsbereiche vor.'},
-                    {title:'Passende Jobs suchen',text:'Durchsuche Jobs und nutze die verfügbaren Suchfunktionen.'},
-                    {title:'Interessante Jobs speichern',text:'Speichere Jobs, die du später erneut ansehen möchtest.'},
-                    {title:'Angebote senden',text:'Sende dem Jobgeber ein Angebot für die gewünschte Arbeit.'}
+                    {title:m.landing_worker_step1(),text:m.landing_worker_step1_text()},
+                    {title:m.landing_worker_step2(),text:m.landing_worker_step2_text()},
+                    {title:m.landing_worker_step3(),text:m.landing_worker_step3_text()},
+                    {title:m.landing_worker_step4(),text:m.landing_worker_step4_text()},
+                    {title:m.landing_worker_step5(),text:m.landing_worker_step5_text()}
                 ] as instruction,i}
                     <div class="flex gap-5 border-b border-[#2A2E38]/10 py-5">
                         <span class="pt-1 text-xs font-bold text-[#62AA97]">0{i+1}</span>
@@ -344,38 +422,38 @@
             </div>
 
             <a href="/jobs" class="inline-flex items-center gap-3 bg-[#2A2E38] px-5 py-4 text-[13px] font-semibold text-white transition hover:bg-[#62AA97]">
-                Jobs entdecken <ArrowUpRight size={18}/>
+                {m.search_discover_jobs()} <ArrowUpRight size={18}/>
             </a>
         </div>
 
         <div class="relative min-h-[400px] bg-cover bg-center lg:min-h-[680px]"
             style="background-image: url('https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&w=1200&q=85')">
             <div class="absolute bottom-6 left-6 right-6 bg-[#2A2E38]/85 p-6 text-white">
-                <span class="text-[11px] tracking-[2px] text-[#A8B79E]">FÜR JOBNEHMER</span>
-                <p class="mb-0 text-xl">Fähigkeiten zeigen. Chancen entdecken.</p>
+                <span class="text-[11px] tracking-[2px] text-[#A8B79E]">{m.landing_for_workers()}</span>
+                <p class="mb-0 text-xl">{m.landing_worker_image()}</p>
             </div>
         </div>
     </section>
 
     <!-- FEATURES -->
     <section class="bg-[#E9E6E1] px-6 py-20 md:px-[6%]">
-        <div class="text-[11px] font-bold tracking-[2px] text-[#66766A]">06 — DIE PLATTFORM</div>
+        <div class="text-[11px] font-bold tracking-[2px] text-[#66766A]">{m.landing_features_label()}</div>
 
         <div class="mb-12 mt-9">
-            <h2 class="text-4xl font-bold tracking-[-2px] md:text-5xl">Mehr als nur eine Jobsuche.</h2>
+            <h2 class="text-4xl font-bold tracking-[-2px] md:text-5xl">{m.landing_features_title()}</h2>
             <p class="mt-4 max-w-[550px] text-sm leading-7 text-[#777982]">
-                Funktionen, die die Vermittlung und Organisation von Dienstleistungen erleichtern.
+                {m.landing_features_text()}
             </p>
         </div>
 
         <div class="grid grid-cols-1 border-l border-t border-[#2A2E38]/20 md:grid-cols-2 xl:grid-cols-3">
             {#each [
-                {icon:Search,title:'Gezielte Jobsuche',text:'Suche nach verfügbaren Aufgaben und entdecke unterschiedliche Dienstleistungen.'},
-                {icon:Users,title:'Persönliche Profile',text:'Nutzer können Informationen, Erfahrungen und Fähigkeiten auf ihren Profilen präsentieren.'},
-                {icon:MessageCircle,title:'Kommunikation',text:'Die Plattform ermöglicht den Austausch zwischen Jobgebern und Jobnehmern.'},
-                {icon:Star,title:'Bewertungen',text:'Bewertungen können dabei helfen, Erfahrungen mit anderen Nutzern einzuschätzen.'},
-                {icon:ShieldCheck,title:'Übersichtliche Verwaltung',text:'Nutzer können ihre Jobs, Profile und Aktivitäten auf der Plattform verwalten.'},
-                {icon:House,title:'Mobile Nutzung',text:'NEXTJOB ist auf unterschiedlichen Geräten zugänglich und für mobile Ansichten ausgelegt.'}
+                {icon:Search,title:m.landing_feature1(),text:m.landing_feature1_text()},
+                {icon:Users,title:m.landing_feature2(),text:m.landing_feature2_text()},
+                {icon:MessageCircle,title:m.landing_feature3(),text:m.landing_feature3_text()},
+                {icon:Star,title:m.landing_feature4(),text:m.landing_feature4_text()},
+                {icon:ShieldCheck,title:m.landing_feature5(),text:m.landing_feature5_text()},
+                {icon:House,title:m.landing_feature6(),text:m.landing_feature6_text()}
             ] as feature}
                 <article class="border-b border-r border-[#2A2E38]/20 p-8">
                     <feature.icon size={24} class="text-[#527362]"/>
@@ -388,17 +466,17 @@
 
     <!-- FAQ -->
     <section id="faq" class="px-6 py-20 md:px-[6%]">
-        <div class="text-[11px] font-bold tracking-[2px] text-[#66766A]">07 — FRAGEN & ANTWORTEN</div>
+        <div class="text-[11px] font-bold tracking-[2px] text-[#66766A]">{m.landing_faq_label()}</div>
 
         <div class="mt-9 grid gap-10 lg:grid-cols-[0.7fr_1.3fr] lg:gap-[10%]">
             <div>
-                <h2 class="text-4xl font-bold leading-tight tracking-[-2px]">Häufig gestellte Fragen.</h2>
+                <h2 class="text-4xl font-bold leading-tight tracking-[-2px]">{m.landing_faq_title()}</h2>
                 <p class="my-6 text-sm leading-8 text-[#777982]">
-                    Antworten auf die wichtigsten Fragen rund um NEXTJOB und die Verwendung der Plattform.
+                    {m.landing_faq_text()}
                 </p>
 
                 <a href="/register" class="inline-flex items-center gap-2 border-b border-[#62AA97] pb-2 text-[13px] font-bold transition hover:text-[#62AA97]">
-                    NEXTJOB ausprobieren <ArrowRight size={18}/>
+                    {m.landing_try_platform()} <ArrowRight size={18}/>
                 </a>
             </div>
 
@@ -427,25 +505,24 @@
 
     <!-- CTA -->
     <section class="bg-[#2A2E38] px-6 py-20 text-center text-[#F5F1EE] md:px-[6%]">
-        <div class="text-[11px] font-bold tracking-[2px] text-[#A8B79E]">08 — LOS GEHT'S</div>
+        <div class="text-[11px] font-bold tracking-[2px] text-[#A8B79E]">{m.landing_cta_label()}</div>
 
         <h2 class="mx-auto my-8 max-w-[800px] text-4xl font-bold leading-tight tracking-[-2px] md:text-6xl">
-            Die nächste Möglichkeit
-            <span class="block text-[#62AA97]">wartet bereits.</span>
+            {m.landing_cta_title1()}
+            <span class="block text-[#62AA97]">{m.landing_cta_title2()}</span>
         </h2>
 
         <p class="mx-auto max-w-[600px] text-sm leading-8 text-[#C0C2C8]">
-            Entdecke Dienstleistungen, veröffentliche deine Aufgaben
-            oder finde neue Möglichkeiten auf NEXTJOB.
+            {m.landing_cta_text()}
         </p>
 
         <div class="mt-8 flex flex-wrap justify-center gap-3.5">
             <a href="/register" class="inline-flex items-center justify-center gap-3 bg-[#62AA97] px-5 py-4 text-[13px] font-semibold text-white transition hover:bg-[#A8B79E] hover:text-[#2A2E38]">
-                Konto erstellen <ArrowUpRight size={18}/>
+                {m.register_title()} <ArrowUpRight size={18}/>
             </a>
 
             <a href="/jobs" class="inline-flex items-center justify-center gap-3 border border-white/30 px-5 py-4 text-[13px] font-semibold text-[#F5F1EE] transition hover:bg-white hover:text-[#2A2E38]">
-                Jobs ansehen <ArrowRight size={18}/>
+                {m.landing_view_jobs()} <ArrowRight size={18}/>
             </a>
         </div>
     </section>
@@ -459,34 +536,34 @@
                 </a>
 
                 <p class="mt-5 max-w-[300px] text-[13px] leading-8 text-[#888B94]">
-                    Eine digitale Plattform für lokale Dienstleistungen, Jobs und neue Möglichkeiten.
+                    {m.landing_footer_text()}
                 </p>
             </div>
 
             <div class="flex flex-col gap-4">
-                <h4 class="mb-2 text-xs font-bold tracking-[1px] text-[#A8B79E]">Plattform</h4>
-                <a href="/jobs" class="text-xs text-[#C0C2C8] transition hover:text-[#62AA97]">Jobs entdecken</a>
-                <a href="/register" class="text-xs text-[#C0C2C8] transition hover:text-[#62AA97]">Job veröffentlichen</a>
-                <a href="/leaderboard" class="text-xs text-[#C0C2C8] transition hover:text-[#62AA97]">Leaderboard</a>
+                <h4 class="mb-2 text-xs font-bold tracking-[1px] text-[#A8B79E]">{m.landing_footer_platform()}</h4>
+                <a href="/jobs" class="text-xs text-[#C0C2C8] transition hover:text-[#62AA97]">{m.search_discover_jobs()}</a>
+                <a href="/register" class="text-xs text-[#C0C2C8] transition hover:text-[#62AA97]">{m.landing_publish_job()}</a>
+                <a href="/leaderboard" class="text-xs text-[#C0C2C8] transition hover:text-[#62AA97]">{m.landing_footer_leaderboard()}</a>
             </div>
 
             <div class="flex flex-col gap-4">
-                <h4 class="mb-2 text-xs font-bold tracking-[1px] text-[#A8B79E]">Informationen</h4>
-                <a href="#how-it-works" class="text-xs text-[#C0C2C8] transition hover:text-[#62AA97]">So funktioniert's</a>
-                <a href="#categories" class="text-xs text-[#C0C2C8] transition hover:text-[#62AA97]">Dienstleistungen</a>
+                <h4 class="mb-2 text-xs font-bold tracking-[1px] text-[#A8B79E]">{m.landing_footer_information()}</h4>
+                <a href="#how-it-works" class="text-xs text-[#C0C2C8] transition hover:text-[#62AA97]">{m.landing_footer_how()}</a>
+                <a href="#categories" class="text-xs text-[#C0C2C8] transition hover:text-[#62AA97]">{m.landing_footer_services()}</a>
                 <a href="#faq" class="text-xs text-[#C0C2C8] transition hover:text-[#62AA97]">FAQ</a>
             </div>
 
             <div class="flex flex-col gap-4">
-                <h4 class="mb-2 text-xs font-bold tracking-[1px] text-[#A8B79E]">Account</h4>
-                <a href="/login" class="text-xs text-[#C0C2C8] transition hover:text-[#62AA97]">Login</a>
-                <a href="/register" class="text-xs text-[#C0C2C8] transition hover:text-[#62AA97]">Registrieren</a>
+                <h4 class="mb-2 text-xs font-bold tracking-[1px] text-[#A8B79E]">{m.landing_footer_account()}</h4>
+                <a href="/login" class="text-xs text-[#C0C2C8] transition hover:text-[#62AA97]">{m.nav_login()}</a>
+                <a href="/register" class="text-xs text-[#C0C2C8] transition hover:text-[#62AA97]">{m.nav_register()}</a>
             </div>
         </div>
 
         <div class="flex flex-col gap-4 pt-6 text-[11px] text-[#777982] md:flex-row md:justify-between">
             <p>© {new Date().getFullYear()} NEXTJOB</p>
-            <p>Lokale Dienstleistungen. Digital verbunden.</p>
+            <p>{m.landing_footer_tagline()}</p>
         </div>
     </footer>
 
