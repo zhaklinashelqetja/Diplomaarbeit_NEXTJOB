@@ -766,5 +766,21 @@
   "leaderboard_position": "Pozicioni {position}",
   "leaderboard_member": "Anëtar",
   "leaderboard_footer_community": "NEXTJOB / Komuniteti",
-  "leaderboard_footer_slogan": "Përkushtim. Cilësi. Besim."
+  "leaderboard_footer_slogan": "Përkushtim. Cilësi. Besim.",
+  "profile_login_again": "Të lutem, hyr përsëri.",
+  "profile_save_failed": "Ruajtja dështoi.",
+  "profile_bio_save_failed": "Përshkrimi nuk mund të ruhej.",
+  "profile_categories_reload": "Kategoritë nuk mund të ngarkoheshin nga databaza. Ringarko faqen.",
+  "profile_select_category": "Zgjidh të paktën një kategori.",
+  "profile_skills_save_failed": "Aftësitë nuk mund të ruheshin në databazë.",
+  "profile_location_not_found": "Vendndodhja nuk u gjet.",
+  "profile_available_locations": "Vendndodhjet e disponueshme",
+  "profile_contact_save_failed": "Informacionet e kontaktit nuk mund të ruheshin.",
+  "profile_avatar_save_failed": "Fotografia e profilit nuk mund të ruhej.",
+  "profile_avatar_alt": "Fotografia e profilit",
+  "profile_skills_count": "{count} aftësi",
+  "profile_add_bio": "Kliko këtu për të shkruar diçka për veten.",
+  "profile_categories_failed": "Kategoritë nuk mund të ngarkoheshin.",
+  "profile_choose_skills": "Zgjidh të gjitha kategoritë që përputhen me aftësitë e tua.",
+  "profile_footer_profile": "Profili"
 }

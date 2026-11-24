@@ -768,5 +768,21 @@
   "leaderboard_position": "Position {position}",
   "leaderboard_member": "Mitglied",
   "leaderboard_footer_community": "NEXTJOB / Community",
-  "leaderboard_footer_slogan": "Engagement. Qualität. Vertrauen."
+  "leaderboard_footer_slogan": "Engagement. Qualität. Vertrauen.",
+  "profile_login_again": "Bitte melde dich erneut an.",
+  "profile_save_failed": "Speichern fehlgeschlagen.",
+  "profile_bio_save_failed": "Die Beschreibung konnte nicht gespeichert werden.",
+  "profile_categories_reload": "Die Kategorien aus der Datenbank konnten nicht geladen werden. Bitte lade die Seite erneut.",
+  "profile_select_category": "Bitte wähle mindestens eine Kategorie aus.",
+  "profile_skills_save_failed": "Skills konnten nicht in der Datenbank gespeichert werden.",
+  "profile_location_not_found": "Standort nicht gefunden.",
+  "profile_available_locations": "Verfügbare Standorte",
+  "profile_contact_save_failed": "Kontaktinformationen konnten nicht gespeichert werden.",
+  "profile_avatar_save_failed": "Das Profilbild konnte nicht gespeichert werden.",
+  "profile_avatar_alt": "Profilbild",
+  "profile_skills_count": "{count} Fähigkeiten",
+  "profile_add_bio": "Hier klicken, um etwas über dich zu schreiben.",
+  "profile_categories_failed": "Kategorien konnten nicht geladen werden.",
+  "profile_choose_skills": "Wähle alle Kategorien aus, die zu deinen Fähigkeiten passen.",
+  "profile_footer_profile": "Profil"
 }
