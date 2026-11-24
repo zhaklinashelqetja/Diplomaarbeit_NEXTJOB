@@ -799,5 +799,7 @@
   "admin_chart_description": "Monthly registration trends",
   "admin_chart_aria": "Chart of new users per month",
   "admin_chart_new_users": "{count} new users",
-  "admin_chart_empty": "No registration data available yet."
+  "admin_chart_empty": "No registration data available yet.",
+  "admin_dashboard_api_error": "API error: {status}",
+  "admin_dashboard_connection_failed": "Connection to the server failed."
 }

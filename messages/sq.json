@@ -797,5 +797,7 @@
   "admin_chart_description": "Zhvillimi i regjistrimeve mujore",
   "admin_chart_aria": "Grafiku i përdoruesve të rinj në muaj",
   "admin_chart_new_users": "{count} përdorues të rinj",
-  "admin_chart_empty": "Ende nuk ka të dhëna për regjistrimet."
+  "admin_chart_empty": "Ende nuk ka të dhëna për regjistrimet.",
+  "admin_dashboard_api_error": "Gabim API: {status}",
+  "admin_dashboard_connection_failed": "Lidhja me serverin dështoi."
 }

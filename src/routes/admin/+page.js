@@ -1,7 +1,8 @@
 
 import { browser } from '$app/environment';
 import { redirect } from '@sveltejs/kit';
-import { API_URL } from '$lib/api.js';
+import { API_URL, localizedUrl } from '$lib/api.js';
+import * as m from '$lib/paraglide/messages.js';
 
 const emptyStats = {
     totalUsers: 0,
@@ -55,7 +56,7 @@ export async function load({ fetch }) {
         }
 
         // Statistiken abrufen
-        const response = await fetch(`${API_URL}/api/admin/stats`, {
+        const response = await fetch(localizedUrl(`${API_URL}/api/admin/stats`), {
             headers: {
                 Authorization: `Bearer ${token}`
             }
@@ -70,7 +71,7 @@ export async function load({ fetch }) {
 
             return {
                 ...emptyData,
-                error: `API Fehler: ${response.status}`
+                error: m.admin_dashboard_api_error({ status: response.status })
             };
         }
 
@@ -101,7 +102,7 @@ export async function load({ fetch }) {
 
         return {
             ...emptyData,
-            error: 'Verbindung zum Server fehlgeschlagen.'
+            error: m.admin_dashboard_connection_failed()
         };
     }
 }
