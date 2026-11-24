@@ -1,6 +1,7 @@
 <script>
     import * as m from '$lib/paraglide/messages.js';
     import { API_URL, localizedUrl } from '$lib/api.js';
+    import { currentUser } from '$lib/auth.js';
 
     let { data } = $props();
     let user = $derived(data.user);
@@ -59,7 +60,7 @@
     let displayedLocation = $state('');
 
     let profileImage = $state('');
-    let imageInput;
+    let imageInput = $state();
 
     // FOLLOWERS & FOLLOWING
     let showFollowers = $state(false);
@@ -215,6 +216,10 @@
                 user.avatar ||
                 user.image ||
                 '';
+
+            if (profileImage) {
+                profileImage = new URL(profileImage, API_URL).href;
+            }
 
             bioDraft = displayedBio;
             skillsDraft = displayedSkills.join(', ');
@@ -413,7 +418,9 @@
     }
 
     async function handleImageChange(event) {
-        const file = event.currentTarget.files?.[0];
+        const input = event.currentTarget;
+        const file = input.files?.[0];
+        const uploadToken = localStorage.getItem('token');
 
         if (!file) return;
 
@@ -431,7 +438,22 @@
                 body: formData
             });
 
+            if (localStorage.getItem('token') !== uploadToken) return;
+
             profileImage = result.avatar_path || '';
+
+            if (profileImage) {
+                const url = new URL(profileImage, API_URL);
+                url.searchParams.set('v', String(Date.now()));
+                profileImage = url.href;
+
+                currentUser.update(current =>
+                    current ? {
+                        ...current,
+                        avatar_path: profileImage
+                    } : current
+                );
+            }
 
             if (
                 profileImage &&
@@ -446,7 +468,7 @@
                 'Das Profilbild konnte nicht gespeichert werden.'
             );
         } finally {
-            event.currentTarget.value = '';
+            input.value = '';
         }
     }
 </script>

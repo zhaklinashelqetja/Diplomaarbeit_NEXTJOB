@@ -721,26 +721,8 @@
 "chat_sending": "Wird gesendet ...",
 "chat_send": "Senden",
 "chat_load_failed": "Die Unterhaltung konnte nicht geladen werden.",
-"chat_send_failed": "Die Nachricht konnte nicht gesendet werden."
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+"chat_send_failed": "Die Nachricht konnte nicht gesendet werden.",
+  "nav_how_nextjob_works": "So funktioniert NEXTJOB",
+  "nav_my_profile": "Mein Profil",
+  "nav_language_label": "Sprache"
 }

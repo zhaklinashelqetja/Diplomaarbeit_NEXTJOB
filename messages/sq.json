@@ -720,30 +720,8 @@
 "chat_sending": "Duke dërguar ...",
 "chat_send": "Dërgo",
 "chat_load_failed": "Biseda nuk mund të ngarkohej.",
-"chat_send_failed": "Mesazhi nuk mund të dërgohej."
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+"chat_send_failed": "Mesazhi nuk mund të dërgohej.",
+  "nav_how_nextjob_works": "Si funksionon NEXTJOB",
+  "nav_my_profile": "Profili im",
+  "nav_language_label": "Gjuha"
 }

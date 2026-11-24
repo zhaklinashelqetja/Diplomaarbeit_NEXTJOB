@@ -577,5 +577,8 @@
   "admin_manage_delete_job": "Delete job",
   "admin_manage_no_jobs": "No jobs found",
   "admin_manage_no_jobs_description": "Check your search or verify that the backend API returns jobs.",
-  "admin_manage_footer": "NEXTJOB · Admin management · User accounts and jobs"
+  "admin_manage_footer": "NEXTJOB · Admin management · User accounts and jobs",
+  "nav_how_nextjob_works": "How NEXTJOB works",
+  "nav_my_profile": "My profile",
+  "nav_language_label": "Language"
 }
