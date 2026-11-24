@@ -1,5 +1,6 @@
 
 <script>
+    import { formatNumber } from '$lib/l10n.js';
     import { onMount } from 'svelte';
     import { page } from '$app/state';
     import { goto } from '$app/navigation';
@@ -324,7 +325,7 @@
 
                                         {#if job.budget !== null && job.budget !== undefined}
                                             <span class="price">
-                                                {Number(job.budget).toLocaleString('de-DE')}
+                                                {formatNumber(job.budget)}
                                                 ALL
                                             </span>
                                         {/if}
@@ -382,7 +383,7 @@
 
                                         {#if Number(worker.avg_rating) > 0}
                                             <span class="rating">
-                                                ★ {Number(worker.avg_rating).toFixed(1)}
+                                                ★ {formatNumber(worker.avg_rating, { minimumFractionDigits: 1, maximumFractionDigits: 1 })}
                                             </span>
                                         {/if}
                                     </div>

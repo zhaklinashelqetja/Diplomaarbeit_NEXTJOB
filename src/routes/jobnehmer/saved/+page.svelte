@@ -1,5 +1,6 @@
 
 <script>
+    import { formatNumber } from '$lib/l10n.js';
     import * as m from '$lib/paraglide/messages.js';
 
     let { data } = $props();
@@ -207,7 +208,7 @@
                                             </p>
 
                                             <p class="mt-1 break-words text-sm font-semibold">
-                                                {job.budget}
+                                                {formatNumber(job.budget)}
                                             </p>
                                         </div>
                                     </div>

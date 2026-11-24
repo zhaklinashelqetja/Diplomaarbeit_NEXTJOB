@@ -1,5 +1,6 @@
 
 <script>
+    import { formatNumber } from '$lib/l10n.js';
     import * as m from '$lib/paraglide/messages.js';
     import {
         Search,
@@ -427,7 +428,7 @@
                                 {#if job.budget != null && job.budget !== ''}
                                     <div class="flex items-start gap-3 text-sm">
                                         <Euro size={17} strokeWidth={1.5} class="shrink-0 text-[#398875]" />
-                                        <span class="break-words">{job.budget}</span>
+                                        <span class="break-words">{formatNumber(job.budget)}</span>
                                     </div>
                                 {/if}
 
