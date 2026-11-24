@@ -11,7 +11,7 @@
         Send,
         MessageCircle
     } from '@lucide/svelte';
-    import { API_URL } from '$lib/api.js';
+    import { API_URL, localizedUrl } from '$lib/api.js';
     import * as m from '$lib/paraglide/messages.js';
     import { getLocale } from '$lib/paraglide/runtime.js';
 
@@ -67,9 +67,9 @@
                 partnerResponse,
                 messagesResponse
             ] = await Promise.all([
-                fetch(`${API_URL}/api/auth/me`, { headers }),
-                fetch(`${API_URL}/api/users/${partnerId}`),
-                fetch(`${API_URL}/api/messages/${partnerId}`, {
+                fetch(localizedUrl(`${API_URL}/api/auth/me`), { headers }),
+                fetch(localizedUrl(`${API_URL}/api/users/${partnerId}`)),
+                fetch(localizedUrl(`${API_URL}/api/messages/${partnerId}`), {
                     headers
                 })
             ]);
@@ -122,7 +122,7 @@
 
         try {
             const response = await fetch(
-                `${API_URL}/api/messages/${partnerId}`,
+                localizedUrl(`${API_URL}/api/messages/${partnerId}`),
                 {
                     headers: {
                         Authorization: `Bearer ${token}`
@@ -194,7 +194,7 @@
 
         try {
             const response = await fetch(
-                `${API_URL}/api/messages/${partnerId}`,
+                localizedUrl(`${API_URL}/api/messages/${partnerId}`),
                 {
                     method: 'POST',
                     headers: {
@@ -243,7 +243,7 @@
         if (!date) return '';
 
         return new Date(date).toLocaleTimeString(
-            getLocale() === 'sq' ? 'sq-AL' : 'de-DE',
+            getLocale() === 'sq' ? 'sq-AL' : getLocale() === 'en' ? 'en-GB' : 'de-AT',
             {
                 hour: '2-digit',
                 minute: '2-digit'

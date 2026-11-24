@@ -4,7 +4,7 @@
     import { page } from '$app/state';
     import { goto } from '$app/navigation';
     import { resolve } from '$app/paths';
-    import { API_URL } from '$lib/api.js';
+    import { API_URL, localizedUrl } from '$lib/api.js';
     import * as m from '$lib/paraglide/messages.js';
 
     import {
@@ -46,8 +46,8 @@
         problems.filter((job) =>
             matches(
                 [
-                    job.title,
-                    job.category,
+                    (job.title_localized ?? job.title),
+                    (job.category_localized ?? job.category),
                     job.neighborhood
                 ].join(' '),
                 query
@@ -60,7 +60,7 @@
             matches(
                 [
                     worker.full_name,
-                    worker.headline,
+                    (worker.headline_localized ?? worker.headline),
                     worker.neighborhood
                 ].join(' '),
                 query
@@ -126,10 +126,10 @@
 
             try {
                 const responses = await Promise.allSettled([
-                    fetch(`${API_URL}/api/problems`, {
+                    fetch(localizedUrl(`${API_URL}/api/problems`), {
                         signal: controller.signal
                     }),
-                    fetch(`${API_URL}/api/workers`, {
+                    fetch(localizedUrl(`${API_URL}/api/workers`), {
                         signal: controller.signal
                     })
                 ]);
@@ -310,10 +310,10 @@
                                         {/if}
                                     </div>
 
-                                    <h3>{job.title}</h3>
+                                    <h3>{(job.title_localized ?? job.title)}</h3>
 
                                     <p class="card-description">
-                                        {job.category || m.search_service()}
+                                        {(job.category_localized ?? job.category) || m.search_service()}
                                     </p>
 
                                     <div class="card-footer">
@@ -371,7 +371,7 @@
                                     </div>
 
                                     <p class="card-description">
-                                        {worker.headline || m.search_local_worker()}
+                                        {(worker.headline_localized ?? worker.headline) || m.search_local_worker()}
                                     </p>
 
                                     <div class="card-footer">

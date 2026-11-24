@@ -4,7 +4,7 @@
     import { goto } from '$app/navigation';
     import { resolve } from '$app/paths';
     import { ArrowUpRight, MessageCircle, ArrowRight, Inbox } from '@lucide/svelte';
-    import { API_URL } from '$lib/api.js';
+    import { API_URL, localizedUrl } from '$lib/api.js';
     import * as m from '$lib/paraglide/messages.js';
     import { getLocale } from '$lib/paraglide/runtime.js';
 
@@ -25,7 +25,7 @@
         }
 
         try {
-            const response = await fetch(`${API_URL}/api/messages/conversations`, {
+            const response = await fetch(localizedUrl(`${API_URL}/api/messages/conversations`), {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }
@@ -49,7 +49,7 @@
     function formatTime(date) {
         if (!date) return '';
 
-        return new Date(date).toLocaleString(getLocale() === 'sq' ? 'sq-AL' : 'de-DE', {
+        return new Date(date).toLocaleString(getLocale() === 'sq' ? 'sq-AL' : getLocale() === 'en' ? 'en-GB' : 'de-AT', {
             day: '2-digit',
             month: '2-digit',
             hour: '2-digit',

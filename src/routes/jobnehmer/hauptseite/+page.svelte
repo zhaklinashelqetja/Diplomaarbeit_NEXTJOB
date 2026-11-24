@@ -67,8 +67,8 @@
     function getSearchableText(job) {
         return normalizeText(
             [
-                job.title,
-                job.description,
+                (job.title_localized ?? job.title),
+                (job.description_localized ?? job.description),
                 job.location,
                 getCategory(job)
             ]
@@ -406,12 +406,12 @@
 
                             <!-- TITLE -->
                             <h3 class="break-words text-2xl font-medium leading-snug tracking-[-0.04em]">
-                                {job.title ?? m.worker_no_title()}
+                                {(job.title_localized ?? job.title) ?? m.worker_no_title()}
                             </h3>
 
                             <!-- DESCRIPTION -->
                             <p class="mt-4 line-clamp-4 break-words text-sm leading-7 text-[#2A2E38]/60">
-                                {job.description ?? m.worker_no_description()}
+                                {(job.description_localized ?? job.description) ?? m.worker_no_description()}
                             </p>
 
                             <!-- DETAILS -->
@@ -434,7 +434,7 @@
                                 {#if getCategory(job)}
                                     <div class="flex items-start gap-3 text-sm">
                                         <Tag size={17} strokeWidth={1.5} class="shrink-0 text-[#398875]" />
-                                        <span class="break-words">{getCategory(job)}</span>
+                                        <span class="break-words">{job.category_localized ?? getCategory(job)}</span>
                                     </div>
                                 {/if}
                             </div>

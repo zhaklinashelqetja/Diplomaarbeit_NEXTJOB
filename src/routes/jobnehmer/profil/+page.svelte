@@ -1,6 +1,6 @@
 <script>
-    import { t } from '$lib/i18n.js';
-    import { API_URL } from '$lib/api.js';
+    import * as m from '$lib/paraglide/messages.js';
+    import { API_URL, localizedUrl } from '$lib/api.js';
 
     let { data } = $props();
     let user = $derived(data.user);
@@ -8,7 +8,7 @@
     let firstName = $derived(user?.first_name ?? '');
     let lastName = $derived(user?.last_name ?? '');
     let fullName = $derived(
-        `${firstName} ${lastName}`.trim() || $t('worker_role')
+        `${firstName} ${lastName}`.trim() || m.worker_role()
     );
 
     let initials = $derived(
@@ -108,7 +108,8 @@
     }
 
     function getCategoryName(category) {
-        return category?.name
+        return category?.name_localized
+            ?? category?.name
             ?? category?.category_name
             ?? category?.title
             ?? '';
@@ -140,7 +141,7 @@
             throw new Error('Bitte melde dich erneut an.');
         }
 
-        const response = await fetch(`${API_URL}/api${path}`, {
+        const response = await fetch(localizedUrl(`${API_URL}/api${path}`), {
             ...options,
             headers: {
                 Authorization: `Bearer ${token}`,
@@ -175,8 +176,8 @@
             try {
                 const [catResponse, neighborhoodResponse] =
                     await Promise.all([
-                        fetch(`${API_URL}/api/categories`),
-                        fetch(`${API_URL}/api/neighborhoods`)
+                        fetch(localizedUrl(`${API_URL}/api/categories`)),
+                        fetch(localizedUrl(`${API_URL}/api/neighborhoods`))
                     ]);
 
                 if (catResponse.ok) {
@@ -264,8 +265,9 @@
                 }
 
                 const category = categoriesList.find(item =>
-                    normalizeText(getCategoryName(item)) ===
-                    normalizeText(skill)
+                    (normalizeText(item.name) === normalizeText(skill) ||
+                     normalizeText(getCategoryName(item)) ===
+                     normalizeText(skill))
                 );
 
                 return category
@@ -450,10 +452,10 @@
 </script>
 
 <svelte:head>
-    <title>{$t('profile_title')} | NextJob</title>
+    <title>{m.profile_title()} | NextJob</title>
     <meta
         name="description"
-        content={$t('profile_meta_description')}
+        content={m.profile_meta_description()}
     />
 </svelte:head>
 
@@ -466,7 +468,7 @@
                 role="alert"
             >
                 <h1 class="text-2xl font-semibold tracking-tight">
-                    {$t('profile_unavailable')}
+                    {m.profile_unavailable()}
                 </h1>
 
                 <p class="mt-3 text-sm leading-7 text-[#2A2E38]/65">
@@ -477,7 +479,7 @@
                     href="/jobnehmer/hauptseite"
                     class="mt-6 inline-flex items-center gap-2 bg-[#2A2E38] px-5 py-3 text-sm font-medium text-white transition hover:bg-[#398875]"
                 >
-                    {$t('profile_back_to_jobs')}
+                    {m.profile_back_to_jobs()}
                     <span>↗</span>
                 </a>
             </section>
@@ -489,15 +491,15 @@
                 <div class="flex flex-col justify-between gap-5 sm:flex-row sm:items-end">
                     <div>
                         <p class="text-xs font-semibold uppercase tracking-[0.22em] text-[#398875]">
-                            NEXTJOB / {$t('profile_my_area')}
+                            NEXTJOB / {m.profile_my_area()}
                         </p>
 
                         <h1 class="mt-3 text-4xl font-semibold tracking-tight sm:text-5xl">
-                            {$t('profile_title')}
+                            {m.profile_title()}
                         </h1>
 
                         <p class="mt-4 max-w-xl text-sm leading-7 text-[#2A2E38]/60 sm:text-base">
-                            {$t('profile_intro')}
+                            {m.profile_intro()}
                         </p>
                     </div>
                 </div>
@@ -567,7 +569,7 @@
                     <!-- NAME AND INFO -->
                     <div class="flex flex-col justify-center bg-[#2A2E38] p-6 sm:p-10 lg:p-12">
                         <p class="text-xs font-medium uppercase tracking-[0.2em] text-[#A8B79E]">
-                            {$t('worker_role')}
+                            {m.worker_role()}
                         </p>
 
                         <h2 class="mt-3 break-words text-3xl font-semibold tracking-tight sm:text-4xl lg:text-5xl">
@@ -742,7 +744,7 @@
                                 <span class="text-xs font-semibold text-[#398875]">01</span>
 
                                 <h2 class="text-xl font-semibold tracking-tight sm:text-2xl">
-                                    {$t('profile_about_me')}
+                                    {m.profile_about_me()}
                                 </h2>
                             </div>
 
@@ -797,7 +799,7 @@
                                         onclick={startEditingBio}
                                         class="text-sm leading-7 text-[#2A2E38]/50 transition hover:text-[#398875]"
                                     >
-                                        {$t('profile_no_bio')} · Hier klicken, um etwas über dich zu schreiben.
+                                        {m.profile_no_bio()} · Hier klicken, um etwas über dich zu schreiben.
                                     </button>
                                 {/if}
                             {/if}
@@ -811,7 +813,7 @@
                                 <span class="text-xs font-semibold text-[#398875]">02</span>
 
                                 <h2 class="text-xl font-semibold tracking-tight sm:text-2xl">
-                                    {$t('profile_my_skills')}
+                                    {m.profile_my_skills()}
                                 </h2>
                             </div>
 
@@ -907,7 +909,7 @@
                                         onclick={startEditingSkills}
                                         class="text-sm leading-7 text-[#2A2E38]/50 transition hover:text-[#398875]"
                                     >
-                                        {$t('profile_no_skills')} · Fähigkeiten hinzufügen
+                                        {m.profile_no_skills()} · Fähigkeiten hinzufügen
                                     </button>
                                 {/if}
                             {/if}
@@ -921,7 +923,7 @@
                                 <span class="text-xs font-semibold text-[#398875]">03</span>
 
                                 <h2 class="text-xl font-semibold tracking-tight sm:text-2xl">
-                                    {$t('profile_contact_info')}
+                                    {m.profile_contact_info()}
                                 </h2>
                             </div>
 
@@ -943,7 +945,7 @@
                                 <div class="grid gap-5 sm:grid-cols-2">
                                     <div>
                                         <label class="mb-2 block text-xs font-medium uppercase tracking-wider text-[#2A2E38]/50">
-                                            {$t('profile_phone')}
+                                            {m.profile_phone()}
                                         </label>
 
                                         <input
@@ -956,7 +958,7 @@
 
                                     <div>
                                         <label class="mb-2 block text-xs font-medium uppercase tracking-wider text-[#2A2E38]/50">
-                                            {$t('profile_location')}
+                                            {m.profile_location()}
                                         </label>
 
                                         <input
@@ -996,7 +998,7 @@
 
                                             <div class="min-w-0">
                                                 <p class="text-xs uppercase tracking-wider text-[#2A2E38]/45">
-                                                    {$t('profile_email')}
+                                                    {m.profile_email()}
                                                 </p>
 
                                                 <p class="mt-2 break-all text-sm font-medium">
@@ -1014,7 +1016,7 @@
 
                                             <div class="min-w-0">
                                                 <p class="text-xs uppercase tracking-wider text-[#2A2E38]/45">
-                                                    {$t('profile_phone')}
+                                                    {m.profile_phone()}
                                                 </p>
 
                                                 <p class="mt-2 break-words text-sm font-medium">
@@ -1032,7 +1034,7 @@
 
                                             <div class="min-w-0">
                                                 <p class="text-xs uppercase tracking-wider text-[#2A2E38]/45">
-                                                    {$t('profile_location')}
+                                                    {m.profile_location()}
                                                 </p>
 
                                                 <p class="mt-2 break-words text-sm font-medium">
@@ -1044,7 +1046,7 @@
 
                                     {#if !user.email && !displayedPhone && !displayedLocation}
                                         <p class="text-sm leading-7 text-[#2A2E38]/50">
-                                            {$t('profile_no_contact')}
+                                            {m.profile_no_contact()}
                                         </p>
                                     {/if}
                                 </div>
@@ -1057,11 +1059,11 @@
         {:else}
             <section class="border-l-4 border-[#62AA97] bg-white p-6">
                 <h1 class="text-2xl font-semibold tracking-tight">
-                    {$t('profile_unavailable')}
+                    {m.profile_unavailable()}
                 </h1>
 
                 <p class="mt-3 text-sm leading-7 text-[#2A2E38]/60">
-                    {$t('profile_load_failed')}
+                    {m.profile_load_failed()}
                 </p>
             </section>
         {/if}
