@@ -288,6 +288,17 @@
                 >
                     SQ
                 </button>
+
+                <span class="language-separator">|</span>
+
+                <button
+                    type="button"
+                    class:active={selectedLocale === 'en'}
+                    aria-pressed={selectedLocale === 'en'}
+                    onclick={() => changeLanguage('en')}
+                >
+                    EN
+                </button>
             </div>
 
             {#if $isLoggedIn}
@@ -400,6 +411,17 @@
                         onclick={() => changeLanguage('sq')}
                     >
                         SQ
+                    </button>
+
+                    <span class="language-separator">|</span>
+
+                    <button
+                        type="button"
+                        class:active={selectedLocale === 'en'}
+                        aria-pressed={selectedLocale === 'en'}
+                        onclick={() => changeLanguage('en')}
+                    >
+                        EN
                     </button>
                 </div>
             </div>
