@@ -2,6 +2,7 @@ from flask import Blueprint, g, jsonify, request
 
 from auth import admin_required, login_required, verified_required, worker_required
 from db import call_proc, execute, fetch_all, fetch_one
+from translations import localize_rows
 
 bp = Blueprint("misc", __name__, url_prefix="/api")
 
@@ -10,9 +11,11 @@ bp = Blueprint("misc", __name__, url_prefix="/api")
 
 @bp.get("/categories")
 def categories():
-    """English names = translation keys, the frontend shows sq/de."""
-    return jsonify(fetch_all(
-        "SELECT category_id, name FROM categories ORDER BY name"))
+    rows = fetch_all(
+        "SELECT category_id, name, name_translations "
+        "FROM categories ORDER BY name"
+    )
+    return jsonify(localize_rows(rows, ("name",)))
 
 
 @bp.get("/neighborhoods")
