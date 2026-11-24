@@ -21,6 +21,7 @@ from routes.misc_routes import bp as misc_bp
 from routes.analysis_routes import bp as analysis_bp
 from routes.chat_routes import bp as chat_bp
 from routes.leaderboard_routes import bp as leaderboard_bp
+from routes.admin_routes import bp as admin_bp
 
 
 def create_app():
@@ -37,6 +38,7 @@ def create_app():
     app.register_blueprint(analysis_bp)
     app.register_blueprint(chat_bp)
     app.register_blueprint(leaderboard_bp)
+    app.register_blueprint(admin_bp)
 
     app.teardown_appcontext(db.close_db)
 
@@ -50,7 +52,8 @@ def create_app():
         if origin and origin in app.config["CORS_ORIGINS"]:
             resp.headers["Access-Control-Allow-Origin"] = origin
             resp.headers["Access-Control-Allow-Headers"] = "Authorization, Content-Type"
-            resp.headers["Access-Control-Allow-Methods"] = "GET, POST, PUT, DELETE, OPTIONS"
+            resp.headers["Access-Control-Allow-Methods"] = "GET, POST, PUT, PATCH, DELETE, OPTIONS"
+            resp.headers["Access-Control-Allow-Credentials"] = "true"
             resp.headers["Access-Control-Max-Age"] = "600"
         resp.vary.add("Origin")
         return resp
