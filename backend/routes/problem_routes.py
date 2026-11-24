@@ -231,6 +231,11 @@ def make_offer(problem_id):
                d.get("message"), d.get("initiated_by", "worker")))
     offer = fetch_one("SELECT offer_id FROM offers WHERE problem_id=%s AND "
                       "worker_id=%s", (problem_id, g.user["user_id"]))
+    execute(
+        "UPDATE offers SET message_translations=%s "
+        "WHERE offer_id=%s AND message <=> %s",
+        (translate_text(d.get("message")),
+         offer["offer_id"], d.get("message")))
     return jsonify({"offer_id": offer["offer_id"]}), 201
 
 

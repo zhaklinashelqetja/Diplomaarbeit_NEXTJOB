@@ -9,6 +9,9 @@ SUPPORTED_LOCALES = ("de", "sq", "en")
 
 
 def translate_text(text):
+    if os.environ.get("ENABLE_EXTERNAL_TRANSLATIONS", "").lower() != "true":
+        return None
+
     if not isinstance(text, str) or not text.strip():
         return None
 
