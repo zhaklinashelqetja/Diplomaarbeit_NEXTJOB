@@ -1,4 +1,3 @@
-
 import { writable } from 'svelte/store';
 import { API_URL } from '$lib/api.js';
 
@@ -7,68 +6,90 @@ export const currentUser = writable(null);
 export const authLoading = writable(false);
 
 export function checkLogin() {
-	if (typeof localStorage === 'undefined') return;
+    if (typeof localStorage === 'undefined') return;
 
-	const token = localStorage.getItem('token');
-	isLoggedIn.set(Boolean(token));
+    const token = localStorage.getItem('token');
+    isLoggedIn.set(Boolean(token));
 
-	if (!token) {
-		currentUser.set(null);
-		return;
-	}
+    if (!token) {
+        currentUser.set(null);
+        return;
+    }
 
-	loadCurrentUser();
+    loadCurrentUser();
 }
 
 export async function loadCurrentUser() {
-	if (typeof localStorage === 'undefined') return null;
+    if (typeof localStorage === 'undefined') return null;
 
-	const token = localStorage.getItem('token');
+    const token = localStorage.getItem('token');
 
-	if (!token) {
-		isLoggedIn.set(false);
-		currentUser.set(null);
-		return null;
-	}
+    if (!token) {
+        isLoggedIn.set(false);
+        currentUser.set(null);
+        return null;
+    }
 
-	authLoading.set(true);
+    authLoading.set(true);
 
-	try {
-		const res = await fetch(`${API_URL}/api/auth/me`, {
-			headers: {
-				Authorization: `Bearer ${token}`
-			}
-		});
+    try {
+        const res = await fetch(`${API_URL}/api/auth/me`, {
+            credentials: 'include',
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        });
 
-		if (res.status === 401) {
-			logout();
-			return null;
-		}
+        if (res.status === 401) {
+            await logout();
+            return null;
+        }
 
-		if (!res.ok) {
-			return null;
-		}
+        if (!res.ok) {
+            return null;
+        }
 
-		const data = await res.json();
-		const user = data.user ?? data;
+        const data = await res.json();
+        const user = data.user ?? data;
 
-		currentUser.set(user);
-		isLoggedIn.set(true);
+        currentUser.set(user);
+        isLoggedIn.set(true);
 
-		return user;
-	} catch (error) {
-		console.error('Benutzerdaten konnten nicht geladen werden:', error);
-		return null;
-	} finally {
-		authLoading.set(false);
-	}
+        return user;
+    } catch (error) {
+        console.error('Benutzerdaten konnten nicht geladen werden:', error);
+        return null;
+    } finally {
+        authLoading.set(false);
+    }
 }
 
-export function logout() {
-	if (typeof localStorage !== 'undefined') {
-		localStorage.removeItem('token');
-	}
+export async function logout() {
+    if (typeof localStorage === 'undefined') return;
 
-	isLoggedIn.set(false);
-	currentUser.set(null);
+    const token = localStorage.getItem('token');
+
+    localStorage.removeItem('token');
+    isLoggedIn.set(false);
+    currentUser.set(null);
+
+    try {
+        const res = await fetch(`${API_URL}/api/auth/logout`, {
+            method: 'POST',
+            credentials: 'include',
+            headers: token
+                ? { Authorization: `Bearer ${token}` }
+                : {}
+        });
+
+        if (!res.ok) {
+            console.error('Logout API:', res.status);
+            return false;
+        }
+
+        return true;
+    } catch (error) {
+        console.error('Server-Logout fehlgeschlagen:', error);
+        return false;
+    }
 }
