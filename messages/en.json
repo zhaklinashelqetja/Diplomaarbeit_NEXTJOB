@@ -207,7 +207,6 @@
   "error_title": "Something went wrong",
   "error_description": "This page does not exist or is unavailable.",
   "error_back": "Back to homepage",
-  "example_message": "Hello {username}",
   "search_jobs": "Jobs",
   "search_all": "All",
   "search_users": "Users",

@@ -207,7 +207,6 @@
   "error_description": "Diese Seite existiert nicht oder ist nicht verfügbar.",
   "error_back": "Zurück zur Startseite",
   "$schema": "https://inlang.com/schema/inlang-message-format",
-  "example_message": "Guten Tag {username}",
   "search_jobs": "Jobs",
   "search_all": "Alle",
   "search_users": "Nutzer",
