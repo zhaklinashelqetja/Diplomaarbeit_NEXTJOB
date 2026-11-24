@@ -4,6 +4,7 @@ from auth import login_required, optional_auth, verified_required, worker_requir
 from db import call_proc, execute, fetch_all, fetch_one
 from routes.user_routes import save_image
 from translations import localize_row, localize_rows
+from translation_service import translate_text
 
 bp = Blueprint("problems", __name__, url_prefix="/api/problems")
 
@@ -116,6 +117,13 @@ def create_problem():
         (g.user["user_id"], d["category_id"], d["neighborhood_id"],
          d.get("address"), d["title"], d["description"], d["contact_phone"],
          d.get("budget"), d.get("urgency", "normal"), d.get("preferred_date")))
+    execute(
+        "UPDATE problems SET title_translations=%s, "
+        "description_translations=%s WHERE problem_id=%s "
+        "AND title=%s AND description=%s",
+        (translate_text(d["title"]),
+         translate_text(d["description"]), problem_id,
+         d["title"], d["description"]))
     return jsonify({"problem_id": problem_id}), 201
 
 
@@ -157,12 +165,13 @@ def update_problem(problem_id):
     updates = {k: d[k] for k in allowed if k in d}
     if not updates:
         return jsonify({"error": "Nothing to update"}), 400
-    sets = ", ".join(f"{k}=%s" for k in updates)
+    values = dict(updates)
     for field in ("title", "description"):
         if field in updates:
-            sets += f", {field}_translations=NULL"
+            values[f"{field}_translations"] = translate_text(updates[field])
+    sets = ", ".join(f"{k}=%s" for k in values)
     execute(f"UPDATE problems SET {sets} WHERE problem_id=%s",
-            (*updates.values(), problem_id))
+            (*values.values(), problem_id))
     return jsonify({"updated": list(updates)})
 
 
@@ -266,4 +275,10 @@ def review_problem(problem_id):
     # sp_leave_review enforces: completed, correct customer, no duplicate
     call_proc("sp_leave_review",
               (problem_id, g.user["user_id"], rating, d.get("text")))
+    execute(
+        "UPDATE reviews SET review_text_translations=%s "
+        "WHERE problem_id=%s AND customer_id=%s "
+        "AND review_text=%s",
+        (translate_text(d.get("text")), problem_id,
+         g.user["user_id"], d.get("text")))
     return jsonify({"reviewed": problem_id}), 201

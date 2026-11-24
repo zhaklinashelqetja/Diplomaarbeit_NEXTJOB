@@ -4,6 +4,7 @@ from auth import login_required, worker_required
 from db import call_proc, execute, fetch_all, fetch_one, replace_list
 from routes.problem_routes import problem_card
 from translations import localize_row, localize_rows
+from translation_service import translate_text
 
 bp = Blueprint("workers", __name__, url_prefix="/api/workers")
 
@@ -79,6 +80,13 @@ def become_worker():
         "years_experience) VALUES (%s,%s,%s,%s)",
         (g.user["user_id"], d.get("headline"), d.get("bio"),
          d.get("years_experience", 0)))
+    execute(
+        "UPDATE worker_profiles SET headline_translations=%s, "
+        "bio_translations=%s WHERE user_id=%s "
+        "AND headline <=> %s AND bio <=> %s",
+        (translate_text(d.get("headline")),
+         translate_text(d.get("bio")), g.user["user_id"],
+         d.get("headline"), d.get("bio")))
     return jsonify({"worker_id": g.user["user_id"]}), 201
 
 
@@ -90,12 +98,13 @@ def update_worker():
     updates = {k: d[k] for k in allowed if k in d}
     if not updates:
         return jsonify({"error": "Nothing to update"}), 400
-    sets = ", ".join(f"{k}=%s" for k in updates)
+    values = dict(updates)
     for field in ("headline", "bio"):
         if field in updates:
-            sets += f", {field}_translations=NULL"
+            values[f"{field}_translations"] = translate_text(updates[field])
+    sets = ", ".join(f"{k}=%s" for k in values)
     execute(f"UPDATE worker_profiles SET {sets} WHERE user_id=%s",
-            (*updates.values(), g.user["user_id"]))
+            (*values.values(), g.user["user_id"]))
     return jsonify({"updated": list(updates)})
 
 
