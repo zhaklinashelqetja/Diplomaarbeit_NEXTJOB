@@ -174,13 +174,29 @@ def admin_stats():
         **totals,
         "jobs_per_month":      fetch_all("SELECT * FROM v_jobs_per_month"),
         "neighborhood_demand": fetch_all("SELECT * FROM v_neighborhood_demand"),
-        "category_demand":     fetch_all("SELECT * FROM v_category_demand"),
+        "category_demand": localize_rows(fetch_all(
+            "SELECT v.*, c.name_translations "
+            "FROM v_category_demand v "
+            "JOIN categories c ON c.category_id = v.category_id "
+            "ORDER BY v.open_problems DESC"
+        ), ("name",)),
         "top_searches":        fetch_all("SELECT * FROM v_top_searches LIMIT 20"),
         "registration_growth": fetch_all("SELECT * FROM v_registration_growth"),
-        "top_problems":        fetch_all("SELECT * FROM v_problem_statistics "
-                                         "ORDER BY total_offers DESC LIMIT 20"),
-        "top_workers":         fetch_all("SELECT * FROM v_worker_search "
-                                         "ORDER BY avg_rating DESC LIMIT 20"),
+        "top_problems": localize_rows(fetch_all(
+            "SELECT v.*, p.title_translations, "
+            "c.name_translations AS category_translations "
+            "FROM v_problem_statistics v "
+            "JOIN problems p ON p.problem_id = v.problem_id "
+            "JOIN categories c ON c.category_id = p.category_id "
+            "ORDER BY v.total_offers DESC LIMIT 20"
+        ), ("title", "category")),
+
+        "top_workers": localize_rows(fetch_all(
+            "SELECT v.*, wp.headline_translations "
+            "FROM v_worker_search v "
+            "JOIN worker_profiles wp ON wp.user_id = v.worker_id "
+            "ORDER BY v.avg_rating DESC LIMIT 20"
+        ), ("headline",)),
     })
 
 

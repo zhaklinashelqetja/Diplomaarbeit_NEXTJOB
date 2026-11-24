@@ -3,6 +3,7 @@
     import RegistrationGrowthChart from '$lib/components/RegistrationGrowthChart.svelte';
     import { goto } from '$app/navigation';
     import * as m from '$lib/paraglide/messages.js';
+    import { localizedField } from '$lib/api.js';
 
     let { data } = $props();
 
@@ -256,7 +257,7 @@
                                             </span>
 
                                             <span class="text-sm font-medium">
-                                                {category.name}
+                                                {localizedField(category, 'name')}
                                             </span>
                                         </div>
 

@@ -139,7 +139,7 @@
         const token = localStorage.getItem('token');
 
         if (!token) {
-            throw new Error('Bitte melde dich erneut an.');
+            throw new Error(m.profile_login_again());
         }
 
         const response = await fetch(localizedUrl(`${API_URL}/api${path}`), {
@@ -156,7 +156,7 @@
             throw new Error(
                 result.message ||
                 result.error ||
-                'Speichern fehlgeschlagen.'
+                m.profile_save_failed()
             );
         }
 
@@ -246,7 +246,7 @@
         } catch (error) {
             alert(
                 error.message ||
-                'Die Beschreibung konnte nicht gespeichert werden.'
+                m.profile_bio_save_failed()
             );
         }
     }
@@ -287,13 +287,13 @@
     async function saveSkills() {
         if (!categoriesList.length) {
             alert(
-                'Die Kategorien aus der Datenbank konnten nicht geladen werden. Bitte lade die Seite erneut.'
+                m.profile_categories_reload()
             );
             return;
         }
 
         if (!selectedCategoryIds.length) {
-            alert('Bitte wähle mindestens eine Kategorie aus.');
+            alert(m.profile_select_category());
             return;
         }
 
@@ -323,7 +323,7 @@
         } catch (error) {
             alert(
                 error.message ||
-                'Skills konnten nicht in der Datenbank gespeichert werden.'
+                m.profile_skills_save_failed()
             );
         }
     }
@@ -367,7 +367,7 @@
                 .filter(Boolean);
 
             alert(
-                `Standort nicht gefunden.\n\nVerfügbare Standorte: ${available.join(', ')}`
+                `${m.profile_location_not_found()}\n\n${m.profile_available_locations()}: ${available.join(', ')}`
             );
 
             return;
@@ -401,7 +401,7 @@
         } catch (error) {
             alert(
                 error.message ||
-                'Kontaktinformationen konnten nicht gespeichert werden.'
+                m.profile_contact_save_failed()
             );
         }
     }
@@ -425,7 +425,7 @@
         if (!file) return;
 
         if (!file.type.startsWith('image/')) {
-            alert('Bitte wähle eine Bilddatei aus.');
+            alert(m.profile_invalid_image());
             return;
         }
 
@@ -465,7 +465,7 @@
         } catch (error) {
             alert(
                 error.message ||
-                'Das Profilbild konnte nicht gespeichert werden.'
+                m.profile_avatar_save_failed()
             );
         } finally {
             input.value = '';
@@ -539,7 +539,7 @@
                             {#if profileImage}
                                 <img
                                     src={profileImage}
-                                    alt="Profilbild"
+                                    alt={m.profile_avatar_alt()}
                                     class="h-36 w-36 rounded-full border-4 border-white/10 object-cover sm:h-40 sm:w-40"
                                 />
                             {:else}
@@ -551,7 +551,7 @@
                             <button
                                 type="button"
                                 onclick={openImagePicker}
-                                aria-label="Profilbild ändern"
+                                aria-label={m.profile_change_photo()}
                                 class="absolute bottom-1 right-1 flex h-11 w-11 items-center justify-center rounded-full border-2 border-[#2A2E38] bg-[#62AA97] text-[#2A2E38] transition hover:bg-[#A8B79E]"
                             >
                                 <svg
@@ -584,7 +584,7 @@
                             onclick={openImagePicker}
                             class="mt-5 text-xs font-medium uppercase tracking-[0.15em] text-[#A8B79E] transition hover:text-white"
                         >
-                            Foto ändern ↗
+                            {m.profile_change_photo()} ↗
                         </button>
                     </div>
 
@@ -623,7 +623,7 @@
                                     </span>
 
                                     <span class="text-sm text-white/60 transition group-hover:text-[#A8B79E]">
-                                        Followers
+                                        {m.profile_followers()}
                                     </span>
                                 </div>
 
@@ -645,7 +645,7 @@
                                     </span>
 
                                     <span class="text-sm text-white/60 transition group-hover:text-[#A8B79E]">
-                                        Following
+                                        {m.profile_following()}
                                     </span>
                                 </div>
 
@@ -659,14 +659,14 @@
                             <div class="mt-5 max-w-md border border-white/10 bg-white/5 p-5">
                                 <div class="mb-4 flex items-center justify-between">
                                     <h3 class="text-sm font-semibold text-white">
-                                        Followers
+                                        {m.profile_followers()}
                                     </h3>
 
                                     <button
                                         type="button"
                                         onclick={() => showFollowers = false}
                                         class="text-white/50 transition hover:text-white"
-                                        aria-label="Close followers"
+                                        aria-label={m.profile_close_followers()}
                                     >
                                         ✕
                                     </button>
@@ -690,7 +690,7 @@
                                     </div>
                                 {:else}
                                     <p class="text-sm leading-6 text-white/50">
-                                        Noch keine Follower verfügbar.
+                                        {m.profile_no_followers()}
                                     </p>
                                 {/if}
                             </div>
@@ -701,14 +701,14 @@
                             <div class="mt-5 max-w-md border border-white/10 bg-white/5 p-5">
                                 <div class="mb-4 flex items-center justify-between">
                                     <h3 class="text-sm font-semibold text-white">
-                                        Following
+                                        {m.profile_following()}
                                     </h3>
 
                                     <button
                                         type="button"
                                         onclick={() => showFollowing = false}
                                         class="text-white/50 transition hover:text-white"
-                                        aria-label="Close following"
+                                        aria-label={m.profile_close_following()}
                                     >
                                         ✕
                                     </button>
@@ -732,7 +732,7 @@
                                     </div>
                                 {:else}
                                     <p class="text-sm leading-6 text-white/50">
-                                        Du folgst noch niemandem.
+                                        {m.profile_no_following()}
                                     </p>
                                 {/if}
                             </div>
@@ -744,11 +744,11 @@
                 <!-- FOOTER -->
                 <div class="flex items-center justify-between border-t border-white/10 px-5 py-4 sm:px-8">
                     <span class="text-[10px] uppercase tracking-[0.2em] text-white/40">
-                        NEXTJOB / PROFILE
+                        NEXTJOB / {m.profile_footer_profile()}
                     </span>
 
                     <span class="text-xs text-white/40">
-                        {displayedSkills.length} Skills
+                        {m.profile_skills_count({ count: displayedSkills.length })}
                     </span>
                 </div>
             </section>
@@ -777,7 +777,7 @@
                                     class="inline-flex w-fit items-center gap-2 text-sm font-medium text-[#398875] transition hover:text-[#2A2E38]"
                                 >
                                     <span>✎</span>
-                                    Bearbeiten
+                                    {m.profile_edit()}
                                 </button>
                             {/if}
                         </div>
@@ -788,7 +788,7 @@
                                     <textarea
                                         bind:value={bioDraft}
                                         rows="6"
-                                        placeholder="Schreibe etwas über dich, deine Erfahrung und deine Arbeit..."
+                                        placeholder={m.profile_bio_placeholder()}
                                         class="w-full resize-y border border-[#2A2E38]/15 bg-white p-4 text-sm leading-7 outline-none transition focus:border-[#62AA97]"
                                     ></textarea>
 
@@ -798,7 +798,7 @@
                                             onclick={saveBio}
                                             class="bg-[#62AA97] px-5 py-3 text-sm font-semibold text-[#2A2E38] transition hover:bg-[#A8B79E]"
                                         >
-                                            Änderungen übernehmen
+                                            {m.profile_save_changes()}
                                         </button>
 
                                         <button
@@ -806,7 +806,7 @@
                                             onclick={cancelBio}
                                             class="border border-[#2A2E38]/15 px-5 py-3 text-sm font-medium transition hover:bg-white"
                                         >
-                                            Abbrechen
+                                            {m.profile_cancel()}
                                         </button>
                                     </div>
                                 </div>
@@ -821,7 +821,7 @@
                                         onclick={startEditingBio}
                                         class="text-sm leading-7 text-[#2A2E38]/50 transition hover:text-[#398875]"
                                     >
-                                        {m.profile_no_bio()} · Hier klicken, um etwas über dich zu schreiben.
+                                        {m.profile_no_bio()} · {m.profile_add_bio()}
                                     </button>
                                 {/if}
                             {/if}
@@ -846,7 +846,7 @@
                                     class="inline-flex w-fit items-center gap-2 text-sm font-medium text-[#398875] transition hover:text-[#2A2E38]"
                                 >
                                     <span>✎</span>
-                                    Bearbeiten
+                                    {m.profile_edit()}
                                 </button>
                             {/if}
                         </div>
@@ -885,12 +885,12 @@
                                         </div>
                                     {:else}
                                         <p class="text-sm text-red-600">
-                                            Kategorien konnten nicht geladen werden.
+                                            {m.profile_categories_failed()}
                                         </p>
                                     {/if}
 
                                     <p class="text-xs leading-5 text-[#2A2E38]/50">
-                                        Wähle alle Kategorien aus, die zu deinen Fähigkeiten passen.
+                                        {m.profile_choose_skills()}
                                     </p>
 
                                     <div class="flex flex-wrap gap-3">
@@ -899,7 +899,7 @@
                                             onclick={saveSkills}
                                             class="bg-[#62AA97] px-5 py-3 text-sm font-semibold text-[#2A2E38] transition hover:bg-[#A8B79E]"
                                         >
-                                            Änderungen übernehmen
+                                            {m.profile_save_changes()}
                                         </button>
 
                                         <button
@@ -907,7 +907,7 @@
                                             onclick={cancelSkills}
                                             class="border border-[#2A2E38]/15 px-5 py-3 text-sm font-medium transition hover:bg-white"
                                         >
-                                            Abbrechen
+                                            {m.profile_cancel()}
                                         </button>
                                     </div>
                                 </div>
@@ -931,7 +931,7 @@
                                         onclick={startEditingSkills}
                                         class="text-sm leading-7 text-[#2A2E38]/50 transition hover:text-[#398875]"
                                     >
-                                        {m.profile_no_skills()} · Fähigkeiten hinzufügen
+                                        {m.profile_no_skills()} · {m.profile_add_skills()}
                                     </button>
                                 {/if}
                             {/if}
@@ -956,7 +956,7 @@
                                     class="inline-flex w-fit items-center gap-2 text-sm font-medium text-[#398875] transition hover:text-[#2A2E38]"
                                 >
                                     <span>✎</span>
-                                    Bearbeiten
+                                    {m.profile_edit()}
                                 </button>
                             {/if}
                         </div>
@@ -973,7 +973,7 @@
                                         <input
                                             bind:value={phoneDraft}
                                             type="tel"
-                                            placeholder="Telefonnummer"
+                                            placeholder={m.profile_phone()}
                                             class="w-full border border-[#2A2E38]/15 bg-white p-4 text-sm outline-none transition focus:border-[#62AA97]"
                                         />
                                     </div>
@@ -986,7 +986,7 @@
                                         <input
                                             bind:value={locationDraft}
                                             type="text"
-                                            placeholder="Standort"
+                                            placeholder={m.profile_location()}
                                             class="w-full border border-[#2A2E38]/15 bg-white p-4 text-sm outline-none transition focus:border-[#62AA97]"
                                         />
                                     </div>
@@ -997,7 +997,7 @@
                                             onclick={saveContact}
                                             class="bg-[#62AA97] px-5 py-3 text-sm font-semibold text-[#2A2E38] transition hover:bg-[#A8B79E]"
                                         >
-                                            Änderungen übernehmen
+                                            {m.profile_save_changes()}
                                         </button>
 
                                         <button
@@ -1005,7 +1005,7 @@
                                             onclick={cancelContact}
                                             class="border border-[#2A2E38]/15 px-5 py-3 text-sm font-medium transition hover:bg-white"
                                         >
-                                            Abbrechen
+                                            {m.profile_cancel()}
                                         </button>
                                     </div>
                                 </div>

@@ -32,6 +32,7 @@
 
 		try {
 			const res = await fetch(`${API_URL}/api/auth/login`, {
+                                credentials: 'include',
 				method: 'POST',
 				headers: {
 					'Content-Type': 'application/json'
@@ -66,29 +67,13 @@
 			// 1. Token weiterhin im localStorage speichern
 			localStorage.setItem('token', data.token);
 
-			// 2. Dasselbe Token als HTTP-only Cookie speichern
-			const sessionRes = await fetch('/api/auth/session', {
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json'
-				},
-				body: JSON.stringify({
-					token: data.token
-				})
-			});
-
-			if (!sessionRes.ok) {
-				localStorage.removeItem('token');
-				error = 'login_failed';
-				return;
-			}
-
-			// 3. Login-Status und Benutzerdaten laden
+			// 2. Login-Status und Benutzerdaten laden
 			isLoggedIn.set(true);
 			await loadCurrentUser();
 
-			// 4. Benutzerdaten vom Backend abrufen
+			// 3. Benutzerdaten vom Backend abrufen
 			const userRes = await fetch(`${API_URL}/api/auth/me`, {
+                                credentials: 'include',
 				headers: {
 					Authorization: `Bearer ${data.token}`
 				}
@@ -103,7 +88,7 @@
 			const user = userData.user ?? userData;
 			const accountType = user.account_type;
 
-			// 5. Zur passenden Hauptseite weiterleiten
+			// 4. Zur passenden Hauptseite weiterleiten
 			if (user.is_admin) {
 				await goto(resolve('/admin'));
 			} else if (accountType === 'jobnehmer') {

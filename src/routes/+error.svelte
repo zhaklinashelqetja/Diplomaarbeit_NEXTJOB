@@ -19,7 +19,7 @@
 	<h2 class="mt-4 text-2xl font-semibold text-gray-900">{m.error_heading()}</h2>
 
 	<p class="mt-3 max-w-md text-gray-600">
-		{page.error?.message ?? m.error_description()}
+		{m.error_description()}
 	</p>
 
 	<a
